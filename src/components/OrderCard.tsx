@@ -1,5 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { moderateScale, moderateVerticalScale } from '../utils/responsive';
+const s = (size: number) => moderateScale(size, 0.3);
+const vs = (size: number) => moderateVerticalScale(size, 0.3);
 import { theme } from '../theme';
 import { MapMarkerIcon } from './Icons';
 import { Order } from '../data/mockData';
@@ -43,16 +46,14 @@ export const OrderCard: React.FC<OrderCardProps> = ({
         </View>
       </View>
 
-      {/* Map Section (if applicable) */}
-      {order.hasMap && (
-        <View style={styles.mapContainer}>
-          <Image source={require('../assets/images/map.png')} style={styles.mapImage} />
-          <View style={styles.distanceBadge}>
-            <MapMarkerIcon color={theme.colors.primary} size={8} />
-            <Text style={styles.distanceText}>{order.distanceText}</Text>
-          </View>
+      {/* Map Section */}
+      <View style={styles.mapContainer}>
+        <Image source={require('../assets/images/map.png')} style={styles.mapImage} />
+        <View style={styles.distanceBadge}>
+          <MapMarkerIcon color={theme.colors.primary} size={8} />
+          <Text style={styles.distanceText}>{order.distanceText}</Text>
         </View>
-      )}
+      </View>
 
       {/* Button Action Row */}
       <View style={styles.buttonRow}>
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
     marginBottom: theme.spacing.md,
     ...theme.shadows.medium,
     borderWidth: 1,
-    borderColor: '#F0F0F3',
+    borderColor: theme.colors.borderLight,
   },
   topRow: {
     flexDirection: 'row',
@@ -107,10 +108,10 @@ const styles = StyleSheet.create({
     marginBottom: theme.spacing.md,
   },
   avatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: '#EEEEEE',
+    width: s(48),
+    height: s(48),
+    borderRadius: theme.borderRadius.circle,
+    backgroundColor: theme.colors.borderLight,
   },
   nameRow: {
     flexDirection: 'row',
@@ -126,13 +127,13 @@ const styles = StyleSheet.create({
   badge: {
     backgroundColor: theme.colors.errorLight,
     paddingHorizontal: theme.spacing.xs,
-    paddingVertical: 2,
+    paddingVertical: theme.spacing.xxs,
     borderRadius: theme.borderRadius.xs,
     marginLeft: theme.spacing.xs,
   },
   badgeText: {
     fontFamily: theme.typography.fontFamily.bold,
-    fontSize: 10,
+    fontSize: theme.typography.fontSize.xs,
     fontWeight: theme.typography.fontWeight.heavy,
     color: theme.colors.error,
   },
@@ -151,15 +152,15 @@ const styles = StyleSheet.create({
     fontSize: theme.typography.fontSize.md,
     fontWeight: theme.typography.fontWeight.bold,
     color: theme.colors.primary,
-    marginBottom: 2,
+    marginBottom: theme.spacing.xxs,
   },
   infoText: {
     fontFamily: theme.typography.fontFamily.regular,
-    fontSize: 10,
+    fontSize: theme.typography.fontSize.xs,
     color: theme.colors.textMedium,
   },
   mapContainer: {
-    height: 110,
+    height: vs(110),
     width: '100%',
     borderRadius: theme.borderRadius.lg,
     overflow: 'hidden',
@@ -185,10 +186,10 @@ const styles = StyleSheet.create({
   },
   distanceText: {
     fontFamily: theme.typography.fontFamily.bold,
-    fontSize: 10,
+    fontSize: theme.typography.fontSize.xs,
     fontWeight: theme.typography.fontWeight.bold,
     color: theme.colors.textDark,
-    marginLeft: 4,
+    marginLeft: theme.spacing.xxs,
   },
   buttonRow: {
     flexDirection: 'row',
@@ -196,8 +197,8 @@ const styles = StyleSheet.create({
   },
   primaryButton: {
     flex: 1,
-    height: 44,
-    borderRadius: 22,
+    height: s(44),
+    borderRadius: theme.borderRadius.circle,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: theme.spacing.sm,
@@ -210,8 +211,8 @@ const styles = StyleSheet.create({
   },
   secondaryButton: {
     flex: 1,
-    height: 44,
-    borderRadius: 22,
+    height: s(44),
+    borderRadius: theme.borderRadius.circle,
     alignItems: 'center',
     justifyContent: 'center',
   },

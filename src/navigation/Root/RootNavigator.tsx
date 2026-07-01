@@ -18,7 +18,7 @@ export const RootNavigator: React.FC = () => {
         return <HomeScreen />;
       case 'History':
         return <HistoryScreen />;
-      case 'Performance':
+      case 'Alerts':
         return <PerformanceScreen />;
       case 'Profile':
         return <ProfileScreen />;

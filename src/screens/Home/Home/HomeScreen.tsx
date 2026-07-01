@@ -7,6 +7,8 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+import { moderateScale } from '../../../utils/responsive';
+const s = (size: number) => moderateScale(size, 0.3);
 import { theme } from '../../../theme';
 import { StatsCard } from '../../../components/StatsCard';
 import { SwipeButton } from '../../../components/SwipeButton';
@@ -70,7 +72,7 @@ export const HomeScreen: React.FC = () => {
         </View>
         
         <TouchableOpacity style={styles.signalBtn} activeOpacity={0.8}>
-          <SignalIcon color={theme.colors.primary} size={20} />
+          <SignalIcon color={theme.colors.primary} size={s(20)} />
         </TouchableOpacity>
       </View>
 
@@ -141,7 +143,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     paddingHorizontal: theme.spacing.md,
     paddingTop: theme.spacing.md,
-    paddingBottom: 110, // Ensure bottom content is scrollable past floating bottom tab bar
+    paddingBottom: 120,
   },
   header: {
     flexDirection: 'row',
@@ -155,9 +157,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   avatar: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    width: s(44),
+    height: s(44),
+    borderRadius: theme.borderRadius.circle,
     borderWidth: 1,
     borderColor: theme.colors.border,
   },
@@ -169,17 +171,17 @@ const styles = StyleSheet.create({
     fontSize: theme.typography.fontSize.lg,
     fontWeight: theme.typography.fontWeight.bold,
     color: '#4B2BB0', // Vibrant header purple matching design
-    marginBottom: 2,
+    marginBottom: s(2),
   },
   statusRow: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   statusDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    marginRight: 6,
+    width: s(8),
+    height: s(8),
+    borderRadius: theme.borderRadius.circle,
+    marginRight: s(6),
   },
   statusText: {
     fontFamily: theme.typography.fontFamily.medium,
@@ -216,7 +218,7 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fontFamily.bold,
     fontSize: theme.typography.fontSize.sm,
     fontWeight: theme.typography.fontWeight.bold,
-    color: '#8664EC', // Purple color for "View All" link
+    color: theme.colors.primary,
   },
   sectionCountText: {
     fontFamily: theme.typography.fontFamily.medium,

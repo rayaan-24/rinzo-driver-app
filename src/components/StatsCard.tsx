@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
+import { screenWidth } from '../utils/responsive';
 import { theme } from '../theme';
 
 interface StatsCardProps {
@@ -8,9 +9,8 @@ interface StatsCardProps {
   valueColor: string;
 }
 
-const { width } = Dimensions.get('window');
 // Calculate width to fit 3 cards in a row with margins
-const CARD_WIDTH = (width - theme.spacing.md * 2 - theme.spacing.sm * 2) / 3;
+const CARD_WIDTH = (screenWidth - theme.spacing.md * 2 - theme.spacing.sm * 2) / 3;
 
 export const StatsCard: React.FC<StatsCardProps> = ({ label, value, valueColor }) => {
   return (

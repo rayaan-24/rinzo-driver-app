@@ -1,5 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { View, StyleSheet, Animated, PanResponder, LayoutChangeEvent } from 'react-native';
+import { moderateScale } from '../utils/responsive';
+const s = (size: number) => moderateScale(size, 0.3);
 import { theme } from '../theme';
 
 interface SwipeButtonProps {
@@ -7,8 +9,8 @@ interface SwipeButtonProps {
   isOnline: boolean;
 }
 
-const HANDLE_SIZE = 48;
-const PADDING = 4;
+const HANDLE_SIZE = s(48);
+const PADDING = s(4);
 
 const PowerIcon: React.FC<{ color: string; size: number }> = ({ color, size }) => (
   <View style={{ width: size, height: size, alignItems: 'center', justifyContent: 'center' }}>
@@ -158,7 +160,7 @@ export const SwipeButton: React.FC<SwipeButtonProps> = ({ onSwipe, isOnline }) =
           },
         ]}
       >
-        <PowerIcon color="#FFFFFF" size={20} />
+        <PowerIcon color="#FFFFFF" size={s(20)} />
       </Animated.View>
     </View>
   );
@@ -166,7 +168,7 @@ export const SwipeButton: React.FC<SwipeButtonProps> = ({ onSwipe, isOnline }) =
 
 const styles = StyleSheet.create({
   container: {
-    height: 56,
+    height: s(56),
     width: '100%',
     borderRadius: theme.borderRadius.xl,
     padding: PADDING,

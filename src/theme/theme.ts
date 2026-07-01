@@ -1,6 +1,10 @@
+import { moderateScale } from '../utils/responsive';
+
+const s = (size: number) => moderateScale(size, 0.3);
+
 export const theme = {
   colors: {
-    primary: '#6338C3',          // Purple for primary actions
+    primary: '#8664EC',          // Purple for primary actions
     primaryLight: '#EFE8FF',     // Lavender background
     background: '#F8F8FC',       // Off-white light purple-grey background
     cardBg: '#FFFFFF',           // White card background
@@ -15,21 +19,21 @@ export const theme = {
     borderLight: '#F2F2F7',      // Very light borders
   },
   spacing: {
-    xxs: 4,
-    xs: 8,
-    sm: 12,
-    md: 16,
-    lg: 20,
-    xl: 24,
-    xxl: 32,
+    xxs: s(4),
+    xs: s(8),
+    sm: s(12),
+    md: s(16),
+    lg: s(20),
+    xl: s(24),
+    xxl: s(32),
   },
   borderRadius: {
-    xs: 4,
-    sm: 8,
-    md: 12,
-    lg: 16,
-    xl: 24,
-    xxl: 32,
+    xs: s(4),
+    sm: s(8),
+    md: s(12),
+    lg: s(16),
+    xl: s(24),
+    xxl: s(32),
     circle: 9999,
   },
   typography: {
@@ -39,13 +43,13 @@ export const theme = {
       bold: 'System',
     },
     fontSize: {
-      xs: 11,
-      sm: 13,
-      md: 15,
-      lg: 18,
-      xl: 20,
-      xxl: 24,
-      huge: 32,
+      xs: s(11),
+      sm: s(13),
+      md: s(15),
+      lg: s(18),
+      xl: s(20),
+      xxl: s(24),
+      huge: s(32),
     },
     fontWeight: {
       regular: '400' as const,
