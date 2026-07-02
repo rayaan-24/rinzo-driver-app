@@ -21,6 +21,8 @@ interface OrderTransitScreenProps {
   onViewOrderPress?: () => void;
   onNavigateToPickup: (order: Order) => void;
   isTransitToFranchise?: boolean;
+  showAcceptedBanner?: boolean;
+  onAcceptNewOrder?: () => void;
 }
 
 const { width, height } = Dimensions.get('window');
@@ -32,6 +34,8 @@ export const OrderTransitScreen: React.FC<OrderTransitScreenProps> = ({
   onViewOrderPress,
   onNavigateToPickup,
   isTransitToFranchise = false,
+  showAcceptedBanner = false,
+  onAcceptNewOrder,
 }) => {
   const insets = useSafeAreaInsets();
 
@@ -119,12 +123,8 @@ export const OrderTransitScreen: React.FC<OrderTransitScreenProps> = ({
         setCountdown((prev) => {
           if (prev <= 1) {
             clearInterval(interval);
-            // Hide sheet and show expired notice
             setShowNewOrderPopup(false);
-            showCustomDialog(
-              'Order Auto Assigned',
-              'The response window of 60 seconds expired. Order #RD-7822 was auto-assigned to another nearby driver.'
-            );
+            handleAcceptNewOrder();
             return 0;
           }
           return prev - 1;
@@ -134,6 +134,7 @@ export const OrderTransitScreen: React.FC<OrderTransitScreenProps> = ({
     return () => {
       clearInterval(interval);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showNewOrderPopup, timerStrokeAnim]);
 
   const handleCall = () => {
@@ -158,10 +159,9 @@ export const OrderTransitScreen: React.FC<OrderTransitScreenProps> = ({
     setShowNewOrderPopup(false);
     showCustomDialog(
       'Order Accepted',
-      'You have accepted order #RD-7822 for Sarah Jenkins. Redirecting to pickup Central Hub...',
+      'You have accepted order #RD-7822 for Sarah Jenkins. Navigation updated to pickup location.',
       () => {
-        // Redirect to next en-route pickup stack
-        onNavigateToPickup(order);
+        onAcceptNewOrder?.();
       }
     );
   };
@@ -604,24 +604,54 @@ export const OrderTransitScreen: React.FC<OrderTransitScreenProps> = ({
           style={styles.mapImage}
         />
 
-        {/* Floating Pick-up Location Card */}
-        <View style={styles.floatingCard}>
-          <View style={styles.nodeIconBox}>
-            <Svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <Circle cx="6" cy="12" r="3" stroke="#8664EC" strokeWidth="2.5" fill="none" />
-              <Circle cx="18" cy="6" r="3" stroke="#8664EC" strokeWidth="2.5" fill="none" />
-              <Circle cx="18" cy="18" r="3" stroke="#8664EC" strokeWidth="2.5" fill="none" />
-              <Path
-                d="M8.5 10.5l7-3.5M8.5 13.5l7 3.5"
-                stroke="#8664EC"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-              />
-            </Svg>
-          </View>
-          <View style={styles.floatingTextContainer}>
-            <Text style={styles.floatingLabel}>PICK-UP LOCATION</Text>
-            <Text style={styles.floatingVal}>Customer Home</Text>
+        <Svg style={StyleSheet.absoluteFillObject} pointerEvents="none">
+          {/* Route path to customer pickup point */}
+          <Path
+            d="M 120 540 Q 240 380 300 240"
+            stroke="#8664EC"
+            strokeWidth="4"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            fill="none"
+            opacity="0.8"
+          />
+          <Circle cx="300" cy="240" r="6" fill="#8664EC" stroke="#FFFFFF" strokeWidth="2" />
+        </Svg>
+
+        {/* Floating Cards Container */}
+        <View style={styles.floatingCardsContainer}>
+          {showAcceptedBanner && (
+            <View style={styles.acceptedBannerCard}>
+              <View style={styles.bannerIconCircle}>
+                <Svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="4">
+                  <Path d="M20 6L9 17l-5-5" strokeLinecap="round" strokeLinejoin="round" />
+                </Svg>
+              </View>
+              <View style={{ marginLeft: 10, flex: 1 }}>
+                <Text style={styles.bannerTitleText}>Order Accepted</Text>
+                <Text style={styles.bannerSubtext}>Navigation updated to pickup location.</Text>
+              </View>
+            </View>
+          )}
+
+          <View style={styles.popupLocationCard}>
+            <View style={styles.nodeIconBox}>
+              <Svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <Circle cx="6" cy="12" r="3" stroke="#8664EC" strokeWidth="2.5" fill="none" />
+                <Circle cx="18" cy="6" r="3" stroke="#8664EC" strokeWidth="2.5" fill="none" />
+                <Circle cx="18" cy="18" r="3" stroke="#8664EC" strokeWidth="2.5" fill="none" />
+                <Path
+                  d="M8.5 10.5l7-3.5M8.5 13.5l7 3.5"
+                  stroke="#8664EC"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                />
+              </Svg>
+            </View>
+            <View style={styles.floatingTextContainer}>
+              <Text style={styles.floatingLabel}>PICK-UP LOCATION</Text>
+              <Text style={styles.floatingVal}>Customer Home</Text>
+            </View>
           </View>
         </View>
 
@@ -1497,6 +1527,52 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     opacity: 0.65, // faded to keep route path contrast high
+  },
+  floatingCardsContainer: {
+    position: 'absolute',
+    top: 16,
+    left: 16,
+    right: 16,
+    zIndex: 10,
+  },
+  acceptedBannerCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#8664EC',
+    borderRadius: 16,
+    padding: 14,
+    marginBottom: 10,
+    ...theme.shadows.medium,
+  },
+  bannerIconCircle: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  bannerTitleText: {
+    fontFamily: theme.typography.fontFamily.bold,
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+  },
+  bannerSubtext: {
+    fontFamily: theme.typography.fontFamily.medium,
+    fontSize: 10.5,
+    color: 'rgba(255, 255, 255, 0.9)',
+    marginTop: 1,
+  },
+  popupLocationCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    padding: 14,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    ...theme.shadows.medium,
   },
 });
 

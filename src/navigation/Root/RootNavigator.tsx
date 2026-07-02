@@ -32,6 +32,7 @@ export const RootNavigator: React.FC = () => {
   const [generateQrOrder, setGenerateQrOrder] = useState<Order | null>(null);
   const [previewLabelBag, setPreviewLabelBag] = useState<any | null>(null);
   const [isTransitToFranchise, setIsTransitToFranchise] = useState(false);
+  const [showAcceptedBanner, setShowAcceptedBanner] = useState(false);
   const slideAnim = useRef(new Animated.Value(1)).current;
   const directionRef = useRef(-1);
   const insets = useSafeAreaInsets();
@@ -229,7 +230,10 @@ export const RootNavigator: React.FC = () => {
         <OrderTransitScreen
           order={transitOrder}
           onBack={() => {
-            if (isTransitToFranchise) {
+            if (showAcceptedBanner) {
+              setShowAcceptedBanner(false);
+              setIsTransitToFranchise(true);
+            } else if (isTransitToFranchise) {
               setIsTransitToFranchise(false);
               setGenerateQrOrder(transitOrder);
               setTransitOrder(null);
@@ -238,7 +242,10 @@ export const RootNavigator: React.FC = () => {
             }
           }}
           onViewOrderPress={() => {
-            if (isTransitToFranchise) {
+            if (showAcceptedBanner) {
+              setShowAcceptedBanner(false);
+              setIsTransitToFranchise(true);
+            } else if (isTransitToFranchise) {
               setIsTransitToFranchise(false);
               setGenerateQrOrder(transitOrder);
               setTransitOrder(null);
@@ -253,9 +260,15 @@ export const RootNavigator: React.FC = () => {
               setSelectedOrder(null);
             } else {
               setActivePickupOrder(order);
+              setShowAcceptedBanner(false);
             }
           }}
           isTransitToFranchise={isTransitToFranchise}
+          showAcceptedBanner={showAcceptedBanner}
+          onAcceptNewOrder={() => {
+            setIsTransitToFranchise(false);
+            setShowAcceptedBanner(true);
+          }}
         />
       </View>
     );
