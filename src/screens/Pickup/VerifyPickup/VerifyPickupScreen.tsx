@@ -52,11 +52,7 @@ export const VerifyPickupScreen: React.FC<VerifyPickupScreenProps> = ({
       ]);
       return;
     }
-    Alert.alert(
-      'Pickup Verified',
-      'OTP code matches successfully. Order is now active!',
-      [{ text: 'OK', onPress: onConfirm }]
-    );
+    onConfirm();
   };
 
   const handleWrongNumber = () => {
