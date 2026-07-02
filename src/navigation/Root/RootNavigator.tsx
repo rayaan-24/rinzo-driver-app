@@ -17,6 +17,8 @@ import { GenerateQrScreen } from '../../screens/Pickup/GenerateQR/GenerateQrScre
 import { LabelPreviewScreen } from '../../screens/Pickup/LabelPreview/LabelPreviewScreen';
 import { FranchiseVerificationScreen } from '../../screens/Pickup/FranchiseVerification/FranchiseVerificationScreen';
 import { OrderCompletedScreen } from '../../screens/Pickup/OrderCompleted/OrderCompletedScreen';
+import { FranchiseIntakeScreen } from '../../screens/Pickup/FranchiseIntake/FranchiseIntakeScreen';
+import { CameraQrScannerScreen } from '../../screens/Pickup/CameraQrScanner/CameraQrScannerScreen';
 import { Order } from '../../data/mockData';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -37,6 +39,8 @@ export const RootNavigator: React.FC = () => {
   const [showAcceptedBanner, setShowAcceptedBanner] = useState(false);
   const [isVerifyingFranchise, setIsVerifyingFranchise] = useState(false);
   const [isOrderCompleted, setIsOrderCompleted] = useState(false);
+  const [isIntakeActive, setIsIntakeActive] = useState(false);
+  const [isCameraActive, setIsCameraActive] = useState(false);
   const slideAnim = useRef(new Animated.Value(1)).current;
   const directionRef = useRef(-1);
   const insets = useSafeAreaInsets();
@@ -87,6 +91,54 @@ export const RootNavigator: React.FC = () => {
       if (result.finished) {setPrevTab(null);}
     });
   };
+
+  if (isIntakeActive && transitOrder) {
+    return (
+      <View
+        style={[
+          styles.container,
+          {
+            paddingTop: insets.top,
+            backgroundColor: theme.colors.background,
+          },
+        ]}
+      >
+        <FranchiseIntakeScreen
+          order={transitOrder}
+          onBack={() => setIsIntakeActive(false)}
+          onLaunchScanner={() => {
+            setIsIntakeActive(false);
+            setIsCameraActive(true);
+          }}
+        />
+      </View>
+    );
+  }
+
+  if (isCameraActive && transitOrder) {
+    return (
+      <View
+        style={[
+          styles.container,
+          {
+            paddingTop: insets.top,
+            backgroundColor: theme.colors.background,
+          },
+        ]}
+      >
+        <CameraQrScannerScreen
+          onBack={() => {
+            setIsCameraActive(false);
+            setIsIntakeActive(true);
+          }}
+          onScanSuccess={() => {
+            setIsCameraActive(false);
+            setIsVerifyingFranchise(true);
+          }}
+        />
+      </View>
+    );
+  }
 
   if (isVerifyingFranchise && transitOrder) {
     return (
@@ -322,7 +374,7 @@ export const RootNavigator: React.FC = () => {
             } else if (transitMode === 'delivery_transit') {
               setTransitMode('franchise_pickup');
             } else if (transitMode === 'franchise_pickup') {
-              setIsVerifyingFranchise(true);
+              setIsIntakeActive(true);
             } else if (transitMode === 'dispatch') {
               setTransitMode('franchise');
             } else if (transitMode === 'franchise') {
