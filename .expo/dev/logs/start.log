@@ -1150,3 +1150,17 @@
 {"_e":"metro:bundling:started","_t":1783021987580,"id":"7","platform":"android","environment":null,"entry":"index.js"}
 {"_e":"metro:bundling:progress","_t":1783021987580,"id":"7","progress":0,"total":1,"current":0}
 {"_e":"metro:bundling:done","_t":1783021987697,"id":"7","total":1,"ms":117.4291}
+{"_e":"metro:bundling:started","_t":1783024027512,"id":"9","platform":"android","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1783024027516,"id":"9","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1783024027829,"id":"9","total":1,"ms":315.8313}
+{"_e":"metro:client_log","_t":1783024220443,"level":"error","data":["React has detected a change in the order of Hooks called by SwipeButton. This will lead to bugs and errors if not fixed. For more information, read the Rules of Hooks: https://react.dev/link/rules-of-hooks\n\n   Previous render            Next render\n   ------------------------------------------------------\n1. useState                   useState\n2. useRef                     useRef\n3. useRef                     useRef\n4. useRef                     useRef\n5. useRef                     useRef\n6. useEffect                  useRef\n   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"]}
+{"_e":"metro:client_log","_t":1783024220548,"level":"error","data":["[Error: Rendered more hooks than during the previous render.]"]}
+{"_e":"metro:bundling:started","_t":1783024290936,"id":"f","platform":"android","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1783024290938,"id":"f","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1783024290940,"id":"f","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1783024291096,"id":"f","total":1,"ms":159.2361}
+{"_e":"metro:client_log","_t":1783024401277,"level":"error","data":["React has detected a change in the order of Hooks called by HomeScreen. This will lead to bugs and errors if not fixed. For more information, read the Rules of Hooks: https://react.dev/link/rules-of-hooks\n\n   Previous render            Next render\n   ------------------------------------------------------\n1. useState                   useState\n2. useState                   useState\n3. undefined                  useRef\n   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"]}
+{"_e":"metro:client_log","_t":1783024401336,"level":"error","data":["[Error: Rendered more hooks than during the previous render.]"]}
+{"_e":"metro:bundling:started","_t":1783024443694,"id":"k","platform":"android","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1783024443694,"id":"k","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1783024443789,"id":"k","total":1,"ms":94.91}
