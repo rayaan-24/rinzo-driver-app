@@ -20,7 +20,7 @@ interface OrderTransitScreenProps {
   onBack: () => void;
   onViewOrderPress?: () => void;
   onNavigateToPickup: (order: Order) => void;
-  transitMode?: 'pickup' | 'dispatch' | 'franchise';
+  transitMode?: 'pickup' | 'delivery_transit' | 'dispatch' | 'franchise';
   showAcceptedBanner?: boolean;
   onAcceptNewOrder?: () => void;
 }
@@ -677,7 +677,9 @@ export const OrderTransitScreen: React.FC<OrderTransitScreenProps> = ({
             </View>
             <View style={styles.floatingTextContainer}>
               <Text style={styles.floatingLabel}>PICK-UP LOCATION</Text>
-              <Text style={styles.floatingVal}>Customer Home</Text>
+              <Text style={styles.floatingVal}>
+                {transitMode === 'delivery_transit' ? 'Rinzo Central Hub' : 'Customer Home'}
+              </Text>
             </View>
           </View>
         </View>
@@ -726,7 +728,9 @@ export const OrderTransitScreen: React.FC<OrderTransitScreenProps> = ({
                 strokeLinejoin="round"
               />
             </Svg>
-            <Text style={styles.primaryBtnText}>Navigate to Pickup Point</Text>
+            <Text style={styles.primaryBtnText}>
+              {transitMode === 'delivery_transit' ? 'Navigate to Franchise' : 'Navigate to Pickup Point'}
+            </Text>
           </TouchableOpacity>
 
           {/* Secondary Action Buttons Row */}
@@ -770,7 +774,9 @@ export const OrderTransitScreen: React.FC<OrderTransitScreenProps> = ({
                   strokeLinejoin="round"
                 />
               </Svg>
-              <Text style={styles.secondaryBtnText}>Call Customer</Text>
+              <Text style={styles.secondaryBtnText}>
+                {transitMode === 'delivery_transit' ? 'Call Hub' : 'Call Customer'}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
