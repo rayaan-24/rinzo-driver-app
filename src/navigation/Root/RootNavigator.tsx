@@ -15,6 +15,7 @@ import { VerifyPickupScreen } from '../../screens/Pickup/VerifyPickup/VerifyPick
 import { OrderCollectedScreen } from '../../screens/Pickup/OrderCollected/OrderCollectedScreen';
 import { GenerateQrScreen } from '../../screens/Pickup/GenerateQR/GenerateQrScreen';
 import { LabelPreviewScreen } from '../../screens/Pickup/LabelPreview/LabelPreviewScreen';
+import { FranchiseVerificationScreen } from '../../screens/Pickup/FranchiseVerification/FranchiseVerificationScreen';
 import { Order } from '../../data/mockData';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -33,6 +34,7 @@ export const RootNavigator: React.FC = () => {
   const [previewLabelBag, setPreviewLabelBag] = useState<any | null>(null);
   const [transitMode, setTransitMode] = useState<'pickup' | 'dispatch' | 'franchise'>('pickup');
   const [showAcceptedBanner, setShowAcceptedBanner] = useState(false);
+  const [isVerifyingFranchise, setIsVerifyingFranchise] = useState(false);
   const slideAnim = useRef(new Animated.Value(1)).current;
   const directionRef = useRef(-1);
   const insets = useSafeAreaInsets();
@@ -80,6 +82,31 @@ export const RootNavigator: React.FC = () => {
       if (result.finished) {setPrevTab(null);}
     });
   };
+
+  if (isVerifyingFranchise && transitOrder) {
+    return (
+      <View
+        style={[
+          styles.container,
+          {
+            paddingTop: insets.top,
+            backgroundColor: theme.colors.background,
+          },
+        ]}
+      >
+        <FranchiseVerificationScreen
+          order={transitOrder}
+          onBack={() => setIsVerifyingFranchise(false)}
+          onConfirm={() => {
+            setIsVerifyingFranchise(false);
+            setTransitMode('pickup');
+            setTransitOrder(null);
+            setSelectedOrder(null);
+          }}
+        />
+      </View>
+    );
+  }
 
   if (previewLabelBag && generateQrOrder) {
     return (
@@ -264,9 +291,7 @@ export const RootNavigator: React.FC = () => {
             } else if (transitMode === 'dispatch') {
               setTransitMode('franchise');
             } else if (transitMode === 'franchise') {
-              setTransitMode('pickup');
-              setTransitOrder(null);
-              setSelectedOrder(null);
+              setIsVerifyingFranchise(true);
             }
           }}
           transitMode={transitMode}
