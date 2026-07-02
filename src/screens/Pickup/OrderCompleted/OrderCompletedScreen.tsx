@@ -69,7 +69,7 @@ export const OrderCompletedScreen: React.FC<OrderCompletedScreenProps> = ({
         {/* 3. Completion Headers */}
         <View style={styles.headerTextCol}>
           <Text style={styles.successTitleText}>
-            Order Completed{'\n'}Successfully
+            Delivery Completed{'\n'}Successfully
           </Text>
           <Text style={styles.successSubtext}>
             The package has been verified and delivered to the customer.
@@ -95,7 +95,9 @@ export const OrderCompletedScreen: React.FC<OrderCompletedScreenProps> = ({
             </View>
             <View style={styles.gridCol}>
               <Text style={styles.gridLabel}>Customer</Text>
-              <Text style={styles.gridVal}>{order.customerName}</Text>
+              <Text style={styles.gridVal}>
+                {order.customerName.split(' ')[0]} {order.customerName.split(' ')[1] ? order.customerName.split(' ')[1].charAt(0) + '.' : ''}
+              </Text>
             </View>
           </View>
 
