@@ -10,6 +10,7 @@ import { BottomTabBar, TabType } from '../../components/BottomTabBar';
 import { PickupDetailsScreen } from '../../screens/Pickup/PickupDetails/PickupDetailsScreen';
 import { OrderTransitScreen } from '../../screens/Pickup/OrderTransit/OrderTransitScreen';
 import { PickupActiveScreen } from '../../screens/Pickup/PickupActive/PickupActiveScreen';
+import { ItemVerificationScreen } from '../../screens/Pickup/ItemVerification/ItemVerificationScreen';
 import { Order } from '../../data/mockData';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -21,6 +22,7 @@ export const RootNavigator: React.FC = () => {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [transitOrder, setTransitOrder] = useState<Order | null>(null);
   const [activePickupOrder, setActivePickupOrder] = useState<Order | null>(null);
+  const [verificationOrder, setVerificationOrder] = useState<Order | null>(null);
   const slideAnim = useRef(new Animated.Value(1)).current;
   const directionRef = useRef(-1);
   const insets = useSafeAreaInsets();
@@ -69,6 +71,31 @@ export const RootNavigator: React.FC = () => {
     });
   };
 
+  if (verificationOrder) {
+    return (
+      <View
+        style={[
+          styles.container,
+          {
+            paddingTop: insets.top,
+            backgroundColor: theme.colors.background,
+          },
+        ]}
+      >
+        <ItemVerificationScreen
+          order={verificationOrder}
+          onBack={() => setVerificationOrder(null)}
+          onConfirm={() => {
+            setVerificationOrder(null);
+            setActivePickupOrder(null);
+            setTransitOrder(null);
+            setSelectedOrder(null);
+          }}
+        />
+      </View>
+    );
+  }
+
   if (activePickupOrder) {
     return (
       <View
@@ -83,6 +110,7 @@ export const RootNavigator: React.FC = () => {
         <PickupActiveScreen
           order={activePickupOrder}
           onBack={() => setActivePickupOrder(null)}
+          onReachedPickup={setVerificationOrder}
         />
       </View>
     );

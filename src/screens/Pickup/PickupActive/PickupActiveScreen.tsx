@@ -17,11 +17,13 @@ import { Order } from '../../../data/mockData';
 interface PickupActiveScreenProps {
   order: Order;
   onBack: () => void;
+  onReachedPickup: (order: Order) => void;
 }
 
 export const PickupActiveScreen: React.FC<PickupActiveScreenProps> = ({
   order,
   onBack,
+  onReachedPickup,
 }) => {
   const insets = useSafeAreaInsets();
 
@@ -67,11 +69,7 @@ export const PickupActiveScreen: React.FC<PickupActiveScreenProps> = ({
   };
 
   const handleReachedPoint = () => {
-    Alert.alert(
-      'Status Updated',
-      'You have arrived at the pickup point! Dispatcher has been notified.',
-      [{ text: 'OK', onPress: onBack }]
-    );
+    onReachedPickup(order);
   };
 
   // Header right en-route text + avatar widget
