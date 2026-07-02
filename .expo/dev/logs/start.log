@@ -996,3 +996,43 @@
 {"_e":"metro:bundling:done","_t":1783019406490,"id":"2t","total":1,"ms":1083.7192}
 {"_e":"metro:client_log","_t":1783019562322,"level":"error","data":["React has detected a change in the order of Hooks called by RootNavigator. This will lead to bugs and errors if not fixed. For more information, read the Rules of Hooks: https://react.dev/link/rules-of-hooks\n\n   Previous render            Next render\n   ------------------------------------------------------\n1. useState                   useState\n2. useState                   useState\n3. useState                   useState\n4. useState                   useState\n5. useState                   useState\n6. useState                   useState\n7. useState                   useState\n8. useState                   useState\n9. useState                   useState\n10. useState                  useState\n11. useState                  useState\n12. useState                  useState\n13. useState                  useState\n14. useState                  useState\n15. useState                  useState\n16. useRef                    useState\n   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"]}
 {"_e":"metro:client_log","_t":1783019562384,"level":"error","data":["[Error: Should have a queue. You are likely calling Hooks conditionally, which is not allowed. (https://react.dev/link/invalid-hook-call)]"]}
+{"_e":"metro:bundling:started","_t":1783019691022,"id":"2y","platform":"android","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1783019691022,"id":"2y","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1783019691145,"id":"2y","total":1,"ms":122.5425}
+{"_e":"metro:bundling:started","_t":1783019857275,"id":"2z","platform":"android","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1783019857275,"id":"2z","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1783019863407,"id":"2z","total":1,"ms":6131.8175}
+{"_e":"metro:client_log","_t":1783019874165,"level":"error","data":["[ReferenceError: Property 'Circle' doesn't exist]"]}
+{"_e":"metro:bundling:started","_t":1783020032633,"id":"33","platform":"android","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1783020032633,"id":"33","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1783020033205,"id":"33","total":1,"ms":571.7448}
+{"_e":"metro:client_log","_t":1783020196115,"level":"warn","data":["The global process.env.EXPO_OS is not defined. This should be inlined by babel-preset-expo during transformation."]}
+{"_e":"metro:bundling:started","_t":1783020215654,"id":"35","platform":"android","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1783020215654,"id":"35","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1783020215770,"id":"35","total":1,"ms":115.4632}
+{"_e":"metro:client_log","_t":1783020225079,"level":"warn","data":["The global process.env.EXPO_OS is not defined. This should be inlined by babel-preset-expo during transformation."]}
+{"_e":"metro:bundling:started","_t":1783020474772,"id":"37","platform":"android","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1783020474773,"id":"37","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1783020474875,"id":"37","total":1,"ms":102.7401}
+{"_e":"metro:client_log","_t":1783020483410,"level":"warn","data":["The global process.env.EXPO_OS is not defined. This should be inlined by babel-preset-expo during transformation."]}
+{"_e":"metro:bundling:started","_t":1783020496940,"id":"39","platform":"android","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1783020496940,"id":"39","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1783020496977,"id":"39","total":1,"ms":36.3949}
+{"_e":"metro:client_log","_t":1783020506333,"level":"warn","data":["The global process.env.EXPO_OS is not defined. This should be inlined by babel-preset-expo during transformation."]}
+{"_e":"metro:client_log","_t":1783020584077,"level":"error","data":["[ReferenceError: Property 'handleManualConfirm' doesn't exist]"]}
+{"_e":"metro:bundling:started","_t":1783020646520,"id":"3e","platform":"android","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1783020646521,"id":"3e","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1783020647109,"id":"3e","total":1,"ms":588.57}
+{"_e":"metro:client_log","_t":1783020655970,"level":"warn","data":["The global process.env.EXPO_OS is not defined. This should be inlined by babel-preset-expo during transformation."]}
+{"_e":"metro:client_log","_t":1783020762951,"level":"error","data":["React has detected a change in the order of Hooks called by RootNavigator. This will lead to bugs and errors if not fixed. For more information, read the Rules of Hooks: https://react.dev/link/rules-of-hooks\n\n   Previous render            Next render\n   ------------------------------------------------------\n1. useState                   useState\n2. useState                   useState\n3. useState                   useState\n4. useState                   useState\n5. useState                   useState\n6. useState                   useState\n7. useState                   useState\n8. useState                   useState\n9. useState                   useState\n10. useState                  useState\n11. useState                  useState\n12. useState                  useState\n13. useState                  useState\n14. useState                  useState\n15. useState                  useState\n16. useState                  useState\n17. useRef                    useState\n   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"]}
+{"_e":"metro:client_log","_t":1783020763023,"level":"error","data":["[Error: Should have a queue. You are likely calling Hooks conditionally, which is not allowed. (https://react.dev/link/invalid-hook-call)]"]}
+{"_e":"metro:bundling:started","_t":1783020833730,"id":"3k","platform":"android","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1783020833731,"id":"3k","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1783020833845,"id":"3k","total":1,"ms":114.626}
+{"_e":"metro:client_log","_t":1783020847609,"level":"warn","data":["The global process.env.EXPO_OS is not defined. This should be inlined by babel-preset-expo during transformation."]}
+{"_e":"root:init","_t":1783020916012,"format":"v0-jsonl","version":"57.0.3"}
+{"_e":"env:mode","_t":1783020916014,"nodeEnv":"development","babelEnv":"development","mode":"development"}
+{"_e":"env:load","_t":1783020916018,"mode":"development","files":[],"env":{}}
+{"_e":"devserver:start","_t":1783020916737,"mode":"development","web":true,"baseUrl":"","asyncRoutes":false,"routerRoot":"../..\\..\\app","serverComponents":false,"serverActions":false,"serverRendering":false,"apiRoutes":false,"exporting":false}
+{"_e":"metro:config","_t":1783020917872,"serverRoot":"../..\\..","projectRoot":"../..\\..","exporting":false,"flags":{"autolinkingModuleResolution":false,"serverActions":false,"serverComponents":false,"reactCompiler":false,"optimizeGraph":false,"treeshaking":false,"logbox":false}}
+{"_e":"metro:instantiate","_t":1783020926209,"atlas":false,"workers":8,"host":"::","port":8081}
