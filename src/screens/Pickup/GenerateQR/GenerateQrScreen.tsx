@@ -16,6 +16,7 @@ interface GenerateQrScreenProps {
   order: Order;
   onBack: () => void;
   onConfirm: () => void;
+  onSelectBag: (bag: BagData) => void;
 }
 
 interface BagData {
@@ -31,6 +32,7 @@ export const GenerateQrScreen: React.FC<GenerateQrScreenProps> = ({
   order: _order,
   onBack,
   onConfirm,
+  onSelectBag,
 }) => {
 
   // Bags printing state
@@ -211,7 +213,12 @@ export const GenerateQrScreen: React.FC<GenerateQrScreenProps> = ({
           const isPending = bag.status === 'pending';
 
           return (
-            <View key={bag.id} style={styles.bagCard}>
+            <TouchableOpacity
+              key={bag.id}
+              style={styles.bagCard}
+              activeOpacity={0.85}
+              onPress={() => onSelectBag(bag)}
+            >
               <View style={styles.bagIconContainer}>
                 {renderBagIcon(bag.status)}
               </View>
@@ -264,7 +271,7 @@ export const GenerateQrScreen: React.FC<GenerateQrScreenProps> = ({
                   </Svg>
                 </View>
               )}
-            </View>
+            </TouchableOpacity>
           );
         })}
 
