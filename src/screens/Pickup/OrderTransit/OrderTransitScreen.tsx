@@ -20,7 +20,7 @@ interface OrderTransitScreenProps {
   onBack: () => void;
   onViewOrderPress?: () => void;
   onNavigateToPickup: (order: Order) => void;
-  isTransitToFranchise?: boolean;
+  transitMode?: 'pickup' | 'dispatch' | 'franchise';
   showAcceptedBanner?: boolean;
   onAcceptNewOrder?: () => void;
 }
@@ -33,7 +33,7 @@ export const OrderTransitScreen: React.FC<OrderTransitScreenProps> = ({
   onBack,
   onViewOrderPress,
   onNavigateToPickup,
-  isTransitToFranchise = false,
+  transitMode = 'pickup',
   showAcceptedBanner = false,
   onAcceptNewOrder,
 }) => {
@@ -52,7 +52,7 @@ export const OrderTransitScreen: React.FC<OrderTransitScreenProps> = ({
 
   // 1. Initial mounting animations for In Transit timeline
   useEffect(() => {
-    if (isTransitToFranchise) {
+    if (transitMode === 'dispatch') {
       // Animate progress line to 50% (between Pickup and In Transit)
       Animated.timing(progressAnim, {
         toValue: 0.5,
@@ -75,13 +75,20 @@ export const OrderTransitScreen: React.FC<OrderTransitScreenProps> = ({
           }),
         ])
       ).start();
+    } else if (transitMode === 'franchise') {
+      // Animate progress line to 100% (franchise en route/arrived)
+      Animated.timing(progressAnim, {
+        toValue: 1.0,
+        duration: 1200,
+        useNativeDriver: false,
+      }).start();
     }
-  }, [isTransitToFranchise, progressAnim, pulseAnim]);
+  }, [transitMode, progressAnim, pulseAnim]);
 
-  // 3. 5-Second Dispatch screen trigger to launch New Order Assigned bottom sheet
+  // 2. 5-Second Dispatch screen trigger to launch New Order Assigned bottom sheet
   useEffect(() => {
     let popupTimeout: NodeJS.Timeout;
-    if (isTransitToFranchise) {
+    if (transitMode === 'dispatch') {
       popupTimeout = setTimeout(() => {
         // Slide up sheet
         setShowNewOrderPopup(true);
@@ -106,9 +113,9 @@ export const OrderTransitScreen: React.FC<OrderTransitScreenProps> = ({
     return () => {
       clearTimeout(popupTimeout);
     };
-  }, [isTransitToFranchise, slideUpAnim, shakeAnim]);
+  }, [transitMode, slideUpAnim, shakeAnim]);
 
-  // 4. 60-Second countdown timer logic
+  // 3. 60-Second countdown timer logic
   useEffect(() => {
     let interval: NodeJS.Timeout;
     if (showNewOrderPopup) {
@@ -140,14 +147,14 @@ export const OrderTransitScreen: React.FC<OrderTransitScreenProps> = ({
   const handleCall = () => {
     showCustomDialog(
       'Calling Contact',
-      `Connecting call to ${isTransitToFranchise ? 'Franchise Central Support' : order.customerName}...`
+      `Connecting call to ${transitMode !== 'pickup' ? 'Franchise Central Support' : order.customerName}...`
     );
   };
 
   const handleMessage = () => {
     showCustomDialog(
       'Support Chat',
-      `Opening message thread with ${isTransitToFranchise ? 'Franchise Dispatcher' : order.customerName}...`
+      `Opening message thread with ${transitMode !== 'pickup' ? 'Franchise Dispatcher' : order.customerName}...`
     );
   };
 
@@ -185,10 +192,16 @@ export const OrderTransitScreen: React.FC<OrderTransitScreenProps> = ({
     outputRange: [CIRCUMFERENCE, 0],
   });
 
+  // Calculate line width dynamically
+  const progressWidth = progressAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0%', '100%'],
+  });
+
   // ----------------------------------------------------
-  // TRANSIT-TO-FRANCHISE MODE LAYOUT
+  // DISPATCH OR FRANCHISE MODE LAYOUT
   // ----------------------------------------------------
-  if (isTransitToFranchise) {
+  if (transitMode === 'dispatch' || transitMode === 'franchise') {
     // Custom header with "En Route" stacked label + Avatar
     const customHeaderRight = (
       <View style={styles.customHeaderRight}>
@@ -203,17 +216,14 @@ export const OrderTransitScreen: React.FC<OrderTransitScreenProps> = ({
       </View>
     );
 
-    // Calculate line width dynamically
-    const progressWidth = progressAnim.interpolate({
-      inputRange: [0, 1],
-      outputRange: ['0%', '100%'],
-    });
+    const headerTitle = transitMode === 'franchise' ? 'franchise' : 'Dispatch';
+    const mainActionBtnText = transitMode === 'franchise' ? 'Reached Franchise' : 'Continue';
 
     return (
       <View style={styles.container}>
         {/* 1. Header Section */}
         <Header
-          title="Dispatch"
+          title={headerTitle}
           showBack={true}
           onBackPress={onBack}
           rightCustom={customHeaderRight}
@@ -340,27 +350,44 @@ export const OrderTransitScreen: React.FC<OrderTransitScreenProps> = ({
                 </Text>
               </View>
 
-              {/* Node 2: In Transit (Pulsing Concentric Circle) */}
+              {/* Node 2: In Transit (Concentric pulsing circle for Dispatch, Checked tick for Franchise) */}
               <View style={styles.nodeItem}>
-                <View style={styles.nodeWrapper}>
-                  {/* Concentric Pulse Scale Ring */}
-                  <Animated.View
-                    style={[
-                      styles.nodeConcentricRing,
-                      { transform: [{ scale: pulseAnim }] },
-                    ]}
-                  />
-                  <View style={styles.nodeCircleTransit} />
-                </View>
+                {transitMode === 'franchise' ? (
+                  <View style={styles.nodeCircleChecked}>
+                    <Svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="4">
+                      <Path d="M20 6L9 17l-5-5" strokeLinecap="round" strokeLinejoin="round" />
+                    </Svg>
+                  </View>
+                ) : (
+                  <View style={styles.nodeWrapper}>
+                    <Animated.View
+                      style={[
+                        styles.nodeConcentricRing,
+                        { transform: [{ scale: pulseAnim }] },
+                      ]}
+                    />
+                    <View style={styles.nodeCircleTransit} />
+                  </View>
+                )}
                 <Text style={[styles.nodeText, { color: '#8664EC', fontFamily: theme.typography.fontFamily.bold, fontWeight: 'bold' }]}>
                   In Transit
                 </Text>
               </View>
 
-              {/* Node 3: Delivered (Inactive Gray) */}
+              {/* Node 3: Delivered (Inactive Gray for Dispatch, Checked tick for Franchise) */}
               <View style={styles.nodeItem}>
-                <View style={styles.nodeCircleInactive} />
-                <Text style={styles.nodeText}>Delivered</Text>
+                {transitMode === 'franchise' ? (
+                  <View style={styles.nodeCircleChecked}>
+                    <Svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="4">
+                      <Path d="M20 6L9 17l-5-5" strokeLinecap="round" strokeLinejoin="round" />
+                    </Svg>
+                  </View>
+                ) : (
+                  <View style={styles.nodeCircleInactive} />
+                )}
+                <Text style={transitMode === 'franchise' ? [styles.nodeText, { color: '#8664EC', fontFamily: theme.typography.fontFamily.bold, fontWeight: 'bold' }] : styles.nodeText}>
+                  Delivered
+                </Text>
               </View>
             </View>
           </View>
@@ -371,7 +398,7 @@ export const OrderTransitScreen: React.FC<OrderTransitScreenProps> = ({
             onPress={handleNavigate}
             activeOpacity={0.8}
           >
-            <Text style={styles.continueSubmitText}>Continue</Text>
+            <Text style={styles.continueSubmitText}>{mainActionBtnText}</Text>
             <Svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2.5" style={{ marginLeft: 6 }}>
               <Path d="M12 2a8 8 0 00-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 00-8-8z" />
               <Circle cx="12" cy="10" r="3" />
