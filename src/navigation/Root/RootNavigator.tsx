@@ -8,9 +8,87 @@ import { PerformanceScreen } from '../../screens/Performance/PerformanceScreen';
 import { ProfileScreen } from '../../screens/Profile/ProfileScreen';
 import { BottomTabBar, TabType } from '../../components/BottomTabBar';
 
+// Saad's Screens for initial flow
+import { SplashScreen } from '../../screens/Splash/SplashScreen';
+import { OnboardingScreen1 } from '../../screens/Onboarding/Screen1/OnboardingScreen1';
+import { OnboardingScreen2 } from '../../screens/Onboarding/Screen2/OnboardingScreen2';
+import { OnboardingScreen3 } from '../../screens/Onboarding/Screen3/OnboardingScreen3';
+import { AllowLocationScreen } from '../../screens/Auth/AllowLocation/AllowLocationScreen';
+import { LoginPhoneScreen } from '../../screens/Auth/LoginPhone/LoginPhoneScreen';
+import { OTPVerificationScreen } from '../../screens/Auth/OTPVerification/OTPVerificationScreen';
+
 export const RootNavigator: React.FC = () => {
+  type FlowState =
+    | 'Splash'
+    | 'Onboarding1'
+    | 'Onboarding2'
+    | 'Onboarding3'
+    | 'AllowLocation'
+    | 'LoginPhone'
+    | 'OTPVerification'
+    | 'Main';
+  const [flowState, setFlowState] = useState<FlowState>('Splash');
+  const [phone, setPhone] = useState<string>('');
   const [activeTab, setActiveTab] = useState<TabType>('Home');
   const insets = useSafeAreaInsets();
+
+  if (flowState === 'Splash') {
+    return <SplashScreen onFinish={() => setFlowState('Onboarding1')} />;
+  }
+  if (flowState === 'Onboarding1') {
+    return (
+      <OnboardingScreen1
+        onNext={() => setFlowState('Onboarding2')}
+        onSkip={() => setFlowState('AllowLocation')}
+      />
+    );
+  }
+  if (flowState === 'Onboarding2') {
+    return (
+      <OnboardingScreen2
+        onNext={() => setFlowState('Onboarding3')}
+        onBack={() => setFlowState('Onboarding1')}
+        onSkip={() => setFlowState('AllowLocation')}
+      />
+    );
+  }
+  if (flowState === 'Onboarding3') {
+    return (
+      <OnboardingScreen3
+        onGetStarted={() => setFlowState('AllowLocation')}
+        onBack={() => setFlowState('Onboarding2')}
+      />
+    );
+  }
+  if (flowState === 'AllowLocation') {
+    return (
+      <AllowLocationScreen
+        onAllow={() => setFlowState('LoginPhone')}
+        onDeny={() => setFlowState('LoginPhone')}
+      />
+    );
+  }
+  if (flowState === 'LoginPhone') {
+    return (
+      <LoginPhoneScreen
+        onSendOTP={(pNum) => {
+          setPhone(pNum);
+          setFlowState('OTPVerification');
+        }}
+        onBack={() => setFlowState('AllowLocation')}
+      />
+    );
+  }
+  if (flowState === 'OTPVerification') {
+    return (
+      <OTPVerificationScreen
+        phoneNumber={phone ? `+91 ${phone}` : '+91 87777 34343'}
+        onVerify={() => setFlowState('Main')}
+        onChangePhone={() => setFlowState('LoginPhone')}
+        onBack={() => setFlowState('LoginPhone')}
+      />
+    );
+  }
 
   const renderActiveScreen = () => {
     switch (activeTab) {
