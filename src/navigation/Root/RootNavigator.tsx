@@ -9,6 +9,7 @@ import { ProfileScreen } from '../../screens/Profile/ProfileScreen';
 import { BottomTabBar, TabType } from '../../components/BottomTabBar';
 import { PickupDetailsScreen } from '../../screens/Pickup/PickupDetails/PickupDetailsScreen';
 import { OrderTransitScreen } from '../../screens/Pickup/OrderTransit/OrderTransitScreen';
+import { PickupActiveScreen } from '../../screens/Pickup/PickupActive/PickupActiveScreen';
 import { Order } from '../../data/mockData';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -19,6 +20,7 @@ export const RootNavigator: React.FC = () => {
   const [prevTab, setPrevTab] = useState<TabType | null>(null);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [transitOrder, setTransitOrder] = useState<Order | null>(null);
+  const [activePickupOrder, setActivePickupOrder] = useState<Order | null>(null);
   const slideAnim = useRef(new Animated.Value(1)).current;
   const directionRef = useRef(-1);
   const insets = useSafeAreaInsets();
@@ -67,6 +69,25 @@ export const RootNavigator: React.FC = () => {
     });
   };
 
+  if (activePickupOrder) {
+    return (
+      <View
+        style={[
+          styles.container,
+          {
+            paddingTop: insets.top,
+            backgroundColor: theme.colors.background,
+          },
+        ]}
+      >
+        <PickupActiveScreen
+          order={activePickupOrder}
+          onBack={() => setActivePickupOrder(null)}
+        />
+      </View>
+    );
+  }
+
   if (transitOrder) {
     return (
       <View
@@ -82,6 +103,7 @@ export const RootNavigator: React.FC = () => {
           order={transitOrder}
           onBack={() => setTransitOrder(null)}
           onViewOrderPress={() => setTransitOrder(null)}
+          onNavigateToPickup={setActivePickupOrder}
         />
       </View>
     );

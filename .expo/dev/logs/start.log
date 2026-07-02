@@ -721,3 +721,155 @@
 {"_e":"metro:bundling:started","_t":1782997493768,"id":"2","platform":"android","environment":null,"entry":"index.js"}
 {"_e":"metro:bundling:progress","_t":1782997493768,"id":"2","progress":0,"total":1,"current":0}
 {"_e":"metro:bundling:done","_t":1782997493822,"id":"2","total":1,"ms":53.4402}
+{"_e":"metro:bundling:started","_t":1782997939518,"id":"4","platform":"android","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1782997939519,"id":"4","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1782997939597,"id":"4","total":1,"ms":78.7464}
+{"_e":"metro:client_log","_t":1782997963567,"level":"log","data":["Viewing details for Rahul Sharma"]}
+{"_e":"metro:client_log","_t":1782997981288,"level":"log","data":["Viewing details for Priya Singh"]}
+{"_e":"metro:client_log","_t":1782997982515,"level":"log","data":["Viewing details for Rahul Sharma"]}
+{"_e":"metro:client_log","_t":1782997984753,"level":"log","data":["Viewing details for Priya Singh"]}
+{"_e":"metro:client_log","_t":1782997985347,"level":"log","data":["Viewing details for Rahul Sharma"]}
+{"_e":"metro:client_log","_t":1782997986216,"level":"log","data":["Viewing details for Priya Singh"]}
+{"_e":"metro:client_log","_t":1782997986620,"level":"log","data":["Viewing details for Rahul Sharma"]}
+{"_e":"metro:client_log","_t":1782997987255,"level":"log","data":["Viewing details for Priya Singh"]}
+{"_e":"metro:client_log","_t":1782997987529,"level":"log","data":["Viewing details for Rahul Sharma"]}
+{"_e":"metro:client_log","_t":1782997988486,"level":"log","data":["Viewing details for Priya Singh"]}
+{"_e":"metro:client_log","_t":1782997989068,"level":"log","data":["Viewing details for Rahul Sharma"]}
+{"_e":"metro:client_log","_t":1782997990530,"level":"log","data":["Viewing details for Priya Singh"]}
+{"_e":"metro:client_log","_t":1782997991247,"level":"log","data":["Viewing details for Rahul Sharma"]}
+{"_e":"metro:client_log","_t":1782997991461,"level":"log","data":["Viewing details for Priya Singh"]}
+{"_e":"metro:client_log","_t":1782997991914,"level":"log","data":["Viewing details for Rahul Sharma"]}
+{"_e":"metro:client_log","_t":1782997993121,"level":"log","data":["Viewing details for Rahul Sharma"]}
+{"_e":"metro:client_log","_t":1782997994572,"level":"log","data":["Viewing details for Priya Singh"]}
+{"_e":"metro:client_log","_t":1782997994984,"level":"log","data":["Viewing details for Priya Singh"]}
+{"_e":"metro:client_log","_t":1782998000719,"level":"log","data":["Viewing details for Rahul Sharma"]}
+{"_e":"metro:client_log","_t":1782998001219,"level":"log","data":["Viewing details for Priya Singh"]}
+{"_e":"metro:client_log","_t":1782998002022,"level":"log","data":["Viewing details for Rahul Sharma"]}
+{"_e":"metro:client_log","_t":1782998015780,"level":"log","data":["Viewing details for Priya Singh"]}
+{"_e":"metro:client_log","_t":1782998016827,"level":"log","data":["Viewing details for Rahul Sharma"]}
+{"_e":"metro:client_log","_t":1782998017733,"level":"log","data":["Viewing details for Priya Singh"]}
+{"_e":"metro:client_log","_t":1782998018771,"level":"log","data":["Viewing details for Rahul Sharma"]}
+{"_e":"metro:client_log","_t":1782998019128,"level":"log","data":["Viewing details for Rahul Sharma"]}
+{"_e":"metro:client_log","_t":1782998020015,"level":"log","data":["Viewing details for Priya Singh"]}
+{"_e":"metro:client_log","_t":1782998021121,"level":"log","data":["Viewing details for Rahul Sharma"]}
+{"_e":"metro:client_log","_t":1782998022135,"level":"log","data":["Viewing details for Priya Singh"]}
+{"_e":"metro:client_log","_t":1782998022980,"level":"log","data":["Viewing details for Rahul Sharma"]}
+{"_e":"metro:client_log","_t":1782998025680,"level":"log","data":["Viewing details for Rahul Sharma"]}
+{"_e":"metro:client_log","_t":1782998026316,"level":"log","data":["Viewing details for Rahul Sharma"]}
+{"_e":"metro:client_log","_t":1782998026689,"level":"log","data":["Viewing details for Rahul Sharma"]}
+{"_e":"metro:client_log","_t":1782998026939,"level":"log","data":["Viewing details for Rahul Sharma"]}
+{"_e":"metro:client_log","_t":1782998027132,"level":"log","data":["Viewing details for Rahul Sharma"]}
+{"_e":"metro:client_log","_t":1782998027311,"level":"log","data":["Viewing details for Rahul Sharma"]}
+{"_e":"metro:client_log","_t":1782998028069,"level":"log","data":["Viewing details for Priya Singh"]}
+{"_e":"metro:client_log","_t":1782998028280,"level":"log","data":["Viewing details for Priya Singh"]}
+{"_e":"metro:client_log","_t":1782998028462,"level":"log","data":["Viewing details for Priya Singh"]}
+{"_e":"metro:client_log","_t":1782998028656,"level":"log","data":["Viewing details for Priya Singh"]}
+{"_e":"metro:client_log","_t":1782998028848,"level":"log","data":["Viewing details for Priya Singh"]}
+{"_e":"metro:client_log","_t":1782998029022,"level":"log","data":["Viewing details for Priya Singh"]}
+{"_e":"metro:client_log","_t":1782998029233,"level":"log","data":["Viewing details for Priya Singh"]}
+{"_e":"metro:client_log","_t":1782998030066,"level":"log","data":["Viewing details for Rahul Sharma"]}
+{"_e":"metro:client_log","_t":1782998031002,"level":"log","data":["Viewing details for Priya Singh"]}
+{"_e":"metro:client_log","_t":1782998031210,"level":"log","data":["Viewing details for Priya Singh"]}
+{"_e":"metro:client_log","_t":1782998032173,"level":"log","data":["Viewing details for Rahul Sharma"]}
+{"_e":"metro:client_log","_t":1782998032399,"level":"log","data":["Viewing details for Rahul Sharma"]}
+{"_e":"metro:client_log","_t":1782998032559,"level":"log","data":["Viewing details for Rahul Sharma"]}
+{"_e":"metro:bundling:failed","_t":1782998062293,"id":null,"message":"SyntaxError: D:\\All_Codes\\Supercx\\rinzo_driver_app\\src\\screens\\Home\\Home\\HomeScreen.tsx: Unexpected token, expected \"}\" (149:11)\n\n  147 |\n  148 | const styles = StyleSheet.create({\n> 149 |   container: {\n      |            ^\n  150 |     flex: 1,\n  151 |     backgroundColor: theme.colors.background,\n  152 |   },","importStack":null,"filename":"src\\screens\\Home\\Home\\HomeScreen.tsx","targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:failed","_t":1782998062485,"id":null,"message":"SyntaxError: D:\\All_Codes\\Supercx\\rinzo_driver_app\\src\\screens\\Home\\Home\\HomeScreen.tsx: Unexpected token, expected \"}\" (149:11)\n\n  147 |\n  148 | const styles = StyleSheet.create({\n> 149 |   container: {\n      |            ^\n  150 |     flex: 1,\n  151 |     backgroundColor: theme.colors.background,\n  152 |   },","importStack":null,"filename":"src\\screens\\Home\\Home\\HomeScreen.tsx","targetModuleName":null,"originModulePath":null}
+{"_e":"metro:client_log","_t":1782998062754,"level":"log","data":["Viewing details for Rahul Sharma"]}
+{"_e":"metro:client_log","_t":1782998066844,"level":"log","data":["Viewing details for Rahul Sharma"]}
+{"_e":"metro:client_log","_t":1782998066949,"level":"log","data":["Viewing details for Priya Singh"]}
+{"_e":"metro:client_log","_t":1782998067261,"level":"log","data":["Viewing details for Priya Singh"]}
+{"_e":"metro:client_log","_t":1782998067435,"level":"log","data":["Viewing details for Priya Singh"]}
+{"_e":"metro:client_log","_t":1782998074266,"level":"log","data":["Viewing details for Rahul Sharma"]}
+{"_e":"metro:client_log","_t":1782998074924,"level":"log","data":["Viewing details for Rahul Sharma"]}
+{"_e":"metro:bundling:failed","_t":1782998076383,"id":null,"message":"SyntaxError: D:\\All_Codes\\Supercx\\rinzo_driver_app\\src\\screens\\Home\\Home\\HomeScreen.tsx: Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>? (143:6)\n\n  141 |           onSecondaryPress={handleSecondaryPress}\n  142 |         />\n> 143 |       </ScrollView>\n      |       ^\n  144 |     </View>\n  145 |   );\n  146 | };","importStack":null,"filename":"src\\screens\\Home\\Home\\HomeScreen.tsx","targetModuleName":null,"originModulePath":null}
+{"_e":"metro:client_log","_t":1782998077289,"level":"log","data":["Viewing details for Rahul Sharma"]}
+{"_e":"metro:client_log","_t":1782998077871,"level":"log","data":["Viewing details for Rahul Sharma"]}
+{"_e":"metro:client_log","_t":1782998078474,"level":"log","data":["Viewing details for Priya Singh"]}
+{"_e":"metro:client_log","_t":1782998078854,"level":"log","data":["Viewing details for Priya Singh"]}
+{"_e":"metro:client_log","_t":1782998081070,"level":"error","data":["[TypeError: undefined is not a function]"]}
+{"_e":"metro:client_log","_t":1782998081115,"level":"error","data":["[TypeError: An error was thrown when attempting to render log messages via LogBox.\n\nundefined is not a function]"]}
+{"_e":"metro:bundling:failed","_t":1782998085766,"id":null,"message":"SyntaxError: D:\\All_Codes\\Supercx\\rinzo_driver_app\\src\\screens\\Home\\Home\\HomeScreen.tsx: Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>? (143:6)\n\n  141 |           onSecondaryPress={handleSecondaryPress}\n  142 |         />\n> 143 |       </ScrollView>\n      |       ^\n  144 |     </View>\n  145 |   );\n  146 | };","importStack":null,"filename":"src\\screens\\Home\\Home\\HomeScreen.tsx","targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:started","_t":1782998090979,"id":"a","platform":"android","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1782998090980,"id":"a","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1782998090982,"id":"a","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:failed","_t":1782998091093,"id":"a","message":"SyntaxError: D:\\All_Codes\\Supercx\\rinzo_driver_app\\src\\screens\\Home\\Home\\HomeScreen.tsx: Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>? (143:6)\n\n  141 |           onSecondaryPress={handleSecondaryPress}\n  142 |         />\n> 143 |       </ScrollView>\n      |       ^\n  144 |     </View>\n  145 |   );\n  146 | };","importStack":null,"filename":"src\\screens\\Home\\Home\\HomeScreen.tsx","targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:started","_t":1782998093298,"id":"b","platform":"android","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1782998093298,"id":"b","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1782998093299,"id":"b","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:failed","_t":1782998093320,"id":"b","message":"SyntaxError: D:\\All_Codes\\Supercx\\rinzo_driver_app\\src\\screens\\Home\\Home\\HomeScreen.tsx: Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>? (143:6)\n\n  141 |           onSecondaryPress={handleSecondaryPress}\n  142 |         />\n> 143 |       </ScrollView>\n      |       ^\n  144 |     </View>\n  145 |   );\n  146 | };","importStack":null,"filename":"src\\screens\\Home\\Home\\HomeScreen.tsx","targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:started","_t":1782998094376,"id":"c","platform":"android","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1782998094376,"id":"c","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1782998094377,"id":"c","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:failed","_t":1782998094397,"id":"c","message":"SyntaxError: D:\\All_Codes\\Supercx\\rinzo_driver_app\\src\\screens\\Home\\Home\\HomeScreen.tsx: Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>? (143:6)\n\n  141 |           onSecondaryPress={handleSecondaryPress}\n  142 |         />\n> 143 |       </ScrollView>\n      |       ^\n  144 |     </View>\n  145 |   );\n  146 | };","importStack":null,"filename":"src\\screens\\Home\\Home\\HomeScreen.tsx","targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:started","_t":1782998099838,"id":"d","platform":"android","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1782998099838,"id":"d","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1782998099839,"id":"d","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:failed","_t":1782998099912,"id":"d","message":"SyntaxError: D:\\All_Codes\\Supercx\\rinzo_driver_app\\src\\screens\\Home\\Home\\HomeScreen.tsx: Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>? (143:6)\n\n  141 |           onSecondaryPress={handleSecondaryPress}\n  142 |         />\n> 143 |       </ScrollView>\n      |       ^\n  144 |     </View>\n  145 |   );\n  146 | };","importStack":null,"filename":"src\\screens\\Home\\Home\\HomeScreen.tsx","targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:started","_t":1782998100588,"id":"e","platform":"android","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1782998100588,"id":"e","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1782998100590,"id":"e","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:failed","_t":1782998100619,"id":"e","message":"SyntaxError: D:\\All_Codes\\Supercx\\rinzo_driver_app\\src\\screens\\Home\\Home\\HomeScreen.tsx: Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>? (143:6)\n\n  141 |           onSecondaryPress={handleSecondaryPress}\n  142 |         />\n> 143 |       </ScrollView>\n      |       ^\n  144 |     </View>\n  145 |   );\n  146 | };","importStack":null,"filename":"src\\screens\\Home\\Home\\HomeScreen.tsx","targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:started","_t":1782998101157,"id":"f","platform":"android","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1782998101157,"id":"f","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1782998101158,"id":"f","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:failed","_t":1782998101184,"id":"f","message":"SyntaxError: D:\\All_Codes\\Supercx\\rinzo_driver_app\\src\\screens\\Home\\Home\\HomeScreen.tsx: Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>? (143:6)\n\n  141 |           onSecondaryPress={handleSecondaryPress}\n  142 |         />\n> 143 |       </ScrollView>\n      |       ^\n  144 |     </View>\n  145 |   );\n  146 | };","importStack":null,"filename":"src\\screens\\Home\\Home\\HomeScreen.tsx","targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:started","_t":1782998101515,"id":"g","platform":"android","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1782998101516,"id":"g","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1782998101517,"id":"g","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:failed","_t":1782998101541,"id":"g","message":"SyntaxError: D:\\All_Codes\\Supercx\\rinzo_driver_app\\src\\screens\\Home\\Home\\HomeScreen.tsx: Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>? (143:6)\n\n  141 |           onSecondaryPress={handleSecondaryPress}\n  142 |         />\n> 143 |       </ScrollView>\n      |       ^\n  144 |     </View>\n  145 |   );\n  146 | };","importStack":null,"filename":"src\\screens\\Home\\Home\\HomeScreen.tsx","targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:started","_t":1782998121095,"id":"h","platform":"android","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1782998121096,"id":"h","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1782998121097,"id":"h","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:failed","_t":1782998121195,"id":"h","message":"SyntaxError: D:\\All_Codes\\Supercx\\rinzo_driver_app\\src\\screens\\Home\\Home\\HomeScreen.tsx: Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>? (143:6)\n\n  141 |           onSecondaryPress={handleSecondaryPress}\n  142 |         />\n> 143 |       </ScrollView>\n      |       ^\n  144 |     </View>\n  145 |   );\n  146 | };","importStack":null,"filename":"src\\screens\\Home\\Home\\HomeScreen.tsx","targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:started","_t":1782998122203,"id":"i","platform":"android","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1782998122203,"id":"i","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1782998122205,"id":"i","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:failed","_t":1782998122243,"id":"i","message":"SyntaxError: D:\\All_Codes\\Supercx\\rinzo_driver_app\\src\\screens\\Home\\Home\\HomeScreen.tsx: Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>? (143:6)\n\n  141 |           onSecondaryPress={handleSecondaryPress}\n  142 |         />\n> 143 |       </ScrollView>\n      |       ^\n  144 |     </View>\n  145 |   );\n  146 | };","importStack":null,"filename":"src\\screens\\Home\\Home\\HomeScreen.tsx","targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:started","_t":1782998137448,"id":"j","platform":"android","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1782998137448,"id":"j","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1782998137450,"id":"j","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1782998137621,"id":"j","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1782998137807,"id":"j","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1782998137907,"id":"j","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1782998138008,"id":"j","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1782998138120,"id":"j","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1782998138220,"id":"j","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1782998138320,"id":"j","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1782998138422,"id":"j","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1782998138532,"id":"j","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:failed","_t":1782998138551,"id":"j","message":"SyntaxError: D:\\All_Codes\\Supercx\\rinzo_driver_app\\src\\screens\\Home\\Home\\HomeScreen.tsx: Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>? (143:6)\n\n  141 |           onSecondaryPress={handleSecondaryPress}\n  142 |         />\n> 143 |       </ScrollView>\n      |       ^\n  144 |     </View>\n  145 |   );\n  146 | };","importStack":null,"filename":"src\\screens\\Home\\Home\\HomeScreen.tsx","targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:started","_t":1782998158104,"id":"k","platform":"android","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1782998158104,"id":"k","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1782998158108,"id":"k","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1782998158245,"id":"k","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1782998158498,"id":"k","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1782998158598,"id":"k","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1782998158698,"id":"k","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1782998158820,"id":"k","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1782998158922,"id":"k","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1782998159022,"id":"k","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1782998159150,"id":"k","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1782998159251,"id":"k","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1782998159374,"id":"k","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1782998159487,"id":"k","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1782998159588,"id":"k","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1782998159988,"id":"k","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1782998160134,"id":"k","total":1,"ms":2029.2662}
+{"_e":"metro:client_log","_t":1782998354686,"level":"error","data":["React has detected a change in the order of Hooks called by RootNavigator. This will lead to bugs and errors if not fixed. For more information, read the Rules of Hooks: https://react.dev/link/rules-of-hooks\n\n   Previous render            Next render\n   ------------------------------------------------------\n1. useState                   useState\n2. useState                   useState\n3. useRef                     useState\n   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"]}
+{"_e":"metro:client_log","_t":1782998354778,"level":"error","data":["[Error: Should have a queue. You are likely calling Hooks conditionally, which is not allowed. (https://react.dev/link/invalid-hook-call)]"]}
+{"_e":"metro:client_log","_t":1782998376025,"level":"error","data":["[Error: Rendered fewer hooks than expected. This may be caused by an accidental early return statement.]"]}
+{"_e":"metro:bundling:started","_t":1782998424605,"id":"r","platform":"android","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1782998424605,"id":"r","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1782998424649,"id":"r","total":1,"ms":44.2119}
+{"_e":"metro:bundling:started","_t":1782999495637,"id":"t","platform":"android","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1782999495637,"id":"t","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1782999495670,"id":"t","total":1,"ms":32.9833}
+{"_e":"metro:client_log","_t":1782999908212,"level":"log","data":["Starting pickup for Rahul Sharma"]}
+{"_e":"metro:client_log","_t":1782999942783,"level":"error","data":["React has detected a change in the order of Hooks called by RootNavigator. This will lead to bugs and errors if not fixed. For more information, read the Rules of Hooks: https://react.dev/link/rules-of-hooks\n\n   Previous render            Next render\n   ------------------------------------------------------\n1. useState                   useState\n2. useState                   useState\n3. useState                   useState\n4. useRef                     useState\n   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"]}
+{"_e":"metro:client_log","_t":1782999942894,"level":"error","data":["[Error: Should have a queue. You are likely calling Hooks conditionally, which is not allowed. (https://react.dev/link/invalid-hook-call)]"]}
+{"_e":"root:init","_t":1783000373178,"format":"v0-jsonl","version":"57.0.3"}
+{"_e":"env:mode","_t":1783000373180,"nodeEnv":"development","babelEnv":"development","mode":"development"}
+{"_e":"env:load","_t":1783000373187,"mode":"development","files":[],"env":{}}
+{"_e":"devserver:start","_t":1783000374816,"mode":"development","web":true,"baseUrl":"","asyncRoutes":false,"routerRoot":"../..\\..\\app","serverComponents":false,"serverActions":false,"serverRendering":false,"apiRoutes":false,"exporting":false}
+{"_e":"metro:config","_t":1783000381761,"serverRoot":"../..\\..","projectRoot":"../..\\..","exporting":false,"flags":{"autolinkingModuleResolution":false,"serverActions":false,"serverComponents":false,"reactCompiler":false,"optimizeGraph":false,"treeshaking":false,"logbox":false}}

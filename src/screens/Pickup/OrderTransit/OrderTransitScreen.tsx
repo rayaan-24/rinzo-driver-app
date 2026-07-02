@@ -18,12 +18,14 @@ interface OrderTransitScreenProps {
   order: Order;
   onBack: () => void;
   onViewOrderPress?: () => void;
+  onNavigateToPickup: (order: Order) => void;
 }
 
 export const OrderTransitScreen: React.FC<OrderTransitScreenProps> = ({
   order,
   onBack,
   onViewOrderPress,
+  onNavigateToPickup,
 }) => {
   const insets = useSafeAreaInsets();
 
@@ -36,11 +38,7 @@ export const OrderTransitScreen: React.FC<OrderTransitScreenProps> = ({
   };
 
   const handleNavigate = () => {
-    Alert.alert(
-      'Navigation Active',
-      `Navigating to Rahul Sharma's address: 42nd Street, Emerald Hills.`,
-      [{ text: 'OK' }]
-    );
+    onNavigateToPickup(order);
   };
 
   // Custom Live signal pill badge for Header right-side
