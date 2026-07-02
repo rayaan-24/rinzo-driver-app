@@ -366,6 +366,8 @@ export const RootNavigator: React.FC = () => {
               setTransitMode('dispatch');
             } else if (transitMode === 'franchise_pickup') {
               setTransitMode('delivery_transit');
+            } else if (transitMode === 'reached_drop') {
+              setTransitMode('delivery_drop');
             } else if (transitMode === 'delivery_drop') {
               setIsCollectionComplete(true);
             } else if (transitMode === 'dispatch') {
@@ -384,6 +386,8 @@ export const RootNavigator: React.FC = () => {
               setTransitMode('dispatch');
             } else if (transitMode === 'franchise_pickup') {
               setTransitMode('delivery_transit');
+            } else if (transitMode === 'reached_drop') {
+              setTransitMode('delivery_drop');
             } else if (transitMode === 'delivery_drop') {
               setIsCollectionComplete(true);
             } else if (transitMode === 'dispatch') {
@@ -403,6 +407,8 @@ export const RootNavigator: React.FC = () => {
             } else if (transitMode === 'franchise_pickup') {
               setIsIntakeActive(true);
             } else if (transitMode === 'delivery_drop') {
+              setTransitMode('reached_drop');
+            } else if (transitMode === 'reached_drop') {
               setIsOrderCompleted(true);
             } else if (transitMode === 'dispatch') {
               setTransitMode('franchise');

@@ -20,7 +20,7 @@ interface OrderTransitScreenProps {
   onBack: () => void;
   onViewOrderPress?: () => void;
   onNavigateToPickup: (order: Order) => void;
-  transitMode?: 'pickup' | 'delivery_transit' | 'franchise_pickup' | 'dispatch' | 'franchise' | 'delivery_drop';
+  transitMode?: 'pickup' | 'delivery_transit' | 'franchise_pickup' | 'dispatch' | 'franchise' | 'delivery_drop' | 'reached_drop';
   showAcceptedBanner?: boolean;
   onAcceptNewOrder?: () => void;
 }
@@ -75,8 +75,8 @@ export const OrderTransitScreen: React.FC<OrderTransitScreenProps> = ({
           }),
         ])
       ).start();
-    } else if (transitMode === 'franchise') {
-      // Animate progress line to 100% (franchise en route/arrived)
+    } else if (transitMode === 'franchise' || transitMode === 'reached_drop') {
+      // Animate progress line to 100% (franchise/drop en route/arrived)
       Animated.timing(progressAnim, {
         toValue: 1.0,
         duration: 1200,
@@ -208,7 +208,7 @@ export const OrderTransitScreen: React.FC<OrderTransitScreenProps> = ({
   // ----------------------------------------------------
   // DISPATCH OR FRANCHISE MODE LAYOUT
   // ----------------------------------------------------
-  if (transitMode === 'dispatch' || transitMode === 'franchise' || transitMode === 'franchise_pickup') {
+  if (transitMode === 'dispatch' || transitMode === 'franchise' || transitMode === 'franchise_pickup' || transitMode === 'reached_drop') {
     // Custom header with "En Route" stacked label + Avatar
     const customHeaderRight = (
       <View style={styles.customHeaderRight}>
@@ -223,9 +223,9 @@ export const OrderTransitScreen: React.FC<OrderTransitScreenProps> = ({
       </View>
     );
 
-    const headerTitle = transitMode === 'franchise_pickup' ? 'Franchise' : (transitMode === 'franchise' ? 'franchise' : 'Dispatch');
-    const mainActionBtnText = (transitMode === 'franchise' || transitMode === 'franchise_pickup') ? 'Reached Franchise' : 'Continue';
-    const sheetTitle = transitMode === 'franchise_pickup' ? 'Franchise Control' : 'Franchise Central';
+    const headerTitle = transitMode === 'reached_drop' ? 'Deliver' : (transitMode === 'franchise_pickup' ? 'Franchise' : (transitMode === 'franchise' ? 'franchise' : 'Dispatch'));
+    const mainActionBtnText = transitMode === 'reached_drop' ? 'Reached Drop Point' : ((transitMode === 'franchise' || transitMode === 'franchise_pickup') ? 'Reached Franchise' : 'Continue');
+    const sheetTitle = transitMode === 'reached_drop' ? 'Customer Home' : (transitMode === 'franchise_pickup' ? 'Franchise Control' : 'Franchise Central');
 
     return (
       <View style={styles.container}>
@@ -346,7 +346,7 @@ export const OrderTransitScreen: React.FC<OrderTransitScreenProps> = ({
 
             {/* Nodes Container */}
             <View style={styles.nodesContainer}>
-              {/* Node 1: Pickup (Checked tick) */}
+              {/* Node 1: Customer (Checked tick for Dispatch/Franchise/reached_drop/franchise_pickup) */}
               <View style={styles.nodeItem}>
                 <View style={styles.nodeCircleChecked}>
                   <Svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="4">
@@ -354,13 +354,13 @@ export const OrderTransitScreen: React.FC<OrderTransitScreenProps> = ({
                   </Svg>
                 </View>
                 <Text style={[styles.nodeText, { color: '#8664EC', fontFamily: theme.typography.fontFamily.bold, fontWeight: 'bold' }]}>
-                  Pickup
+                  {order.type === 'delivery' || transitMode === 'reached_drop' ? 'Pickup' : 'Customer'}
                 </Text>
               </View>
 
-              {/* Node 2: In Transit (Concentric pulsing circle for Dispatch, Checked tick for Franchise, Greyed for franchise_pickup) */}
+              {/* Node 2: In Transit (Concentric pulsing circle for Dispatch, Checked tick for Franchise/reached_drop, Greyed for franchise_pickup) */}
               <View style={styles.nodeItem}>
-                {transitMode === 'franchise' ? (
+                {transitMode === 'franchise' || transitMode === 'reached_drop' ? (
                   <View style={styles.nodeCircleChecked}>
                     <Svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="4">
                       <Path d="M20 6L9 17l-5-5" strokeLinecap="round" strokeLinejoin="round" />
@@ -379,14 +379,14 @@ export const OrderTransitScreen: React.FC<OrderTransitScreenProps> = ({
                 ) : (
                   <View style={styles.nodeCircleInactive} />
                 )}
-                <Text style={transitMode === 'franchise' || transitMode === 'dispatch' ? [styles.nodeText, { color: '#8664EC', fontFamily: theme.typography.fontFamily.bold, fontWeight: 'bold' }] : styles.nodeText}>
+                <Text style={transitMode === 'franchise' || transitMode === 'reached_drop' || transitMode === 'dispatch' ? [styles.nodeText, { color: '#8664EC', fontFamily: theme.typography.fontFamily.bold, fontWeight: 'bold' }] : styles.nodeText}>
                   In Transit
                 </Text>
               </View>
 
-              {/* Node 3: Delivered (Inactive Gray for Dispatch, Checked tick for Franchise) */}
+              {/* Node 3: Franchise (Checked tick for Franchise/reached_drop, Greyed for Dispatch/franchise_pickup) */}
               <View style={styles.nodeItem}>
-                {transitMode === 'franchise' ? (
+                {transitMode === 'franchise' || transitMode === 'reached_drop' ? (
                   <View style={styles.nodeCircleChecked}>
                     <Svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="4">
                       <Path d="M20 6L9 17l-5-5" strokeLinecap="round" strokeLinejoin="round" />
@@ -395,8 +395,8 @@ export const OrderTransitScreen: React.FC<OrderTransitScreenProps> = ({
                 ) : (
                   <View style={styles.nodeCircleInactive} />
                 )}
-                <Text style={transitMode === 'franchise' ? [styles.nodeText, { color: '#8664EC', fontFamily: theme.typography.fontFamily.bold, fontWeight: 'bold' }] : styles.nodeText}>
-                  Delivered
+                <Text style={transitMode === 'franchise' || transitMode === 'reached_drop' ? [styles.nodeText, { color: '#8664EC', fontFamily: theme.typography.fontFamily.bold, fontWeight: 'bold' }] : styles.nodeText}>
+                  {order.type === 'delivery' || transitMode === 'reached_drop' ? 'Delivered' : 'Franchise'}
                 </Text>
               </View>
             </View>
