@@ -3,10 +3,11 @@ import { View, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Path } from 'react-native-svg';
 import { theme } from '../../../theme';
-import { moderateScale, screenWidth } from '../../../utils/responsive';
+import { moderateScale, verticalScale, screenWidth } from '../../../utils/responsive';
 import { CustomButton } from '../../../components/common/CustomButton';
 
 const s = (size: number) => moderateScale(size, 0.3);
+const vs = (size: number) => verticalScale(size);
 
 interface AllowLocationScreenProps {
   onAllow?: () => void;
@@ -30,7 +31,7 @@ export const AllowLocationScreen: React.FC<AllowLocationScreenProps> = ({
       {/* 2. 3D Map Illustration Container */}
       <View style={styles.illustrationContainer}>
         <Image
-          source={require('../../../assets/images/allow_location_map.png')}
+          source={require('../../../assets/images/allow_location_map.jpg')}
           style={styles.illustrationImage}
           resizeMode="contain"
         />
@@ -67,11 +68,11 @@ export const AllowLocationScreen: React.FC<AllowLocationScreenProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FAFAFA',
+    backgroundColor: '#EDE6F9',
   },
   textContainer: {
     paddingHorizontal: theme.spacing.xl,
-    paddingTop: s(25),
+    paddingTop: vs(20),
     alignItems: 'center',
   },
   title: {
@@ -80,7 +81,7 @@ const styles = StyleSheet.create({
     fontWeight: theme.typography.fontWeight.bold,
     color: '#1C1C1E',
     textAlign: 'center',
-    marginBottom: s(10),
+    marginBottom: vs(8),
   },
   subtitle: {
     fontFamily: theme.typography.fontFamily.regular,
@@ -94,20 +95,21 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: s(10),
+    marginVertical: vs(8),
   },
   illustrationImage: {
     width: screenWidth * 0.85,
     height: '100%',
+    maxHeight: vs(320),
   },
   footer: {
     paddingHorizontal: theme.spacing.lg,
-    paddingBottom: theme.spacing.xl,
+    paddingBottom: vs(20),
     alignItems: 'center',
   },
   allowButton: {
     width: '100%',
-    height: s(54),
+    height: vs(54),
     borderRadius: s(16),
     backgroundColor: '#7952F3',
   },
@@ -115,9 +117,9 @@ const styles = StyleSheet.create({
     marginRight: s(8),
   },
   maybeLaterBtn: {
-    paddingVertical: s(12),
+    paddingVertical: vs(10),
     paddingHorizontal: s(20),
-    marginTop: s(14),
+    marginTop: vs(12),
   },
   maybeLaterText: {
     fontFamily: theme.typography.fontFamily.bold,
