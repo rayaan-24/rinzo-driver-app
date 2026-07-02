@@ -156,7 +156,7 @@ export const RootNavigator: React.FC = () => {
         <CollectionCompleteScreen
           onContinue={() => {
             setIsCollectionComplete(false);
-            setIsOrderCompleted(true);
+            setTransitMode('delivery_drop');
           }}
         />
       </View>
@@ -366,6 +366,8 @@ export const RootNavigator: React.FC = () => {
               setTransitMode('dispatch');
             } else if (transitMode === 'franchise_pickup') {
               setTransitMode('delivery_transit');
+            } else if (transitMode === 'delivery_drop') {
+              setIsCollectionComplete(true);
             } else if (transitMode === 'dispatch') {
               setTransitMode('pickup');
               setGenerateQrOrder(transitOrder);
@@ -382,6 +384,8 @@ export const RootNavigator: React.FC = () => {
               setTransitMode('dispatch');
             } else if (transitMode === 'franchise_pickup') {
               setTransitMode('delivery_transit');
+            } else if (transitMode === 'delivery_drop') {
+              setIsCollectionComplete(true);
             } else if (transitMode === 'dispatch') {
               setTransitMode('pickup');
               setGenerateQrOrder(transitOrder);
@@ -398,6 +402,8 @@ export const RootNavigator: React.FC = () => {
               setTransitMode('franchise_pickup');
             } else if (transitMode === 'franchise_pickup') {
               setIsIntakeActive(true);
+            } else if (transitMode === 'delivery_drop') {
+              setIsOrderCompleted(true);
             } else if (transitMode === 'dispatch') {
               setTransitMode('franchise');
             } else if (transitMode === 'franchise') {
