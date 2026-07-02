@@ -20,6 +20,7 @@ import { OrderCompletedScreen } from '../../screens/Pickup/OrderCompleted/OrderC
 import { FranchiseIntakeScreen } from '../../screens/Pickup/FranchiseIntake/FranchiseIntakeScreen';
 import { CameraQrScannerScreen } from '../../screens/Pickup/CameraQrScanner/CameraQrScannerScreen';
 import { CollectionCompleteScreen } from '../../screens/Pickup/CollectionComplete/CollectionCompleteScreen';
+import { CustomerHandoffScreen } from '../../screens/Pickup/CustomerHandoff/CustomerHandoffScreen';
 import { Order } from '../../data/mockData';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -43,6 +44,7 @@ export const RootNavigator: React.FC = () => {
   const [isIntakeActive, setIsIntakeActive] = useState(false);
   const [isCameraActive, setIsCameraActive] = useState(false);
   const [isCollectionComplete, setIsCollectionComplete] = useState(false);
+  const [isCustomerHandoffActive, setIsCustomerHandoffActive] = useState(false);
   const slideAnim = useRef(new Animated.Value(1)).current;
   const directionRef = useRef(-1);
   const insets = useSafeAreaInsets();
@@ -157,6 +159,30 @@ export const RootNavigator: React.FC = () => {
           onContinue={() => {
             setIsCollectionComplete(false);
             setTransitMode('delivery_drop');
+          }}
+        />
+      </View>
+    );
+  }
+
+  if (isCustomerHandoffActive) {
+    return (
+      <View
+        style={[
+          styles.container,
+          {
+            paddingTop: insets.top,
+            backgroundColor: theme.colors.background,
+          },
+        ]}
+      >
+        <CustomerHandoffScreen
+          onBack={() => {
+            setIsCustomerHandoffActive(false);
+          }}
+          onConfirm={() => {
+            setIsCustomerHandoffActive(false);
+            setIsOrderCompleted(true);
           }}
         />
       </View>
@@ -409,7 +435,7 @@ export const RootNavigator: React.FC = () => {
             } else if (transitMode === 'delivery_drop') {
               setTransitMode('reached_drop');
             } else if (transitMode === 'reached_drop') {
-              setIsOrderCompleted(true);
+              setIsCustomerHandoffActive(true);
             } else if (transitMode === 'dispatch') {
               setTransitMode('franchise');
             } else if (transitMode === 'franchise') {
