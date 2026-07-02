@@ -47,7 +47,10 @@ export const RootNavigator: React.FC = () => {
         return (
           <HomeScreen
             onSelectOrder={setSelectedOrder}
-            onStartPickup={setTransitOrder}
+            onStartPickup={(order) => {
+              setTransitOrder(order);
+              setTransitMode(order.type === 'delivery' ? 'delivery_transit' : 'pickup');
+            }}
           />
         );
       case 'History':
