@@ -289,6 +289,8 @@ export const RootNavigator: React.FC = () => {
               setTransitMode('dispatch');
             } else if (transitMode === 'franchise') {
               setTransitMode('dispatch');
+            } else if (transitMode === 'franchise_pickup') {
+              setTransitMode('delivery_transit');
             } else if (transitMode === 'dispatch') {
               setTransitMode('pickup');
               setGenerateQrOrder(transitOrder);
@@ -303,6 +305,8 @@ export const RootNavigator: React.FC = () => {
               setTransitMode('dispatch');
             } else if (transitMode === 'franchise') {
               setTransitMode('dispatch');
+            } else if (transitMode === 'franchise_pickup') {
+              setTransitMode('delivery_transit');
             } else if (transitMode === 'dispatch') {
               setTransitMode('pickup');
               setGenerateQrOrder(transitOrder);
@@ -315,6 +319,10 @@ export const RootNavigator: React.FC = () => {
             if (transitMode === 'pickup') {
               setActivePickupOrder(order);
               setShowAcceptedBanner(false);
+            } else if (transitMode === 'delivery_transit') {
+              setTransitMode('franchise_pickup');
+            } else if (transitMode === 'franchise_pickup') {
+              setIsVerifyingFranchise(true);
             } else if (transitMode === 'dispatch') {
               setTransitMode('franchise');
             } else if (transitMode === 'franchise') {
