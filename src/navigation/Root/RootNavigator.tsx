@@ -12,6 +12,7 @@ import { OrderTransitScreen } from '../../screens/Pickup/OrderTransit/OrderTrans
 import { PickupActiveScreen } from '../../screens/Pickup/PickupActive/PickupActiveScreen';
 import { ItemVerificationScreen } from '../../screens/Pickup/ItemVerification/ItemVerificationScreen';
 import { VerifyPickupScreen } from '../../screens/Pickup/VerifyPickup/VerifyPickupScreen';
+import { OrderCollectedScreen } from '../../screens/Pickup/OrderCollected/OrderCollectedScreen';
 import { Order } from '../../data/mockData';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -25,6 +26,7 @@ export const RootNavigator: React.FC = () => {
   const [activePickupOrder, setActivePickupOrder] = useState<Order | null>(null);
   const [verificationOrder, setVerificationOrder] = useState<Order | null>(null);
   const [verifyOtpOrder, setVerifyOtpOrder] = useState<Order | null>(null);
+  const [collectedOrder, setCollectedOrder] = useState<Order | null>(null);
   const slideAnim = useRef(new Animated.Value(1)).current;
   const directionRef = useRef(-1);
   const insets = useSafeAreaInsets();
@@ -73,6 +75,33 @@ export const RootNavigator: React.FC = () => {
     });
   };
 
+  if (collectedOrder) {
+    return (
+      <View
+        style={[
+          styles.container,
+          {
+            paddingTop: insets.top,
+            backgroundColor: theme.colors.background,
+          },
+        ]}
+      >
+        <OrderCollectedScreen
+          order={collectedOrder}
+          onBack={() => setCollectedOrder(null)}
+          onConfirm={() => {
+            setCollectedOrder(null);
+            setVerifyOtpOrder(null);
+            setVerificationOrder(null);
+            setActivePickupOrder(null);
+            setTransitOrder(null);
+            setSelectedOrder(null);
+          }}
+        />
+      </View>
+    );
+  }
+
   if (verifyOtpOrder) {
     return (
       <View
@@ -88,11 +117,7 @@ export const RootNavigator: React.FC = () => {
           order={verifyOtpOrder}
           onBack={() => setVerifyOtpOrder(null)}
           onConfirm={() => {
-            setVerifyOtpOrder(null);
-            setVerificationOrder(null);
-            setActivePickupOrder(null);
-            setTransitOrder(null);
-            setSelectedOrder(null);
+            setCollectedOrder(verifyOtpOrder);
           }}
         />
       </View>
