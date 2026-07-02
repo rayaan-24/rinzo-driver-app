@@ -72,7 +72,7 @@ export const HomeScreen: React.FC = () => {
         </View>
         
         <TouchableOpacity style={styles.signalBtn} activeOpacity={0.8}>
-          <SignalIcon color={theme.colors.primary} size={s(20)} />
+          <SignalIcon color={theme.colors.primary} size={s(14)} />
         </TouchableOpacity>
       </View>
 
