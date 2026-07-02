@@ -15,11 +15,13 @@ import { Order } from '../../../data/mockData';
 interface PickupDetailsScreenProps {
   order: Order;
   onBack: () => void;
+  onStartPickup: (order: Order) => void;
 }
 
 export const PickupDetailsScreen: React.FC<PickupDetailsScreenProps> = ({
   order,
   onBack,
+  onStartPickup,
 }) => {
   return (
     <View style={styles.container}>
@@ -249,6 +251,7 @@ export const PickupDetailsScreen: React.FC<PickupDetailsScreenProps> = ({
           <TouchableOpacity
             style={[styles.primaryActionBtn, { backgroundColor: theme.colors.primary }]}
             activeOpacity={0.8}
+            onPress={() => onStartPickup(order)}
           >
             <Svg width="18" height="18" viewBox="0 0 24 24" fill="none">
               <Path

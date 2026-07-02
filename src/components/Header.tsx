@@ -9,6 +9,7 @@ interface HeaderProps {
   showBack?: boolean;
   onBackPress?: () => void;
   leftCustom?: React.ReactNode;
+  rightCustom?: React.ReactNode;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -16,6 +17,7 @@ export const Header: React.FC<HeaderProps> = ({
   showBack = false,
   onBackPress,
   leftCustom,
+  rightCustom,
 }) => {
   return (
     <View style={styles.container}>
@@ -51,11 +53,15 @@ export const Header: React.FC<HeaderProps> = ({
         </View>
       )}
 
-      {/* Right: Signal indicator (always constant) */}
+      {/* Right: Custom Component OR default Signal indicator */}
       <View style={styles.rightContainer}>
-        <TouchableOpacity style={styles.signalBtn} activeOpacity={0.8}>
-          <SignalIcon color={theme.colors.primary} size={15} />
-        </TouchableOpacity>
+        {rightCustom ? (
+          rightCustom
+        ) : (
+          <TouchableOpacity style={styles.signalBtn} activeOpacity={0.8}>
+            <SignalIcon color={theme.colors.primary} size={15} />
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );

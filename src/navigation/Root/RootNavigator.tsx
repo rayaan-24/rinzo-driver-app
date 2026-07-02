@@ -8,6 +8,7 @@ import { PerformanceScreen } from '../../screens/Performance/PerformanceScreen';
 import { ProfileScreen } from '../../screens/Profile/ProfileScreen';
 import { BottomTabBar, TabType } from '../../components/BottomTabBar';
 import { PickupDetailsScreen } from '../../screens/Pickup/PickupDetails/PickupDetailsScreen';
+import { OrderTransitScreen } from '../../screens/Pickup/OrderTransit/OrderTransitScreen';
 import { Order } from '../../data/mockData';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -17,6 +18,7 @@ export const RootNavigator: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabType>('Home');
   const [prevTab, setPrevTab] = useState<TabType | null>(null);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [transitOrder, setTransitOrder] = useState<Order | null>(null);
   const slideAnim = useRef(new Animated.Value(1)).current;
   const directionRef = useRef(-1);
   const insets = useSafeAreaInsets();
@@ -24,7 +26,12 @@ export const RootNavigator: React.FC = () => {
   const renderScreen = (tab: TabType) => {
     switch (tab) {
       case 'Home':
-        return <HomeScreen onSelectOrder={setSelectedOrder} />;
+        return (
+          <HomeScreen
+            onSelectOrder={setSelectedOrder}
+            onStartPickup={setTransitOrder}
+          />
+        );
       case 'History':
         return <HistoryScreen />;
       case 'Alerts':
@@ -32,7 +39,12 @@ export const RootNavigator: React.FC = () => {
       case 'Profile':
         return <ProfileScreen />;
       default:
-        return <HomeScreen onSelectOrder={setSelectedOrder} />;
+        return (
+          <HomeScreen
+            onSelectOrder={setSelectedOrder}
+            onStartPickup={setTransitOrder}
+          />
+        );
     }
   };
 
@@ -55,6 +67,26 @@ export const RootNavigator: React.FC = () => {
     });
   };
 
+  if (transitOrder) {
+    return (
+      <View
+        style={[
+          styles.container,
+          {
+            paddingTop: insets.top,
+            backgroundColor: theme.colors.background,
+          },
+        ]}
+      >
+        <OrderTransitScreen
+          order={transitOrder}
+          onBack={() => setTransitOrder(null)}
+          onViewOrderPress={() => setTransitOrder(null)}
+        />
+      </View>
+    );
+  }
+
   if (selectedOrder) {
     return (
       <View
@@ -69,6 +101,7 @@ export const RootNavigator: React.FC = () => {
         <PickupDetailsScreen
           order={selectedOrder}
           onBack={() => setSelectedOrder(null)}
+          onStartPickup={setTransitOrder}
         />
       </View>
     );

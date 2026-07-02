@@ -23,9 +23,13 @@ import {
 
 interface HomeScreenProps {
   onSelectOrder: (order: Order) => void;
+  onStartPickup: (order: Order) => void;
 }
 
-export const HomeScreen: React.FC<HomeScreenProps> = ({ onSelectOrder }) => {
+export const HomeScreen: React.FC<HomeScreenProps> = ({
+  onSelectOrder,
+  onStartPickup,
+}) => {
   const [isOnline, setIsOnline] = useState(mockDriverStats.isOnline);
   const [stats, setStats] = useState(mockDriverStats);
 
@@ -38,7 +42,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onSelectOrder }) => {
   };
 
   const handlePrimaryPress = (order: Order) => {
-    console.log(`Starting ${order.type} for ${order.customerName}`);
+    onStartPickup(order);
   };
 
   const handleSecondaryPress = (order: Order) => {
