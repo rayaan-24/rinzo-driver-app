@@ -213,7 +213,7 @@ export const LoginPhoneScreen: React.FC<LoginPhoneScreenProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5EEFD',
+    backgroundColor: '#F1EAFD',
   },
   keyboardView: {
     flex: 1,

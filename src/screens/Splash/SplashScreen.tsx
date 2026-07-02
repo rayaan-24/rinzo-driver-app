@@ -2,9 +2,10 @@ import React, { useEffect, useRef } from 'react';
 import { View, StyleSheet, Text, Image, Animated } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { theme } from '../../theme';
-import { moderateScale, screenWidth } from '../../utils/responsive';
+import { moderateScale, verticalScale, screenWidth } from '../../utils/responsive';
 
 const s = (size: number) => moderateScale(size, 0.3);
+const vs = (size: number) => verticalScale(size);
 
 interface SplashScreenProps {
   onFinish?: () => void;
@@ -14,14 +15,12 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
   const progressAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    // Animate the progress bar from 0 to 1 over 2.2 seconds
     Animated.timing(progressAnim, {
       toValue: 1,
       duration: 2200,
       useNativeDriver: false,
     }).start();
 
-    // Trigger onFinish after 2.5 seconds
     const timer = setTimeout(() => {
       if (onFinish) {
         onFinish();
@@ -31,7 +30,6 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
     return () => clearTimeout(timer);
   }, [onFinish, progressAnim]);
 
-  // Interpolate animation value to progress bar width
   const progressBarWidth = progressAnim.interpolate({
     inputRange: [0, 1],
     outputRange: ['0%', '100%'],
@@ -85,35 +83,35 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F7F1FD', // Exact background color matching the image assets seamlessly
+    backgroundColor: '#F7F1FD',
   },
   innerContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: '#F7F1FD',
-    paddingVertical: s(30),
+    paddingVertical: vs(20),
   },
   brandingContainer: {
     alignItems: 'center',
-    marginTop: s(45),
+    marginTop: vs(30),
   },
   mainLogo: {
-    width: s(115),
-    height: s(115),
-    marginBottom: s(12),
+    width: s(110),
+    height: s(110),
+    marginBottom: vs(10),
   },
   wordmarkImage: {
-    width: s(220),
-    height: s(42),
-    marginVertical: s(4),
+    width: s(210),
+    height: vs(40),
+    marginVertical: vs(4),
   },
   tagline: {
     fontFamily: theme.typography.fontFamily.medium,
     fontSize: s(14),
     fontWeight: theme.typography.fontWeight.medium,
-    color: '#6E6A80', // Slate-purple gray tagline color
-    marginTop: s(6),
+    color: '#6E6A80',
+    marginTop: vs(4),
     letterSpacing: 0.3,
   },
   illustrationContainer: {
@@ -121,27 +119,27 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
-    marginVertical: s(10),
+    marginVertical: vs(10),
   },
   scooterImage: {
-    width: screenWidth * 0.92,
-    height: s(270),
+    width: screenWidth * 0.9,
+    height: vs(260),
   },
   loaderContainer: {
     width: '100%',
     alignItems: 'center',
-    marginBottom: s(35),
+    marginBottom: vs(25),
   },
   progressTrack: {
     width: s(150),
-    height: s(4.5),
-    backgroundColor: '#E5DCF7', // Light purple track color matching design
+    height: vs(4.5),
+    backgroundColor: '#E5DCF7',
     borderRadius: s(10),
     overflow: 'hidden',
   },
   progressBar: {
     height: '100%',
-    backgroundColor: '#7952F3', // Vibrant purple progress fill
+    backgroundColor: '#7952F3',
     borderRadius: s(10),
   },
 });
