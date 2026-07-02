@@ -13,6 +13,7 @@ import { PickupActiveScreen } from '../../screens/Pickup/PickupActive/PickupActi
 import { ItemVerificationScreen } from '../../screens/Pickup/ItemVerification/ItemVerificationScreen';
 import { VerifyPickupScreen } from '../../screens/Pickup/VerifyPickup/VerifyPickupScreen';
 import { OrderCollectedScreen } from '../../screens/Pickup/OrderCollected/OrderCollectedScreen';
+import { GenerateQrScreen } from '../../screens/Pickup/GenerateQR/GenerateQrScreen';
 import { Order } from '../../data/mockData';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -27,6 +28,7 @@ export const RootNavigator: React.FC = () => {
   const [verificationOrder, setVerificationOrder] = useState<Order | null>(null);
   const [verifyOtpOrder, setVerifyOtpOrder] = useState<Order | null>(null);
   const [collectedOrder, setCollectedOrder] = useState<Order | null>(null);
+  const [generateQrOrder, setGenerateQrOrder] = useState<Order | null>(null);
   const slideAnim = useRef(new Animated.Value(1)).current;
   const directionRef = useRef(-1);
   const insets = useSafeAreaInsets();
@@ -75,6 +77,34 @@ export const RootNavigator: React.FC = () => {
     });
   };
 
+  if (generateQrOrder) {
+    return (
+      <View
+        style={[
+          styles.container,
+          {
+            paddingTop: insets.top,
+            backgroundColor: theme.colors.background,
+          },
+        ]}
+      >
+        <GenerateQrScreen
+          order={generateQrOrder}
+          onBack={() => setGenerateQrOrder(null)}
+          onConfirm={() => {
+            setGenerateQrOrder(null);
+            setCollectedOrder(null);
+            setVerifyOtpOrder(null);
+            setVerificationOrder(null);
+            setActivePickupOrder(null);
+            setTransitOrder(null);
+            setSelectedOrder(null);
+          }}
+        />
+      </View>
+    );
+  }
+
   if (collectedOrder) {
     return (
       <View
@@ -90,12 +120,7 @@ export const RootNavigator: React.FC = () => {
           order={collectedOrder}
           onBack={() => setCollectedOrder(null)}
           onConfirm={() => {
-            setCollectedOrder(null);
-            setVerifyOtpOrder(null);
-            setVerificationOrder(null);
-            setActivePickupOrder(null);
-            setTransitOrder(null);
-            setSelectedOrder(null);
+            setGenerateQrOrder(collectedOrder);
           }}
         />
       </View>
