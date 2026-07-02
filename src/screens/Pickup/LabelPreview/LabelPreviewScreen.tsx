@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   ScrollView,
   Modal,
-  Alert,
   Dimensions,
 } from 'react-native';
 import Svg, { Path, Circle } from 'react-native-svg';
@@ -39,23 +38,32 @@ export const LabelPreviewScreen: React.FC<LabelPreviewScreenProps> = ({
 }) => {
   const [showScanResult, setShowScanResult] = useState(false);
 
+  // Custom themed dialog states
+  const [dialogVisible, setDialogVisible] = useState(false);
+  const [dialogTitle, setDialogTitle] = useState('');
+  const [dialogDesc, setDialogDesc] = useState('');
+
+  const showCustomDialog = (title: string, desc: string) => {
+    setDialogTitle(title);
+    setDialogDesc(desc);
+    setDialogVisible(true);
+  };
+
   const handlePrint = () => {
-    Alert.alert(
+    showCustomDialog(
       'Label Printed',
-      `Sticker tag for ${bag.name} (${bag.qrCode}) sent to connected Thermal Printer Z-100!`,
-      [{ text: 'OK' }]
+      `Sticker tag for ${bag.name} (${bag.qrCode}) sent to connected Thermal Printer Z-100!`
     );
   };
 
   const handleShare = () => {
-    Alert.alert('Share Label', 'Opening native system share sheet...', [{ text: 'OK' }]);
+    showCustomDialog('Share Label', 'Opening native system share sheet...');
   };
 
   const handleRegenerate = () => {
-    Alert.alert(
+    showCustomDialog(
       'Regenerating QR',
-      'Re-generating unique cryptographic QR hash for this laundry bag...',
-      [{ text: 'OK' }]
+      'Re-generating unique cryptographic QR hash for this laundry bag...'
     );
   };
 
@@ -196,7 +204,11 @@ export const LabelPreviewScreen: React.FC<LabelPreviewScreenProps> = ({
         </View>
 
         {/* 4. Thermal Printer Status Bar */}
-        <View style={styles.printerStatusCapsule}>
+        <TouchableOpacity
+          style={styles.printerStatusCapsule}
+          activeOpacity={0.9}
+          onPress={() => showCustomDialog('Printer Connection', 'Thermal Printer Z-100 is connected, online, and has 40% paper remaining.')}
+        >
           <View style={styles.printerCircleIcon}>
             <Svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8664EC" strokeWidth="2.5">
               <Path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2" />
@@ -220,7 +232,7 @@ export const LabelPreviewScreen: React.FC<LabelPreviewScreenProps> = ({
             <Text style={styles.metricValLabel}>BATTERY</Text>
             <Text style={styles.metricValText}>85%</Text>
           </View>
-        </View>
+        </TouchableOpacity>
 
         <View style={{ height: 20 }} />
       </ScrollView>
@@ -307,6 +319,44 @@ export const LabelPreviewScreen: React.FC<LabelPreviewScreenProps> = ({
               onPress={() => setShowScanResult(false)}
             >
               <Text style={styles.modalDismissBtnText}>Close Verification</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Custom Themed Dialog Alert Modal */}
+      <Modal
+        visible={dialogVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setDialogVisible(false)}
+      >
+        <View style={styles.modalBackdrop}>
+          <View style={styles.modalCard}>
+            {/* Concentric Success Circle Icon */}
+            <View style={styles.modalIconOuterCircle}>
+              <View style={styles.modalIconInnerCircle}>
+                <Svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="4">
+                  <Path
+                    d="M20 6L9 17l-5-5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </Svg>
+              </View>
+            </View>
+
+            {/* Modal texts */}
+            <Text style={styles.modalTitle}>{dialogTitle}</Text>
+            <Text style={styles.modalDesc}>{dialogDesc}</Text>
+
+            {/* Modal OK Button */}
+            <TouchableOpacity
+              style={styles.modalButton}
+              activeOpacity={0.8}
+              onPress={() => setDialogVisible(false)}
+            >
+              <Text style={styles.modalButtonText}>OK</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -686,6 +736,21 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
     color: '#8664EC',
+  },
+  modalButton: {
+    width: '100%',
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: theme.colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+    ...theme.shadows.small,
+  },
+  modalButtonText: {
+    fontFamily: theme.typography.fontFamily.bold,
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: theme.colors.cardBg,
   },
 });
 export default LabelPreviewScreen;

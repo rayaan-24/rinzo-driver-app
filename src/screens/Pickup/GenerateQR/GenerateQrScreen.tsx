@@ -5,7 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  Alert,
+  Modal,
 } from 'react-native';
 import Svg, { Path, Circle, Rect } from 'react-native-svg';
 import { theme } from '../../../theme';
@@ -34,6 +34,16 @@ export const GenerateQrScreen: React.FC<GenerateQrScreenProps> = ({
   onConfirm,
   onSelectBag,
 }) => {
+  // Custom themed dialog states
+  const [dialogVisible, setDialogVisible] = useState(false);
+  const [dialogTitle, setDialogTitle] = useState('');
+  const [dialogDesc, setDialogDesc] = useState('');
+
+  const showCustomDialog = (title: string, desc: string) => {
+    setDialogTitle(title);
+    setDialogDesc(desc);
+    setDialogVisible(true);
+  };
 
   // Bags printing state
   const [bags, setBags] = useState<BagData[]>([
@@ -80,25 +90,35 @@ export const GenerateQrScreen: React.FC<GenerateQrScreenProps> = ({
   const flexPrinted = readyCount > 0 ? 2 : 4;
   const flexPending = 6;
 
-  const handlePrintBag = (bagId: string, bagName: string) => {
-    setBags((prev) =>
-      prev.map((b) => (b.id === bagId ? { ...b, status: 'printed' } : b))
-    );
-    Alert.alert(
-      'Printing Label',
-      `${bagName} QR code label has been sent to connected Bluetooth printer TP-202.`,
-      [{ text: 'OK' }]
-    );
+  const handlePrintBag = (bagId: string, bagName: string, status: 'printed' | 'ready' | 'pending') => {
+    if (status === 'printed') {
+      showCustomDialog(
+        'Re-printing Label',
+        `Sticker label for ${bagName} has already been printed. Re-sending print command to connected Bluetooth printer TP-202.`
+      );
+    } else if (status === 'pending') {
+      showCustomDialog(
+        'Print Action Blocked',
+        `${bagName} is pending weight verification. Please complete items check in preceding screens before generating QR sticker.`
+      );
+    } else {
+      setBags((prev) =>
+        prev.map((b) => (b.id === bagId ? { ...b, status: 'printed' } : b))
+      );
+      showCustomDialog(
+        'Printing Label',
+        `${bagName} QR code label has been successfully sent to connected Bluetooth printer TP-202.`
+      );
+    }
   };
 
   const handlePrintAll = () => {
     setBags((prev) =>
       prev.map((b) => (b.status === 'ready' ? { ...b, status: 'printed' } : b))
     );
-    Alert.alert(
+    showCustomDialog(
       'All Labels Printed',
-      'All generated QR laundry bag labels have been sent to Bluetooth printer.',
-      [{ text: 'OK' }]
+      'All generated QR laundry bag labels have been sent to Bluetooth printer.'
     );
   };
 
@@ -247,36 +267,40 @@ export const GenerateQrScreen: React.FC<GenerateQrScreenProps> = ({
               </View>
 
               {/* Printing Button on the Right */}
-              {isReady ? (
-                <TouchableOpacity
-                  style={styles.printBtnActive}
-                  onPress={() => handlePrintBag(bag.id, bag.name)}
-                  activeOpacity={0.8}
+              <TouchableOpacity
+                style={
+                  isReady
+                    ? styles.printBtnActive
+                    : [
+                        styles.printBtnDisabled,
+                        isPending && { backgroundColor: '#F9FAFB', borderColor: '#E5E7EB' },
+                      ]
+                }
+                onPress={() => handlePrintBag(bag.id, bag.name, bag.status)}
+                activeOpacity={isPending ? 0.95 : 0.7}
+              >
+                <Svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke={isReady ? '#FFFFFF' : isPending ? '#E5E7EB' : '#AEAEB2'}
+                  strokeWidth="2.5"
                 >
-                  <Svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2.5">
-                    <Path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2" />
-                    <Path d="M6 14h12v8H6z" />
-                  </Svg>
-                </TouchableOpacity>
-              ) : (
-                <View
-                  style={[
-                    styles.printBtnDisabled,
-                    isPending && { backgroundColor: '#F9FAFB', borderColor: '#E5E7EB' },
-                  ]}
-                >
-                  <Svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={isPending ? '#E5E7EB' : '#AEAEB2'} strokeWidth="2.5">
-                    <Path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2" />
-                    <Path d="M6 14h12v8H6z" />
-                  </Svg>
-                </View>
-              )}
+                  <Path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2" />
+                  <Path d="M6 14h12v8H6z" />
+                </Svg>
+              </TouchableOpacity>
             </TouchableOpacity>
           );
         })}
 
         {/* 5. Connected Printer Bar */}
-        <View style={styles.printerStatusBar}>
+        <TouchableOpacity
+          style={styles.printerStatusBar}
+          activeOpacity={0.9}
+          onPress={() => showCustomDialog('Printer Connection', 'Thermal Bluetooth Printer TP-202 is online, fully charged (85%), and ready to print laundry labels.')}
+        >
           <View style={styles.printerIconCircle}>
             <Svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2.5">
               <Path d="M6.5 6.5l11 11L12 22V2l5.5 5.5-11 11" strokeLinecap="round" strokeLinejoin="round" />
@@ -303,7 +327,7 @@ export const GenerateQrScreen: React.FC<GenerateQrScreenProps> = ({
             </View>
           </View>
           <View style={styles.greenActiveDot} />
-        </View>
+        </TouchableOpacity>
 
         {/* 6. Action Submit Buttons */}
         {/* Print All Labels */}
@@ -328,6 +352,44 @@ export const GenerateQrScreen: React.FC<GenerateQrScreenProps> = ({
           <Text style={styles.continueBtnText}>Continue to Navigate</Text>
         </TouchableOpacity>
       </ScrollView>
+
+      {/* Custom Themed Dialog Modal */}
+      <Modal
+        visible={dialogVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setDialogVisible(false)}
+      >
+        <View style={styles.modalBackdrop}>
+          <View style={styles.modalCard}>
+            {/* Concentric Success Circle Icon */}
+            <View style={styles.modalIconOuterCircle}>
+              <View style={styles.modalIconInnerCircle}>
+                <Svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="4">
+                  <Path
+                    d="M20 6L9 17l-5-5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </Svg>
+              </View>
+            </View>
+
+            {/* Modal texts */}
+            <Text style={styles.modalTitle}>{dialogTitle}</Text>
+            <Text style={styles.modalDesc}>{dialogDesc}</Text>
+
+            {/* Modal OK Button */}
+            <TouchableOpacity
+              style={styles.modalButton}
+              activeOpacity={0.8}
+              onPress={() => setDialogVisible(false)}
+            >
+              <Text style={styles.modalButtonText}>OK</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -564,6 +626,71 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fontFamily.bold,
     fontSize: 14,
     fontWeight: theme.typography.fontWeight.bold,
+  },
+  modalBackdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.45)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  modalCard: {
+    width: '84%',
+    backgroundColor: theme.colors.cardBg,
+    borderRadius: 24,
+    padding: theme.spacing.lg,
+    alignItems: 'center',
+    ...theme.shadows.large,
+    borderWidth: 1,
+    borderColor: '#EFE8FF',
+  },
+  modalIconOuterCircle: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: theme.colors.primaryLight,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: theme.spacing.sm,
+  },
+  modalIconInnerCircle: {
+    width: 46,
+    height: 46,
+    borderRadius: 23,
+    backgroundColor: '#10B981',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  modalTitle: {
+    fontFamily: theme.typography.fontFamily.bold,
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: theme.colors.textDark,
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  modalDesc: {
+    fontFamily: theme.typography.fontFamily.medium,
+    fontSize: 13,
+    color: theme.colors.textMedium,
+    textAlign: 'center',
+    marginBottom: theme.spacing.md,
+    lineHeight: 18,
+    paddingHorizontal: 8,
+  },
+  modalButton: {
+    width: '100%',
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: theme.colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+    ...theme.shadows.small,
+  },
+  modalButtonText: {
+    fontFamily: theme.typography.fontFamily.bold,
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: theme.colors.cardBg,
   },
 });
 export default GenerateQrScreen;
