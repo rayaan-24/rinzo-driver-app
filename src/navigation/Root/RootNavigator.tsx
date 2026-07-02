@@ -19,6 +19,7 @@ import { FranchiseVerificationScreen } from '../../screens/Pickup/FranchiseVerif
 import { OrderCompletedScreen } from '../../screens/Pickup/OrderCompleted/OrderCompletedScreen';
 import { FranchiseIntakeScreen } from '../../screens/Pickup/FranchiseIntake/FranchiseIntakeScreen';
 import { CameraQrScannerScreen } from '../../screens/Pickup/CameraQrScanner/CameraQrScannerScreen';
+import { CollectionCompleteScreen } from '../../screens/Pickup/CollectionComplete/CollectionCompleteScreen';
 import { Order } from '../../data/mockData';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -41,6 +42,7 @@ export const RootNavigator: React.FC = () => {
   const [isOrderCompleted, setIsOrderCompleted] = useState(false);
   const [isIntakeActive, setIsIntakeActive] = useState(false);
   const [isCameraActive, setIsCameraActive] = useState(false);
+  const [isCollectionComplete, setIsCollectionComplete] = useState(false);
   const slideAnim = useRef(new Animated.Value(1)).current;
   const directionRef = useRef(-1);
   const insets = useSafeAreaInsets();
@@ -133,7 +135,28 @@ export const RootNavigator: React.FC = () => {
           }}
           onScanSuccess={() => {
             setIsCameraActive(false);
-            setIsVerifyingFranchise(true);
+            setIsCollectionComplete(true);
+          }}
+        />
+      </View>
+    );
+  }
+
+  if (isCollectionComplete && transitOrder) {
+    return (
+      <View
+        style={[
+          styles.container,
+          {
+            paddingTop: insets.top,
+            backgroundColor: theme.colors.background,
+          },
+        ]}
+      >
+        <CollectionCompleteScreen
+          onContinue={() => {
+            setIsCollectionComplete(false);
+            setIsOrderCompleted(true);
           }}
         />
       </View>
