@@ -20,7 +20,7 @@ interface OrderTransitScreenProps {
   onBack: () => void;
   onViewOrderPress?: () => void;
   onNavigateToPickup: (order: Order) => void;
-  transitMode?: 'pickup' | 'delivery_transit' | 'franchise_pickup' | 'dispatch' | 'franchise';
+  transitMode?: 'pickup' | 'delivery_transit' | 'franchise_pickup' | 'dispatch' | 'franchise' | 'delivery_drop';
   showAcceptedBanner?: boolean;
   onAcceptNewOrder?: () => void;
 }
@@ -739,7 +739,7 @@ export const OrderTransitScreen: React.FC<OrderTransitScreenProps> = ({
               />
             </Svg>
             <Text style={styles.primaryBtnText}>
-              {transitMode === 'delivery_transit' ? 'Navigate to Franchise' : 'Navigate to Pickup Point'}
+              {transitMode === 'delivery_drop' ? 'Navigate to Drop Point' : (transitMode === 'delivery_transit' ? 'Navigate to Franchise' : 'Navigate to Pickup Point')}
             </Text>
           </TouchableOpacity>
 
