@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
-  Modal,
   Alert,
 } from 'react-native';
 import Svg, { Path, Circle, Rect } from 'react-native-svg';
@@ -25,22 +24,11 @@ export const OrderCollectedScreen: React.FC<OrderCollectedScreenProps> = ({
   onBack,
   onConfirm,
 }) => {
-  const [showQrModal, setShowQrModal] = useState(false);
-
   const handleViewOrder = () => {
     Alert.alert(
       'Order Invoice',
       `Opening invoice details for Order #${order.orderNumber}...`,
       [{ text: 'OK' }]
-    );
-  };
-
-  const handlePrintLabels = () => {
-    setShowQrModal(false);
-    Alert.alert(
-      'Labels Printed',
-      'QR sorting labels sent to the mobile bluetooth printer!',
-      [{ text: 'OK', onPress: onConfirm }]
     );
   };
 
@@ -173,7 +161,7 @@ export const OrderCollectedScreen: React.FC<OrderCollectedScreenProps> = ({
         {/* Generate QR Labels Button */}
         <TouchableOpacity
           style={styles.generateBtn}
-          onPress={() => setShowQrModal(true)}
+          onPress={onConfirm}
           activeOpacity={0.8}
         >
           <Svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2" style={{ marginRight: 8 }}>
@@ -209,68 +197,6 @@ export const OrderCollectedScreen: React.FC<OrderCollectedScreenProps> = ({
           </Text>
         </View>
       </ScrollView>
-
-      {/* Custom Themed QR Labels Modal */}
-      <Modal
-        visible={showQrModal}
-        transparent={true}
-        animationType="fade"
-        onRequestClose={() => setShowQrModal(false)}
-      >
-        <View style={styles.modalBackdrop}>
-          <View style={styles.modalCard}>
-            <Text style={styles.modalTitle}>QR Labels Generated</Text>
-            <Text style={styles.modalDesc}>
-              Print or scan the barcode/QR code at the laundry sorting processing center.
-            </Text>
-
-            {/* Styled QR Code Vector */}
-            <View style={styles.qrContainer}>
-              <Svg width="150" height="150" viewBox="0 0 100 100" fill="none">
-                {/* QR Code corners */}
-                {/* Top-Left */}
-                <Rect x="5" y="5" width="20" height="20" rx="3" fill="none" stroke="#8664EC" strokeWidth="4" />
-                <Rect x="10" y="10" width="10" height="10" fill="#8664EC" />
-                {/* Top-Right */}
-                <Rect x="75" y="5" width="20" height="20" rx="3" fill="none" stroke="#8664EC" strokeWidth="4" />
-                <Rect x="80" y="10" width="10" height="10" fill="#8664EC" />
-                {/* Bottom-Left */}
-                <Rect x="5" y="75" width="20" height="20" rx="3" fill="none" stroke="#8664EC" strokeWidth="4" />
-                <Rect x="10" y="80" width="10" height="10" fill="#8664EC" />
-
-                {/* Center QR dots and lines */}
-                <Rect x="35" y="15" width="8" height="8" fill="#2E205E" />
-                <Rect x="50" y="5" width="12" height="6" fill="#2E205E" />
-                <Rect x="55" y="25" width="8" height="8" fill="#2E205E" />
-                <Rect x="15" y="45" width="16" height="8" fill="#2E205E" />
-                <Rect x="40" y="40" width="12" height="12" fill="#8664EC" />
-                <Rect x="65" y="45" width="8" height="16" fill="#2E205E" />
-                <Rect x="45" y="65" width="14" height="8" fill="#2E205E" />
-                <Rect x="75" y="75" width="8" height="8" fill="#8664EC" />
-                <Rect x="85" y="65" width="8" height="8" fill="#2E205E" />
-              </Svg>
-            </View>
-
-            {/* Print Labels primary Action */}
-            <TouchableOpacity
-              style={styles.modalPrintBtn}
-              activeOpacity={0.8}
-              onPress={handlePrintLabels}
-            >
-              <Text style={styles.modalPrintBtnText}>Print Labels</Text>
-            </TouchableOpacity>
-
-            {/* Dismiss modal secondary action */}
-            <TouchableOpacity
-              style={styles.modalCancelBtn}
-              activeOpacity={0.7}
-              onPress={() => setShowQrModal(false)}
-            >
-              <Text style={styles.modalCancelBtnText}>Close</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
     </View>
   );
 };
