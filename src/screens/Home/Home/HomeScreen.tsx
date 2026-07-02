@@ -13,7 +13,7 @@ import { theme } from '../../../theme';
 import { StatsCard } from '../../../components/StatsCard';
 import { SwipeButton } from '../../../components/SwipeButton';
 import { OrderCard } from '../../../components/OrderCard';
-import { SignalIcon } from '../../../components/Icons';
+import { Header } from '../../../components/Header';
 import {
   mockDriverStats,
   mockPickupOrders,
@@ -21,7 +21,15 @@ import {
   Order,
 } from '../../../data/mockData';
 
-export const HomeScreen: React.FC = () => {
+interface HomeScreenProps {
+  onSelectOrder: (order: Order) => void;
+  onStartPickup: (order: Order) => void;
+}
+
+export const HomeScreen: React.FC<HomeScreenProps> = ({
+  onSelectOrder,
+  onStartPickup,
+}) => {
   const [isOnline, setIsOnline] = useState(mockDriverStats.isOnline);
   const [stats, setStats] = useState(mockDriverStats);
 
@@ -34,47 +42,46 @@ export const HomeScreen: React.FC = () => {
   };
 
   const handlePrimaryPress = (order: Order) => {
-    console.log(`Starting ${order.type} for ${order.customerName}`);
+    onStartPickup(order);
   };
 
   const handleSecondaryPress = (order: Order) => {
-    console.log(`Viewing details for ${order.customerName}`);
+    onSelectOrder(order);
   };
 
-  return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={styles.contentContainer}
-      showsVerticalScrollIndicator={false}
-    >
-      {/* 1. Header Section */}
-      <View style={styles.header}>
-        <View style={styles.headerLeft}>
-          <Image source={{ uri: stats.driverAvatar }} style={styles.avatar} />
-          <View style={styles.headerTextContainer}>
-            <Text style={styles.greeting}>Good Morning, Driver 👋</Text>
-            <View style={styles.statusRow}>
-              <View
-                style={[
-                  styles.statusDot,
-                  {
-                    backgroundColor: isOnline
-                      ? theme.colors.success
-                      : theme.colors.textMedium,
-                  },
-                ]}
-              />
-              <Text style={styles.statusText}>
-                {isOnline ? 'Online' : 'Offline'} • {stats.onlineHours}
-              </Text>
-            </View>
-          </View>
+  const headerLeftComponent = (
+    <View style={styles.headerLeft}>
+      <Image source={{ uri: stats.driverAvatar }} style={styles.avatar} />
+      <View style={styles.headerTextContainer}>
+        <Text style={styles.greeting}>Good Morning, Driver 👋</Text>
+        <View style={styles.statusRow}>
+          <View
+            style={[
+              styles.statusDot,
+              {
+                backgroundColor: isOnline
+                  ? theme.colors.success
+                  : theme.colors.textMedium,
+              },
+            ]}
+          />
+          <Text style={styles.statusText}>
+            {isOnline ? 'Online' : 'Offline'} • {stats.onlineHours}
+          </Text>
         </View>
-        
-        <TouchableOpacity style={styles.signalBtn} activeOpacity={0.8}>
-          <SignalIcon color={theme.colors.primary} size={s(20)} />
-        </TouchableOpacity>
       </View>
+    </View>
+  );
+
+  return (
+    <View style={styles.container}>
+      <Header leftCustom={headerLeftComponent} />
+      
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.contentContainer}
+        showsVerticalScrollIndicator={false}
+      >
 
       {/* 2. Stats Section */}
       <View style={styles.statsContainer}>
@@ -131,7 +138,8 @@ export const HomeScreen: React.FC = () => {
           onSecondaryPress={handleSecondaryPress}
         />
       ))}
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 
@@ -139,6 +147,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.background,
+  },
+  scrollView: {
+    flex: 1,
   },
   contentContainer: {
     paddingHorizontal: theme.spacing.md,

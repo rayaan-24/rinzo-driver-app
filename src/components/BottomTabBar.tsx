@@ -26,7 +26,6 @@ export const BottomTabBar: React.FC<BottomTabBarProps> = ({ activeTab, onTabPres
         styles.barContainer,
         {
           paddingBottom: insets.bottom > 0 ? insets.bottom : theme.spacing.md,
-          backgroundColor: 'rgba(248, 248, 252, 0.85)', // Frosted/semi-transparent background
         },
       ]}
     >
@@ -78,6 +77,7 @@ const styles = StyleSheet.create({
     right: 0,
     paddingTop: 0,
     paddingHorizontal: theme.spacing.md,
+    backgroundColor: theme.colors.background,
   },
   tabBar: {
     flexDirection: 'row',
@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: theme.spacing.xs,
+    overflow: 'hidden',
     ...theme.shadows.large,
     borderWidth: 1,
     borderColor: '#F0F0F5',
