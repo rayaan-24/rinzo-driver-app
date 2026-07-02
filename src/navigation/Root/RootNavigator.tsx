@@ -31,6 +31,7 @@ export const RootNavigator: React.FC = () => {
   const [collectedOrder, setCollectedOrder] = useState<Order | null>(null);
   const [generateQrOrder, setGenerateQrOrder] = useState<Order | null>(null);
   const [previewLabelBag, setPreviewLabelBag] = useState<any | null>(null);
+  const [isTransitToFranchise, setIsTransitToFranchise] = useState(false);
   const slideAnim = useRef(new Animated.Value(1)).current;
   const directionRef = useRef(-1);
   const insets = useSafeAreaInsets();
@@ -114,13 +115,13 @@ export const RootNavigator: React.FC = () => {
           order={generateQrOrder}
           onBack={() => setGenerateQrOrder(null)}
           onConfirm={() => {
+            setIsTransitToFranchise(true);
+            setTransitOrder(generateQrOrder);
             setGenerateQrOrder(null);
             setCollectedOrder(null);
             setVerifyOtpOrder(null);
             setVerificationOrder(null);
             setActivePickupOrder(null);
-            setTransitOrder(null);
-            setSelectedOrder(null);
           }}
           onSelectBag={setPreviewLabelBag}
         />
@@ -227,9 +228,34 @@ export const RootNavigator: React.FC = () => {
       >
         <OrderTransitScreen
           order={transitOrder}
-          onBack={() => setTransitOrder(null)}
-          onViewOrderPress={() => setTransitOrder(null)}
-          onNavigateToPickup={setActivePickupOrder}
+          onBack={() => {
+            if (isTransitToFranchise) {
+              setIsTransitToFranchise(false);
+              setGenerateQrOrder(transitOrder);
+              setTransitOrder(null);
+            } else {
+              setTransitOrder(null);
+            }
+          }}
+          onViewOrderPress={() => {
+            if (isTransitToFranchise) {
+              setIsTransitToFranchise(false);
+              setGenerateQrOrder(transitOrder);
+              setTransitOrder(null);
+            } else {
+              setTransitOrder(null);
+            }
+          }}
+          onNavigateToPickup={(order) => {
+            if (isTransitToFranchise) {
+              setIsTransitToFranchise(false);
+              setTransitOrder(null);
+              setSelectedOrder(null);
+            } else {
+              setActivePickupOrder(order);
+            }
+          }}
+          isTransitToFranchise={isTransitToFranchise}
         />
       </View>
     );
