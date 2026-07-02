@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Alert,
+  Modal,
   Animated,
 } from 'react-native';
 import Svg, { Path, Circle, Rect } from 'react-native-svg';
@@ -36,6 +37,7 @@ export const ItemVerificationScreen: React.FC<ItemVerificationScreenProps> = ({
   onConfirm,
 }) => {
   const insets = useSafeAreaInsets();
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   // Verification Item list state
   const [items, setItems] = useState<ItemData[]>([
@@ -109,11 +111,7 @@ export const ItemVerificationScreen: React.FC<ItemVerificationScreenProps> = ({
   };
 
   const handleConfirmVerification = () => {
-    Alert.alert(
-      'Verification Confirmed',
-      'All item verifications have been submitted successfully!',
-      [{ text: 'OK', onPress: onConfirm }]
-    );
+    setShowSuccessModal(true);
   };
 
   const getConditionStyle = (type: string) => {
@@ -254,12 +252,12 @@ export const ItemVerificationScreen: React.FC<ItemVerificationScreenProps> = ({
                   activeOpacity={0.8}
                 >
                   {item.verified ? (
-                    <Svg width="22" height="22" viewBox="0 0 24 24" fill="#8664EC">
+                    <Svg width="27" height="27" viewBox="0 0 24 24" fill="#8664EC">
                       <Rect width="24" height="24" rx="6" fill="#8664EC" />
                       <Path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z" fill="#FFFFFF" />
                     </Svg>
                   ) : (
-                    <Svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                    <Svg width="27" height="27" viewBox="0 0 24 24" fill="none">
                       <Rect
                         x="1"
                         y="1"
@@ -340,6 +338,49 @@ export const ItemVerificationScreen: React.FC<ItemVerificationScreenProps> = ({
           </Svg>
         </TouchableOpacity>
       </View>
+
+      {/* Custom Themed Success Modal */}
+      <Modal
+        visible={showSuccessModal}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setShowSuccessModal(false)}
+      >
+        <View style={styles.modalBackdrop}>
+          <View style={styles.modalCard}>
+            {/* Concentric Success Circle Icon */}
+            <View style={styles.modalIconOuterCircle}>
+              <View style={styles.modalIconInnerCircle}>
+                <Svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="4">
+                  <Path
+                    d="M20 6L9 17l-5-5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </Svg>
+              </View>
+            </View>
+
+            {/* Modal texts */}
+            <Text style={styles.modalTitle}>Verification Confirmed</Text>
+            <Text style={styles.modalDesc}>
+              All item verifications have been submitted successfully!
+            </Text>
+
+            {/* Modal OK Button */}
+            <TouchableOpacity
+              style={styles.modalButton}
+              activeOpacity={0.8}
+              onPress={() => {
+                setShowSuccessModal(false);
+                onConfirm();
+              }}
+            >
+              <Text style={styles.modalButtonText}>OK</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -616,6 +657,71 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: theme.typography.fontWeight.bold,
     marginRight: 8,
+  },
+  modalBackdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.45)', // dim overlay
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  modalCard: {
+    width: '82%',
+    backgroundColor: theme.colors.cardBg,
+    borderRadius: 24,
+    padding: theme.spacing.lg,
+    alignItems: 'center',
+    ...theme.shadows.large,
+    borderWidth: 1,
+    borderColor: '#EFE8FF',
+  },
+  modalIconOuterCircle: {
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+    backgroundColor: theme.colors.primaryLight,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: theme.spacing.md,
+  },
+  modalIconInnerCircle: {
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+    backgroundColor: theme.colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  modalTitle: {
+    fontFamily: theme.typography.fontFamily.bold,
+    fontSize: 18,
+    fontWeight: theme.typography.fontWeight.bold,
+    color: theme.colors.textDark,
+    marginBottom: theme.spacing.xs,
+    textAlign: 'center',
+  },
+  modalDesc: {
+    fontFamily: theme.typography.fontFamily.medium,
+    fontSize: 13,
+    color: theme.colors.textMedium,
+    textAlign: 'center',
+    lineHeight: 18,
+    marginBottom: theme.spacing.lg,
+    paddingHorizontal: theme.spacing.xs,
+  },
+  modalButton: {
+    width: '100%',
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: theme.colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+    ...theme.shadows.small,
+  },
+  modalButtonText: {
+    fontFamily: theme.typography.fontFamily.bold,
+    fontSize: 14,
+    fontWeight: theme.typography.fontWeight.bold,
+    color: theme.colors.cardBg,
   },
 });
 export default ItemVerificationScreen;
