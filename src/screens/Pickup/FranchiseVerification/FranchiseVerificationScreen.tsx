@@ -51,7 +51,7 @@ export const FranchiseVerificationScreen: React.FC<FranchiseVerificationScreenPr
     // Animate scanner progress from 0 to 1 over 8 seconds
     Animated.timing(progressAnim, {
       toValue: 1,
-      duration: 8000,
+      duration: 20000,
       useNativeDriver: false,
     }).start();
 
