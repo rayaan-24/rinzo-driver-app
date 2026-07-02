@@ -31,6 +31,8 @@ export const RootNavigator: React.FC = () => {
   const [collectedOrder, setCollectedOrder] = useState<Order | null>(null);
   const [generateQrOrder, setGenerateQrOrder] = useState<Order | null>(null);
   const [previewLabelBag, setPreviewLabelBag] = useState<any | null>(null);
+  const [transitMode, setTransitMode] = useState<'pickup' | 'dispatch' | 'franchise'>('pickup');
+  const [showAcceptedBanner, setShowAcceptedBanner] = useState(false);
   const slideAnim = useRef(new Animated.Value(1)).current;
   const directionRef = useRef(-1);
   const insets = useSafeAreaInsets();
@@ -114,13 +116,13 @@ export const RootNavigator: React.FC = () => {
           order={generateQrOrder}
           onBack={() => setGenerateQrOrder(null)}
           onConfirm={() => {
+            setTransitMode('dispatch');
+            setTransitOrder(generateQrOrder);
             setGenerateQrOrder(null);
             setCollectedOrder(null);
             setVerifyOtpOrder(null);
             setVerificationOrder(null);
             setActivePickupOrder(null);
-            setTransitOrder(null);
-            setSelectedOrder(null);
           }}
           onSelectBag={setPreviewLabelBag}
         />
@@ -227,9 +229,52 @@ export const RootNavigator: React.FC = () => {
       >
         <OrderTransitScreen
           order={transitOrder}
-          onBack={() => setTransitOrder(null)}
-          onViewOrderPress={() => setTransitOrder(null)}
-          onNavigateToPickup={setActivePickupOrder}
+          onBack={() => {
+            if (showAcceptedBanner) {
+              setShowAcceptedBanner(false);
+              setTransitMode('dispatch');
+            } else if (transitMode === 'franchise') {
+              setTransitMode('dispatch');
+            } else if (transitMode === 'dispatch') {
+              setTransitMode('pickup');
+              setGenerateQrOrder(transitOrder);
+              setTransitOrder(null);
+            } else {
+              setTransitOrder(null);
+            }
+          }}
+          onViewOrderPress={() => {
+            if (showAcceptedBanner) {
+              setShowAcceptedBanner(false);
+              setTransitMode('dispatch');
+            } else if (transitMode === 'franchise') {
+              setTransitMode('dispatch');
+            } else if (transitMode === 'dispatch') {
+              setTransitMode('pickup');
+              setGenerateQrOrder(transitOrder);
+              setTransitOrder(null);
+            } else {
+              setTransitOrder(null);
+            }
+          }}
+          onNavigateToPickup={(order) => {
+            if (transitMode === 'pickup') {
+              setActivePickupOrder(order);
+              setShowAcceptedBanner(false);
+            } else if (transitMode === 'dispatch') {
+              setTransitMode('franchise');
+            } else if (transitMode === 'franchise') {
+              setTransitMode('pickup');
+              setTransitOrder(null);
+              setSelectedOrder(null);
+            }
+          }}
+          transitMode={transitMode}
+          showAcceptedBanner={showAcceptedBanner}
+          onAcceptNewOrder={() => {
+            setTransitMode('pickup');
+            setShowAcceptedBanner(true);
+          }}
         />
       </View>
     );
