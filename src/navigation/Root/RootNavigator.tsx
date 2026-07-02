@@ -7,31 +7,34 @@ import { HistoryScreen } from '../../screens/OrderHistory/HistoryScreen';
 import { PerformanceScreen } from '../../screens/Performance/PerformanceScreen';
 import { ProfileScreen } from '../../screens/Profile/ProfileScreen';
 import { BottomTabBar, TabType } from '../../components/BottomTabBar';
+import { PickupDetailsScreen } from '../../screens/Pickup/PickupDetails/PickupDetailsScreen';
+import { Order } from '../../data/mockData';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const TAB_ORDER: TabType[] = ['Home', 'History', 'Alerts', 'Profile'];
 
-const renderScreen = (tab: TabType) => {
-  switch (tab) {
-    case 'Home':
-      return <HomeScreen />;
-    case 'History':
-      return <HistoryScreen />;
-    case 'Alerts':
-      return <PerformanceScreen />;
-    case 'Profile':
-      return <ProfileScreen />;
-    default:
-      return <HomeScreen />;
-  }
-};
-
 export const RootNavigator: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabType>('Home');
   const [prevTab, setPrevTab] = useState<TabType | null>(null);
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const slideAnim = useRef(new Animated.Value(1)).current;
   const directionRef = useRef(-1);
   const insets = useSafeAreaInsets();
+
+  const renderScreen = (tab: TabType) => {
+    switch (tab) {
+      case 'Home':
+        return <HomeScreen onSelectOrder={setSelectedOrder} />;
+      case 'History':
+        return <HistoryScreen />;
+      case 'Alerts':
+        return <PerformanceScreen />;
+      case 'Profile':
+        return <ProfileScreen />;
+      default:
+        return <HomeScreen onSelectOrder={setSelectedOrder} />;
+    }
+  };
 
   const handleTabPress = (tab: TabType) => {
     if (tab === activeTab) {return;}
@@ -51,6 +54,25 @@ export const RootNavigator: React.FC = () => {
       if (result.finished) {setPrevTab(null);}
     });
   };
+
+  if (selectedOrder) {
+    return (
+      <View
+        style={[
+          styles.container,
+          {
+            paddingTop: insets.top,
+            backgroundColor: theme.colors.background,
+          },
+        ]}
+      >
+        <PickupDetailsScreen
+          order={selectedOrder}
+          onBack={() => setSelectedOrder(null)}
+        />
+      </View>
+    );
+  }
 
   return (
     <View
