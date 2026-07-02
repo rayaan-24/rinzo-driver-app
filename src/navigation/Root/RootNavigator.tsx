@@ -16,6 +16,7 @@ import { OrderCollectedScreen } from '../../screens/Pickup/OrderCollected/OrderC
 import { GenerateQrScreen } from '../../screens/Pickup/GenerateQR/GenerateQrScreen';
 import { LabelPreviewScreen } from '../../screens/Pickup/LabelPreview/LabelPreviewScreen';
 import { FranchiseVerificationScreen } from '../../screens/Pickup/FranchiseVerification/FranchiseVerificationScreen';
+import { OrderCompletedScreen } from '../../screens/Pickup/OrderCompleted/OrderCompletedScreen';
 import { Order } from '../../data/mockData';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -35,6 +36,7 @@ export const RootNavigator: React.FC = () => {
   const [transitMode, setTransitMode] = useState<'pickup' | 'dispatch' | 'franchise'>('pickup');
   const [showAcceptedBanner, setShowAcceptedBanner] = useState(false);
   const [isVerifyingFranchise, setIsVerifyingFranchise] = useState(false);
+  const [isOrderCompleted, setIsOrderCompleted] = useState(false);
   const slideAnim = useRef(new Animated.Value(1)).current;
   const directionRef = useRef(-1);
   const insets = useSafeAreaInsets();
@@ -99,6 +101,28 @@ export const RootNavigator: React.FC = () => {
           onBack={() => setIsVerifyingFranchise(false)}
           onConfirm={() => {
             setIsVerifyingFranchise(false);
+            setIsOrderCompleted(true);
+          }}
+        />
+      </View>
+    );
+  }
+
+  if (isOrderCompleted && transitOrder) {
+    return (
+      <View
+        style={[
+          styles.container,
+          {
+            paddingTop: insets.top,
+            backgroundColor: theme.colors.background,
+          },
+        ]}
+      >
+        <OrderCompletedScreen
+          order={transitOrder}
+          onBackToHome={() => {
+            setIsOrderCompleted(false);
             setTransitMode('pickup');
             setTransitOrder(null);
             setSelectedOrder(null);

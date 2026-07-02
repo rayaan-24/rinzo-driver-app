@@ -980,3 +980,11 @@
 {"_e":"metro:bundling:started","_t":1783016640913,"id":"2g","platform":"android","environment":null,"entry":"index.js"}
 {"_e":"metro:bundling:progress","_t":1783016640913,"id":"2g","progress":0,"total":1,"current":0}
 {"_e":"metro:bundling:done","_t":1783016641011,"id":"2g","total":1,"ms":97.965}
+{"_e":"metro:bundling:started","_t":1783016937721,"id":"2j","platform":"android","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1783016937721,"id":"2j","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1783016937772,"id":"2j","total":1,"ms":51.2265}
+{"_e":"metro:client_log","_t":1783016994161,"level":"error","data":["React has detected a change in the order of Hooks called by RootNavigator. This will lead to bugs and errors if not fixed. For more information, read the Rules of Hooks: https://react.dev/link/rules-of-hooks\n\n   Previous render            Next render\n   ------------------------------------------------------\n1. useState                   useState\n2. useState                   useState\n3. useState                   useState\n4. useState                   useState\n5. useState                   useState\n6. useState                   useState\n7. useState                   useState\n8. useState                   useState\n9. useState                   useState\n10. useState                  useState\n11. useState                  useState\n12. useState                  useState\n13. useState                  useState\n14. useRef                    useState\n   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"]}
+{"_e":"metro:client_log","_t":1783016995484,"level":"error","data":["[Error: Should have a queue. You are likely calling Hooks conditionally, which is not allowed. (https://react.dev/link/invalid-hook-call)]"]}
+{"_e":"metro:bundling:started","_t":1783017070366,"id":"2o","platform":"android","environment":null,"entry":"index.js"}
+{"_e":"metro:bundling:progress","_t":1783017070366,"id":"2o","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1783017070454,"id":"2o","total":1,"ms":87.5886}
