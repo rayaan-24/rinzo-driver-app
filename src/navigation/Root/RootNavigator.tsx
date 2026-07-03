@@ -86,6 +86,7 @@ export const RootNavigator: React.FC = () => {
           setFlowState('OTPVerification');
         }}
         onNavigateToEmail={() => setFlowState('LoginEmail')}
+        onNavigateToSignUp={() => setFlowState('SignUp')}
         onBack={() => setFlowState('AllowLocation')}
       />
     );
