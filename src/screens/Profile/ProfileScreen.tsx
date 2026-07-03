@@ -13,6 +13,7 @@ import Svg, { Path, Circle } from 'react-native-svg';
 import { theme } from '../../theme';
 import { driverData } from '../../data/profile';
 import { ChevronRightIcon } from '../../components/Icons';
+import { Header } from '../../components/Header';
 import { moderateScale } from '../../utils/responsive';
 import { PersonalInformationScreen } from './PersonalInformation/PersonalInformationScreen';
 import { VehicleInformationScreen } from './VehicleInformation/VehicleInformationScreen';
@@ -503,21 +504,25 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onSubScreenChange 
     <View style={styles.outerContainer}>
       <View style={styles.contentWrapper}>
         {/* 1. HEADER */}
-        <View style={styles.headerContainer}>
-          <View style={styles.headerLeft}>
-            <AvatarPlaceholder size={moderateScale(32)} source={driverAvatar} />
-            <Text style={styles.headerTitle}>Rinzo Driver</Text>
-          </View>
-          <TouchableOpacity
-            accessible={true}
-            accessibilityLabel="Notifications"
-            accessibilityRole="button"
-            activeOpacity={0.7}
-            style={styles.headerRight}
-          >
-            <BellIcon size={20} color={theme.colors.textDark} />
-          </TouchableOpacity>
-        </View>
+        <Header
+          leftCustom={
+            <View style={styles.headerLeft}>
+              <AvatarPlaceholder size={moderateScale(32)} source={driverAvatar} />
+              <Text style={styles.headerTitle}>Rinzo Driver</Text>
+            </View>
+          }
+          rightCustom={
+            <TouchableOpacity
+              accessible={true}
+              accessibilityLabel="Notifications"
+              accessibilityRole="button"
+              activeOpacity={0.7}
+              style={styles.headerRight}
+            >
+              <BellIcon size={20} color={theme.colors.textDark} />
+            </TouchableOpacity>
+          }
+        />
 
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -661,16 +666,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: theme.spacing.md,
     paddingTop: theme.spacing.md,
     paddingBottom: moderateScale(130), // Floating bottom navigation safe padding
-  },
-  headerContainer: {
-    flexDirection: 'row',
-    height: moderateScale(60),
-    backgroundColor: theme.colors.cardBg,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: theme.spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: theme.colors.borderLight,
   },
   headerLeft: {
     flexDirection: 'row',

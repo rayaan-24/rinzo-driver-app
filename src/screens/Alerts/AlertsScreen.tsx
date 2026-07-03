@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
+import { Header } from '../../components/Header';
 import {
   View,
   Text,
@@ -315,22 +316,28 @@ export const AlertsScreen: React.FC = () => {
     <Animated.View style={[styles.outerContainer, { opacity: screenFade }]}>
       
       {/* 1. STICKY HEADER */}
-      <Animated.View style={[styles.headerContainer, { opacity: headerFade }]}>
-        <View style={styles.headerLeft}>
-          <View style={styles.avatarOutline}>
-            <Image source={driverData.avatar} style={styles.avatarImage} />
-          </View>
-          <Text style={styles.headerTitle}>Rinzo Driver</Text>
-        </View>
-        <TouchableOpacity
-          accessible={true}
-          accessibilityLabel="Settings"
-          accessibilityRole="button"
-          activeOpacity={0.7}
-          style={styles.settingsTouchBox}
-        >
-          <SettingsIcon size={20} color={theme.colors.textDark} />
-        </TouchableOpacity>
+      <Animated.View style={{ opacity: headerFade }}>
+        <Header
+          leftCustom={
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <View style={styles.avatarOutline}>
+                <Image source={driverData.avatar} style={styles.avatarImage} />
+              </View>
+              <Text style={styles.headerTitle}>Rinzo Driver</Text>
+            </View>
+          }
+          rightCustom={
+            <TouchableOpacity
+              accessible={true}
+              accessibilityLabel="Settings"
+              accessibilityRole="button"
+              activeOpacity={0.7}
+              style={styles.settingsTouchBox}
+            >
+              <SettingsIcon size={20} color={theme.colors.textDark} />
+            </TouchableOpacity>
+          }
+        />
       </Animated.View>
 
       {/* 2. MAIN SCROLLABLE LIST CONTAINER */}
@@ -469,20 +476,6 @@ const styles = StyleSheet.create({
   outerContainer: {
     flex: 1,
     backgroundColor: '#FCFAFF', // Light lavender background style
-  },
-  headerContainer: {
-    flexDirection: 'row',
-    height: 56,
-    backgroundColor: '#FFFFFF',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: theme.spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F1F1F5',
-  },
-  headerLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
   },
   avatarOutline: {
     width: 34,

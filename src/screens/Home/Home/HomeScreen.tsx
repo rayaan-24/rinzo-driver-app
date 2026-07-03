@@ -66,7 +66,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     <View style={styles.headerLeft}>
       <Image source={{ uri: stats.driverAvatar }} style={styles.avatar} />
       <View style={styles.headerTextContainer}>
-        <Text style={styles.greeting}>Good Morning, Driver ≡ƒæï</Text>
+        <Text style={styles.greeting}>Good Morning, Driver </Text>
         <View style={styles.statusRow}>
           <View
             style={[
@@ -79,7 +79,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             ]}
           />
           <Text style={styles.statusText}>
-            {isOnline ? 'Online' : 'Offline'} ΓÇó {stats.onlineHours}
+            {isOnline ? 'Online' : 'Offline'} {stats.onlineHours}
           </Text>
         </View>
       </View>
@@ -225,8 +225,8 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingHorizontal: theme.spacing.md,
-    paddingTop: theme.spacing.md,
-    paddingBottom: 120,
+    paddingTop: s(12),
+    paddingBottom: 100,
   },
   header: {
     flexDirection: 'row',
@@ -279,17 +279,17 @@ const styles = StyleSheet.create({
   statsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: theme.spacing.xl,
+    marginBottom: s(16),
   },
   swipeContainer: {
-    marginBottom: theme.spacing.xl,
+    marginBottom: s(16),
   },
   sectionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: theme.spacing.md,
-    marginTop: theme.spacing.xs,
+    marginBottom: s(10),
+    marginTop: s(2),
   },
   sectionTitle: {
     fontFamily: theme.typography.fontFamily.bold,
@@ -312,7 +312,7 @@ const styles = StyleSheet.create({
   emptyStateCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 24,
-    paddingVertical: s(36),
+    paddingVertical: s(24),
     paddingHorizontal: s(20),
     alignItems: 'center',
     justifyContent: 'center',
@@ -321,34 +321,34 @@ const styles = StyleSheet.create({
     ...theme.shadows.small,
   },
   emptyIconCircle: {
-    width: s(72),
-    height: s(72),
-    borderRadius: s(36),
+    width: s(60),
+    height: s(60),
+    borderRadius: s(30),
     backgroundColor: '#F5EFFF',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: s(16),
+    marginBottom: s(12),
   },
   emptyHeading: {
     fontFamily: theme.typography.fontFamily.bold,
-    fontSize: s(18),
+    fontSize: s(16),
     fontWeight: 'bold',
     color: theme.colors.textDark,
-    marginBottom: s(8),
+    marginBottom: s(6),
   },
   emptySubtitle: {
     fontFamily: theme.typography.fontFamily.medium,
-    fontSize: s(12),
+    fontSize: s(11),
     color: theme.colors.textMedium,
     textAlign: 'center',
-    lineHeight: s(18),
+    lineHeight: s(16),
     paddingHorizontal: s(12),
-    marginBottom: s(24),
+    marginBottom: s(18),
   },
   emptyGoOnlineBtn: {
     width: '100%',
-    height: s(48),
-    borderRadius: s(24),
+    height: s(42),
+    borderRadius: s(21),
     backgroundColor: '#8664EC',
     alignItems: 'center',
     justifyContent: 'center',
@@ -357,7 +357,7 @@ const styles = StyleSheet.create({
   emptyGoOnlineText: {
     color: '#FFFFFF',
     fontFamily: theme.typography.fontFamily.bold,
-    fontSize: s(14),
+    fontSize: s(13),
     fontWeight: 'bold',
   },
 });

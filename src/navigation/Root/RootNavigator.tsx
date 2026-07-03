@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { theme } from '../../theme';
 import { HomeScreen } from '../../screens/Home/Home/HomeScreen';
 import { HistoryScreen } from '../../screens/OrderHistory/HistoryScreen';
-import { PerformanceScreen } from '../../screens/Performance/PerformanceScreen';
+
 import { ProfileScreen } from '../../screens/Profile/ProfileScreen';
 import { BottomTabBar, TabType } from '../../components/BottomTabBar';
 import { PickupDetailsScreen } from '../../screens/Pickup/PickupDetails/PickupDetailsScreen';
@@ -37,6 +37,7 @@ import { LoginEmailScreen } from '../../screens/Auth/LoginEmail/LoginEmailScreen
 import { CreateNewPasswordScreen } from '../../screens/Auth/CreateNewPassword/CreateNewPasswordScreen';
 import { PasswordResetSuccessScreen } from '../../screens/Auth/PasswordResetSuccess/PasswordResetSuccessScreen';
 import { SignupScreen } from '../../screens/Auth/Signup/SignupScreen';
+import { AlertsScreen } from '../../screens/Alerts/AlertsScreen';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const TAB_ORDER: TabType[] = ['Home', 'History', 'Alerts', 'Profile'];
@@ -237,7 +238,7 @@ export const RootNavigator: React.FC = () => {
       case 'History':
         return <HistoryScreen />;
       case 'Alerts':
-        return <PerformanceScreen />;
+        return <AlertsScreen />;
       case 'Profile':
         return <ProfileScreen onSubScreenChange={(isSub) => setIsHideTabBar(isSub)} />;
       default:

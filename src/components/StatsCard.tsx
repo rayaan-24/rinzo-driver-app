@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { screenWidth } from '../utils/responsive';
+import { screenWidth, moderateScale } from '../utils/responsive';
+const s = (size: number) => moderateScale(size, 0.3);
 import { theme } from '../theme';
 
 interface StatsCardProps {
@@ -25,7 +26,7 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: theme.colors.cardBg,
     borderRadius: theme.borderRadius.lg,
-    paddingVertical: theme.spacing.md,
+    paddingVertical: s(12),
     paddingHorizontal: theme.spacing.sm,
     width: CARD_WIDTH,
     alignItems: 'center',
@@ -34,15 +35,15 @@ const styles = StyleSheet.create({
   },
   label: {
     fontFamily: theme.typography.fontFamily.medium,
-    fontSize: theme.typography.fontSize.xs,
+    fontSize: s(10),
     fontWeight: theme.typography.fontWeight.medium,
     color: theme.colors.textMedium,
-    marginBottom: theme.spacing.xs,
+    marginBottom: s(4),
     textAlign: 'center',
   },
   value: {
     fontFamily: theme.typography.fontFamily.bold,
-    fontSize: theme.typography.fontSize.huge,
+    fontSize: s(28),
     fontWeight: theme.typography.fontWeight.bold,
     textAlign: 'center',
   },
