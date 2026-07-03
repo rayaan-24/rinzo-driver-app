@@ -14,6 +14,7 @@ import {
 import Svg, { Path, Circle, Rect } from 'react-native-svg';
 import { theme } from '../../../theme';
 import { moderateScale } from '../../../utils/responsive';
+import { Header } from '../../../components/Header';
 
 // ==========================================
 // CUSTOM SVG ICONS (Alphanumeric/Android space-safe)
@@ -325,28 +326,22 @@ export const BankDetailsScreen: React.FC<BankDetailsScreenProps> = ({ onBack }) 
         <View style={styles.contentWrapper}>
           
           {/* 1. FIXED HEADER */}
-          <View style={styles.headerContainer}>
-            <TouchableOpacity
-              accessible={true}
-              accessibilityLabel="Go Back"
-              accessibilityRole="button"
-              activeOpacity={0.7}
-              onPress={onBack}
-              style={styles.headerButton}
-            >
-              <ArrowLeftIcon size={22} color={theme.colors.textDark} />
-            </TouchableOpacity>
-            <Text style={styles.headerTitle}>Bank Details</Text>
-            <TouchableOpacity
-              accessible={true}
-              accessibilityLabel="Help"
-              accessibilityRole="button"
-              activeOpacity={0.7}
-              style={styles.headerButtonRight}
-            >
-              <HelpIcon size={20} color={theme.colors.textDark} />
-            </TouchableOpacity>
-          </View>
+          <Header
+            title="Bank Details"
+            showBack
+            onBackPress={onBack}
+            rightCustom={
+              <TouchableOpacity
+                accessible={true}
+                accessibilityLabel="Help"
+                accessibilityRole="button"
+                activeOpacity={0.7}
+                style={styles.headerButtonRight}
+              >
+                <HelpIcon size={20} color={theme.colors.textDark} />
+              </TouchableOpacity>
+            }
+          />
 
           <ScrollView
             showsVerticalScrollIndicator={false}
@@ -562,36 +557,7 @@ const styles = StyleSheet.create({
     maxWidth: 600,
     backgroundColor: '#FFFFFF',
   },
-  headerContainer: {
-    flexDirection: 'row',
-    height: moderateScale(60),
-    backgroundColor: '#FFFFFF',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: theme.spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F2F2F7',
-  },
-  headerButton: {
-    width: 40,
-    height: 40,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-  },
-  headerButtonRight: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: theme.colors.borderLight,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  headerTitle: {
-    fontFamily: 'Poppins-Bold',
-    fontSize: theme.typography.fontSize.lg,
-    fontWeight: theme.typography.fontWeight.bold,
-    color: theme.colors.textDark,
-  },
+
   scrollContent: {
     paddingHorizontal: theme.spacing.md,
     paddingTop: theme.spacing.xl,
@@ -748,5 +714,13 @@ const styles = StyleSheet.create({
     fontWeight: theme.typography.fontWeight.bold,
     color: '#FFFFFF',
     marginLeft: 8,
+  },
+  headerButtonRight: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: theme.colors.borderLight,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

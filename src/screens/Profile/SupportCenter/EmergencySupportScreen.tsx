@@ -18,6 +18,7 @@ import {
 import Svg, { Path, Circle } from 'react-native-svg';
 import { theme } from '../../../theme';
 import { moderateScale } from '../../../utils/responsive';
+import { Header } from '../../../components/Header';
 import { ImageManager } from '../../../utils/imageManager';
 
 const { width } = Dimensions.get('window');
@@ -258,30 +259,22 @@ export const EmergencySupportScreen: React.FC<EmergencySupportScreenProps> = ({ 
     <View style={styles.outerContainer}>
       
       {/* 1. FIXED HEADER */}
-      <Animated.View style={[styles.headerContainer, { opacity: headerFadeAnim }]}>
-        <TouchableOpacity
-          accessible={true}
-          accessibilityLabel="Go Back"
-          accessibilityRole="button"
-          activeOpacity={0.7}
-          onPress={onBack}
-          style={styles.headerBackBtn}
-        >
-          <ArrowLeftIcon size={24} color={theme.colors.textDark} />
-        </TouchableOpacity>
-        
-        <Text style={styles.headerTitle}>Emergency Support</Text>
-        
-        <TouchableOpacity
-          accessible={true}
-          accessibilityLabel="Help info"
-          accessibilityRole="button"
-          activeOpacity={0.75}
-          style={styles.headerRightBtn}
-        >
-          <HelpIcon size={22} color="#7C4DFF" />
-        </TouchableOpacity>
-      </Animated.View>
+      <Header
+        title="Emergency Support"
+        showBack
+        onBackPress={onBack}
+        rightCustom={
+          <TouchableOpacity
+            accessible={true}
+            accessibilityLabel="Help info"
+            accessibilityRole="button"
+            activeOpacity={0.75}
+            style={styles.headerRightBtn}
+          >
+            <HelpIcon size={22} color="#7C4DFF" />
+          </TouchableOpacity>
+        }
+      />
 
       {/* 2. MAIN SCROLL CONTAINER */}
       <KeyboardAvoidingView
@@ -494,33 +487,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FCFAFF', // Very light lavender background
   },
-  headerContainer: {
-    flexDirection: 'row',
-    height: 56,
-    backgroundColor: '#FFFFFF',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: theme.spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F1F1F5',
-  },
-  headerBackBtn: {
-    width: 40,
-    height: 40,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-  },
-  headerTitle: {
-    fontFamily: 'Poppins-Bold',
-    fontSize: 18,
-    color: theme.colors.textDark,
-  },
-  headerRightBtn: {
-    width: 40,
-    height: 40,
-    justifyContent: 'center',
-    alignItems: 'flex-end',
-  },
+
   keyboardContainer: {
     flex: 1,
   },
@@ -719,5 +686,11 @@ const styles = StyleSheet.create({
     height: 8,
     borderRadius: 4,
     backgroundColor: '#7C4DFF',
+  },
+  headerRightBtn: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
   },
 });

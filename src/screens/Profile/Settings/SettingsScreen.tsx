@@ -14,6 +14,7 @@ import Svg, { Path, Circle } from 'react-native-svg';
 import { theme } from '../../../theme';
 import { driverData } from '../../../data/profile';
 import { moderateScale } from '../../../utils/responsive';
+import { Header } from '../../../components/Header';
 
 // ==========================================
 // OUTLINED SVG ICONS (Satisfying pixel perfect)
@@ -249,24 +250,11 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onNaviga
       <View style={styles.contentWrapper}>
         
         {/* 1. STICKY HEADER */}
-        <Animated.View style={[styles.headerContainer, { opacity: headerFade }]}>
-          <Animated.View style={{ transform: [{ scale: backScale }] }}>
-            <TouchableOpacity
-              accessible={true}
-              accessibilityLabel="Go Back"
-              accessibilityRole="button"
-              activeOpacity={0.7}
-              onPressIn={() => pressIn(backScale)}
-              onPressOut={() => pressOut(backScale)}
-              onPress={onBack}
-              style={styles.headerButton}
-            >
-              <ArrowLeftIcon size={22} color="#1F1F1F" />
-            </TouchableOpacity>
-          </Animated.View>
-          <Text style={styles.headerTitle}>Settings</Text>
-          <View style={styles.headerRightPlaceholder} />
-        </Animated.View>
+        <Header
+          title="Settings"
+          showBack
+          onBackPress={onBack}
+        />
 
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -474,31 +462,7 @@ const styles = StyleSheet.create({
     maxWidth: 600,
     backgroundColor: '#FCFAFF',
   },
-  headerContainer: {
-    flexDirection: 'row',
-    height: 56,
-    backgroundColor: '#FFFFFF',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: theme.spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F1F1F5',
-  },
-  headerButton: {
-    width: 40,
-    height: 40,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-  },
-  headerTitle: {
-    fontFamily: 'Poppins-Bold',
-    fontSize: 18,
-    fontWeight: theme.typography.fontWeight.bold,
-    color: '#1F1F1F',
-  },
-  headerRightPlaceholder: {
-    width: 40,
-  },
+
   scrollContent: {
     paddingHorizontal: theme.spacing.md,
     paddingTop: theme.spacing.xl,
