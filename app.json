@@ -3,7 +3,7 @@
   "displayName": "rinzo_driver_app",
   "expo": {
     "name": "rinzo_driver_app",
-    "slug": "rinzo-driver-app",
+    "slug": "rinzo_driver_app",
     "version": "1.0.0",
     "platforms": ["ios", "android"],
     "entryPoint": "./index.js"

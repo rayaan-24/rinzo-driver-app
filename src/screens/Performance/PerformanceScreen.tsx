@@ -1,12 +1,16 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { theme } from '../../theme';
+import { Header } from '../../components/Header';
 
 export const PerformanceScreen: React.FC = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Performance Insights</Text>
-      <Text style={styles.subtitle}>Track your ratings, active hours, and earnings</Text>
+      <Header title="Alerts" />
+      <View style={styles.content}>
+        <Text style={styles.title}>Performance Insights</Text>
+        <Text style={styles.subtitle}>Track your ratings, active hours, and earnings</Text>
+      </View>
     </View>
   );
 };
@@ -15,6 +19,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.background,
+  },
+  content: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     padding: theme.spacing.xl,
@@ -32,3 +39,4 @@ const styles = StyleSheet.create({
     color: theme.colors.textMedium,
   },
 });
+export default PerformanceScreen;
