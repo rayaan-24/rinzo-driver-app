@@ -75,8 +75,30 @@ const PhoneIcon = () => (
   </Svg>
 );
 
+// Envelope Icon for Email change option
+const MailIcon = () => (
+  <Svg width={s(16)} height={s(16)} viewBox="0 0 24 24" fill="none">
+    <Path
+      d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+      stroke="#6B46DF"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <Path
+      d="M22 6l-10 7L2 6"
+      stroke="#6B46DF"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </Svg>
+);
+
 interface OTPVerificationScreenProps {
   phoneNumber?: string;
+  emailAddress?: string;
+  verificationType?: 'phone' | 'email';
   onVerify?: (otp: string) => void;
   onChangePhone?: () => void;
   onResendOTP?: () => void;
@@ -85,6 +107,8 @@ interface OTPVerificationScreenProps {
 
 export const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({
   phoneNumber = '+91 87777 34343',
+  emailAddress = 'driver@rinzo.com',
+  verificationType = 'phone',
   onVerify,
   onChangePhone,
   onResendOTP,
@@ -321,12 +345,18 @@ export const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({
                 style={styles.wordmarkImage}
                 resizeMode="contain"
               />
-              <Text style={styles.welcomeTitle}>Verify Your Phone Number</Text>
+              <Text style={styles.welcomeTitle}>
+                {verificationType === 'email' ? 'Verify Your' : 'Verify Your' + '\n' + 'Phone Number'}
+              </Text>
               <Text style={styles.welcomeSubtitle}>
-                We've sent a 6-digit verification code to
+                {verificationType === 'email'
+                  ? 'We\'ve sent a 6-digit\nverification code to'
+                  : 'We\'ve sent a 6-digit verification code to'}
               </Text>
               <View style={styles.phoneRow}>
-                <Text style={styles.phoneNumberText}>{phoneNumber}</Text>
+                <Text style={styles.phoneNumberText}>
+                  {verificationType === 'email' ? emailAddress : phoneNumber}
+                </Text>
                 <EditPencilIcon onPress={onChangePhone} />
               </View>
             </View>
@@ -394,15 +424,17 @@ export const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({
               <Text style={styles.resendText}>Resend OTP</Text>
             </TouchableOpacity>
 
-            {/* Change Phone Number Box */}
+            {/* Change contact detail box */}
             <TouchableOpacity
               onPress={onChangePhone}
               activeOpacity={0.8}
               style={styles.changePhoneBox}
             >
               <View style={styles.changePhoneLeft}>
-                <PhoneIcon />
-                <Text style={styles.changePhoneText}>Change Phone Number</Text>
+                {verificationType === 'email' ? <MailIcon /> : <PhoneIcon />}
+                <Text style={styles.changePhoneText}>
+                  {verificationType === 'email' ? 'Change Email Address' : 'Change Phone Number'}
+                </Text>
               </View>
               <Svg width={s(16)} height={s(16)} viewBox="0 0 24 24" fill="none">
                 <Path
@@ -497,17 +529,17 @@ const styles = StyleSheet.create({
   },
   welcomeTitle: {
     fontFamily: fontFamily.bold,
-    fontSize: s(20),
+    fontSize: s(24),
     fontWeight: theme.typography.fontWeight.bold,
     color: '#1C1C1E',
-    marginTop: s(10),
+    marginTop: s(14),
   },
   welcomeSubtitle: {
     fontFamily: fontFamily.regular,
-    fontSize: s(12),
+    fontSize: s(13),
     color: '#6E6A80',
-    marginTop: s(4),
-    lineHeight: s(17),
+    marginTop: s(6),
+    lineHeight: s(19),
   },
   phoneRow: {
     flexDirection: 'row',
@@ -516,7 +548,7 @@ const styles = StyleSheet.create({
   },
   phoneNumberText: {
     fontFamily: fontFamily.bold,
-    fontSize: s(14),
+    fontSize: s(16),
     fontWeight: theme.typography.fontWeight.bold,
     color: '#6B46DF',
     marginRight: s(6),

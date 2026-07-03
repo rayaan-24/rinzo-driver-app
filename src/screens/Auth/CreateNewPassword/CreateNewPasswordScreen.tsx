@@ -428,17 +428,17 @@ const styles = StyleSheet.create({
   },
   welcomeTitle: {
     fontFamily: fontFamily.bold,
-    fontSize: s(22),
+    fontSize: s(24),
     fontWeight: theme.typography.fontWeight.bold,
     color: '#1C1C1E',
     marginTop: s(-2),
   },
   welcomeSubtitle: {
     fontFamily: fontFamily.regular,
-    fontSize: s(12),
+    fontSize: s(10),
     color: '#6E6A80',
-    marginTop: s(4),
-    lineHeight: s(17),
+    marginTop: s(2),
+    lineHeight: s(19),
   },
   card: {
     backgroundColor: '#FFFFFF',

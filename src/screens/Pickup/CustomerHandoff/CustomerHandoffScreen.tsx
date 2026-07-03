@@ -88,7 +88,7 @@ export const CustomerHandoffScreen: React.FC<CustomerHandoffScreenProps> = ({
       <Header
         title="Rinzo"
         showBack={true}
-        onBack={onBack}
+        onBackPress={onBack}
         rightCustom={headerRightBlock}
       />
 
@@ -491,7 +491,7 @@ const styles = StyleSheet.create({
   errorText: {
     fontFamily: theme.typography.fontFamily.medium,
     fontSize: 11,
-    color: theme.colors.danger,
+    color: theme.colors.error,
     textAlign: 'center',
     marginBottom: 12,
   },

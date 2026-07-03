@@ -20,6 +20,8 @@ export interface Order {
   customerAvatar: string;
   hasMap: boolean;
   type: 'pickup' | 'delivery';
+  driverAvatar?: string;
+  phoneNumber?: string;
 }
 
 export const mockDriverStats: DriverStats = {
