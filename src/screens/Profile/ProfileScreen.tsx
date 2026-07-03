@@ -21,6 +21,12 @@ import { DocumentDetailsScreen } from './Documents/DocumentDetailsScreen';
 import { UploadSuccessScreen } from './Documents/UploadSuccessScreen';
 import { BankDetailsScreen } from './BankDetails/BankDetailsScreen';
 import { PerformanceScreen } from './Performance/PerformanceScreen';
+import { SettingsScreen } from './Settings/SettingsScreen';
+import { TermsAndPrivacyScreen } from './TermsAndPrivacy/TermsAndPrivacyScreen';
+import { HelpAndSupportScreen } from './HelpAndSupport/HelpAndSupportScreen';
+import { SupportCenterScreen } from './SupportCenter/SupportCenterScreen';
+import { OrderChatScreen } from './SupportCenter/OrderChatScreen';
+import { EmergencySupportScreen } from './SupportCenter/EmergencySupportScreen';
 import { vehicleData } from '../../data/vehicleInformation';
 
 // ==========================================
@@ -153,10 +159,21 @@ const getMenuIcon = (iconName: string, color: string) => {
       return <TrendingUpIcon size={20} color={color} />;
     case 'settings':
       return <SettingsIcon size={20} color={color} />;
+    case 'shield':
+      return <ShieldIcon size={20} color={color} />;
     default:
       return <UserPlaceholderIcon size={20} color={color} />;
   }
 };
+
+const ShieldIcon: React.FC<{ size?: number; color?: string }> = ({ size = 20, color = theme.colors.primary }) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <Path
+      d="M 12 2 L 4 5 V 11.09 C 4 16.14 7.41 20.85 12 22 C 16.59 20.85 20 16.14 20 11.09 V 5 L 12 2 Z"
+      fill={color}
+    />
+  </Svg>
+);
 
 const SettingsIcon: React.FC<{ size?: number; color?: string }> = ({ size = 20, color = theme.colors.primary }) => (
   <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
@@ -196,14 +213,103 @@ const AvatarPlaceholder: React.FC<{ size: number; source: any }> = ({ size, sour
   );
 };
 
+interface TappableRowProps {
+  accessibilityLabel: string;
+  onPress: () => void;
+  children: React.ReactNode;
+}
+
+const TappableRow: React.FC<TappableRowProps> = ({ accessibilityLabel, onPress, children }) => {
+  const scaleAnim = useRef(new Animated.Value(1)).current;
+
+  const handlePressIn = () => {
+    Animated.timing(scaleAnim, {
+      toValue: 0.98,
+      duration: 80,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const handlePressOut = () => {
+    Animated.timing(scaleAnim, {
+      toValue: 1,
+      duration: 120,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  return (
+    <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
+      <TouchableOpacity
+        accessible={true}
+        accessibilityLabel={accessibilityLabel}
+        accessibilityRole="button"
+        activeOpacity={0.8}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        onPress={onPress}
+        style={styles.menuRow}
+      >
+        {children}
+      </TouchableOpacity>
+    </Animated.View>
+  );
+};
+
+const TappableLogoutButton: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const scaleAnim = useRef(new Animated.Value(1)).current;
+
+  const handlePressIn = () => {
+    Animated.timing(scaleAnim, {
+      toValue: 0.98,
+      duration: 80,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const handlePressOut = () => {
+    Animated.timing(scaleAnim, {
+      toValue: 1,
+      duration: 120,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  return (
+    <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
+      <TouchableOpacity
+        accessible={true}
+        accessibilityLabel="Logout"
+        accessibilityRole="button"
+        activeOpacity={0.8}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        style={styles.logoutButton}
+      >
+        {children}
+      </TouchableOpacity>
+    </Animated.View>
+  );
+};
+
 // ==========================================
 // COMPONENT MAIN EXPORT
 // ==========================================
 
-export const ProfileScreen: React.FC = () => {
-  const [currentSubScreen, setCurrentSubScreen] = useState<'profile' | 'personal' | 'vehicle' | 'documents' | 'document_details' | 'upload_success' | 'bank_details' | 'performance'>('profile');
+interface ProfileScreenProps {
+  onSubScreenChange?: (isSubScreen: boolean) => void;
+}
+
+export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onSubScreenChange }) => {
+  const [currentSubScreen, setCurrentSubScreen] = useState<'profile' | 'personal' | 'vehicle' | 'documents' | 'document_details' | 'upload_success' | 'bank_details' | 'performance' | 'settings' | 'terms' | 'help' | 'support_center' | 'order_chat' | 'emergency_report'>('profile');
   const [driverAvatar, setDriverAvatar] = useState(driverData.avatar);
   const [vehicleImage, setVehicleImage] = useState(vehicleData.image);
+
+  useEffect(() => {
+    if (onSubScreenChange) {
+      onSubScreenChange(currentSubScreen !== 'profile');
+    }
+  }, [currentSubScreen, onSubScreenChange]);
 
   // Animation refs
   const heroFadeAnim = useRef(new Animated.Value(0)).current;
@@ -277,7 +383,10 @@ export const ProfileScreen: React.FC = () => {
     return (
       <PersonalInformationScreen
         avatarImage={driverAvatar}
-        onChangeAvatar={setDriverAvatar}
+        onChangeAvatar={(uri) => {
+          setDriverAvatar(uri);
+          driverData.avatar = uri;
+        }}
         onBack={() => setCurrentSubScreen('profile')}
       />
     );
@@ -332,6 +441,60 @@ export const ProfileScreen: React.FC = () => {
     return (
       <PerformanceScreen
         onBack={() => setCurrentSubScreen('profile')}
+      />
+    );
+  }
+
+  if (currentSubScreen === 'settings') {
+    return (
+      <SettingsScreen
+        onBack={() => setCurrentSubScreen('profile')}
+        onNavigateHelp={() => setCurrentSubScreen('help')}
+      />
+    );
+  }
+
+  if (currentSubScreen === 'terms') {
+    return (
+      <TermsAndPrivacyScreen
+        onBack={() => setCurrentSubScreen('profile')}
+      />
+    );
+  }
+
+  if (currentSubScreen === 'help') {
+    return (
+      <HelpAndSupportScreen
+        onBack={() => setCurrentSubScreen('settings')}
+        onNavigateSupportCenter={() => setCurrentSubScreen('support_center')}
+      />
+    );
+  }
+
+  if (currentSubScreen === 'support_center') {
+    return (
+      <SupportCenterScreen
+        onBack={() => setCurrentSubScreen('help')}
+        onNavigateOrderSupport={() => setCurrentSubScreen('order_chat')}
+        onNavigateEmergencySupport={() => setCurrentSubScreen('emergency_report')}
+      />
+    );
+  }
+
+  if (currentSubScreen === 'emergency_report') {
+    return (
+      <EmergencySupportScreen
+        onBack={() => setCurrentSubScreen('support_center')}
+      />
+    );
+  }
+
+
+
+  if (currentSubScreen === 'order_chat') {
+    return (
+      <OrderChatScreen
+        onBack={() => setCurrentSubScreen('support_center')}
       />
     );
   }
@@ -428,13 +591,9 @@ export const ProfileScreen: React.FC = () => {
           {/* 4. MENU LIST */}
           <Animated.View style={[styles.menuList, getAnimatedStyle(listItemsAnim)]}>
             {driverData.menuItems.map((item) => (
-              <TouchableOpacity
+              <TappableRow
                 key={item.id}
-                accessible={true}
                 accessibilityLabel={`Go to ${item.title}`}
-                accessibilityRole="button"
-                activeOpacity={0.7}
-                style={styles.menuRow}
                 onPress={() => {
                   if (item.id === 'personal') {
                     setCurrentSubScreen('personal');
@@ -446,6 +605,10 @@ export const ProfileScreen: React.FC = () => {
                     setCurrentSubScreen('bank_details');
                   } else if (item.id === 'performance') {
                     setCurrentSubScreen('performance');
+                  } else if (item.id === 'settings') {
+                    setCurrentSubScreen('settings');
+                  } else if (item.id === 'terms') {
+                    setCurrentSubScreen('terms');
                   }
                 }}
               >
@@ -461,22 +624,16 @@ export const ProfileScreen: React.FC = () => {
                   </View>
                 </View>
                 <ChevronRightIcon size={14} color={theme.colors.textLight} />
-              </TouchableOpacity>
+              </TappableRow>
             ))}
           </Animated.View>
 
           {/* 5. LOGOUT BUTTON */}
           <Animated.View style={getAnimatedStyle(logoutBtnAnim)}>
-            <TouchableOpacity
-              accessible={true}
-              accessibilityLabel="Logout"
-              accessibilityRole="button"
-              activeOpacity={0.7}
-              style={styles.logoutButton}
-            >
+            <TappableLogoutButton>
               <LogOutIcon size={18} color={theme.colors.error} />
               <Text style={styles.logoutText}>Logout</Text>
-            </TouchableOpacity>
+            </TappableLogoutButton>
           </Animated.View>
         </ScrollView>
       </View>
@@ -520,9 +677,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerTitle: {
-    fontFamily: theme.typography.fontFamily.bold,
+    fontFamily: 'Poppins-SemiBold',
     fontSize: theme.typography.fontSize.lg,
-    fontWeight: theme.typography.fontWeight.bold,
     color: theme.colors.textDark,
     marginLeft: theme.spacing.sm,
   },
@@ -567,15 +723,14 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.success,
   },
   driverName: {
-    fontFamily: theme.typography.fontFamily.bold,
+    fontFamily: 'Poppins-Bold',
     fontSize: theme.typography.fontSize.xl,
-    fontWeight: theme.typography.fontWeight.bold,
     color: theme.colors.textDark,
     marginBottom: theme.spacing.xxs,
     textAlign: 'center',
   },
   employeeId: {
-    fontFamily: theme.typography.fontFamily.regular,
+    fontFamily: 'Poppins-Medium',
     fontSize: theme.typography.fontSize.sm,
     color: theme.colors.textMedium,
     marginBottom: theme.spacing.md,
@@ -597,20 +752,18 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.primaryLight,
   },
   verifiedChipText: {
-    fontFamily: theme.typography.fontFamily.medium,
+    fontFamily: 'Poppins-Medium',
     fontSize: 12,
     color: theme.colors.primary,
-    fontWeight: theme.typography.fontWeight.semibold,
     marginLeft: 5,
   },
   onlineChip: {
     backgroundColor: theme.colors.successLight,
   },
   onlineChipText: {
-    fontFamily: theme.typography.fontFamily.medium,
+    fontFamily: 'Poppins-Medium',
     fontSize: 12,
     color: theme.colors.success,
-    fontWeight: theme.typography.fontWeight.semibold,
     marginLeft: 5,
   },
   statsGrid: {
@@ -622,13 +775,20 @@ const styles = StyleSheet.create({
   statCard: {
     width: '48%',
     backgroundColor: theme.colors.cardBg,
-    borderRadius: 20,
+    borderRadius: 22,
     padding: theme.spacing.md,
     marginBottom: theme.spacing.sm,
-    ...theme.shadows.small,
+    borderWidth: 1,
+    borderColor: '#F2F2F7',
+    shadowColor: '#7C4DFF',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.02,
+    shadowRadius: 10,
+    elevation: 2,
   },
   purpleStatCard: {
     backgroundColor: theme.colors.primary,
+    borderColor: theme.colors.primary,
   },
   statCardHeader: {
     flexDirection: 'row',
@@ -637,27 +797,25 @@ const styles = StyleSheet.create({
     marginBottom: theme.spacing.sm,
   },
   statTitle: {
-    fontFamily: theme.typography.fontFamily.medium,
+    fontFamily: 'Poppins-Medium',
     fontSize: 11,
     color: theme.colors.textMedium,
-    fontWeight: theme.typography.fontWeight.semibold,
+    letterSpacing: 1.0,
   },
   purpleStatTitle: {
-    fontFamily: theme.typography.fontFamily.medium,
+    fontFamily: 'Poppins-Medium',
     fontSize: 11,
     color: theme.colors.primaryLight,
-    fontWeight: theme.typography.fontWeight.semibold,
+    letterSpacing: 1.0,
   },
   statValue: {
-    fontFamily: theme.typography.fontFamily.bold,
+    fontFamily: 'Poppins-Bold',
     fontSize: moderateScale(28),
-    fontWeight: theme.typography.fontWeight.bold,
     color: theme.colors.textDark,
   },
   purpleStatValue: {
-    fontFamily: theme.typography.fontFamily.bold,
+    fontFamily: 'Poppins-Bold',
     fontSize: moderateScale(28),
-    fontWeight: theme.typography.fontWeight.bold,
     color: theme.colors.cardBg,
   },
   purpleStatText: {
@@ -671,10 +829,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: theme.colors.cardBg,
-    borderRadius: 20,
+    borderRadius: 22,
     padding: theme.spacing.md,
-    marginBottom: theme.spacing.sm,
-    ...theme.shadows.small,
+    marginBottom: 12, // Restores vertical spacing between card rows
+    borderWidth: 1,
+    borderColor: '#F2F2F7',
+    shadowColor: '#7C4DFF',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.02,
+    shadowRadius: 10,
+    elevation: 2,
   },
   menuLeft: {
     flexDirection: 'row',
@@ -694,27 +858,25 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   menuTitle: {
-    fontFamily: theme.typography.fontFamily.medium,
+    fontFamily: 'Poppins-SemiBold',
     fontSize: theme.typography.fontSize.md,
-    fontWeight: theme.typography.fontWeight.semibold,
     color: theme.colors.textDark,
     marginBottom: 2,
   },
   menuSubtitle: {
-    fontFamily: theme.typography.fontFamily.regular,
+    fontFamily: 'Poppins-Regular',
     fontSize: theme.typography.fontSize.sm,
     color: theme.colors.textMedium,
   },
   warningText: {
     color: theme.colors.error,
-    fontWeight: theme.typography.fontWeight.medium,
   },
   logoutButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#FFF5F5',
-    borderRadius: 20,
+    borderRadius: 22,
     height: 56,
     borderWidth: 1,
     borderColor: '#FEE2E2',
@@ -722,9 +884,8 @@ const styles = StyleSheet.create({
     marginBottom: theme.spacing.md,
   },
   logoutText: {
-    fontFamily: theme.typography.fontFamily.bold,
+    fontFamily: 'Poppins-SemiBold',
     fontSize: theme.typography.fontSize.md,
-    fontWeight: theme.typography.fontWeight.bold,
     color: theme.colors.error,
     marginLeft: theme.spacing.xs,
   },

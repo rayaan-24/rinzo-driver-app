@@ -267,28 +267,26 @@ export const PerformanceScreen: React.FC<PerformanceScreenProps> = ({ onBack }) 
           </Animated.View>
 
           {/* 4. PERFORMANCE GRADIENT BANNERS */}
-          <Animated.View style={[styles.performanceCardShadow, { opacity: bannerFade }]}>
-            <View style={styles.performanceCardContent}>
-              <Svg style={StyleSheet.absoluteFill} width="100%" height="100%">
-                <Defs>
-                  <SvgLinearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <Stop offset="0%" stopColor="#8664EC" />
-                    <Stop offset="100%" stopColor="#6366F1" />
-                  </SvgLinearGradient>
-                </Defs>
-                <Rect width="100%" height="100%" rx={24} fill="url(#grad)" />
-              </Svg>
-              <View style={styles.performanceLeft}>
-                <View style={styles.performanceHeaderRow}>
-                  <ClockIcon size={18} color="#FFFFFF" />
-                  <Text style={styles.performanceHeaderLabel}>ON-TIME DELIVERY</Text>
-                </View>
-                <Text style={styles.performanceValue}>99.2%</Text>
-                <Text style={styles.performanceSubtitle}>Excellent performance this week3f</Text>
+          <Animated.View style={[styles.performanceCard, { opacity: bannerFade }]}>
+            <Svg style={[StyleSheet.absoluteFill, { width: '100%', height: '100%' }]} width="100%" height="100%">
+              <Defs>
+                <SvgLinearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <Stop offset="0%" stopColor="#8664EC" />
+                  <Stop offset="100%" stopColor="#6366F1" />
+                </SvgLinearGradient>
+              </Defs>
+              <Rect width="100%" height="100%" rx={24} fill="url(#grad)" />
+            </Svg>
+            <View style={styles.performanceLeft}>
+              <View style={styles.performanceHeaderRow}>
+                <ClockIcon size={18} color="#FFFFFF" />
+                <Text style={styles.performanceHeaderLabel}>ON-TIME DELIVERY</Text>
               </View>
-              <View style={styles.sparkleContainer}>
-                <SparklesIcon size={24} color="#FFFFFF" />
-              </View>
+              <Text style={styles.performanceValue}>99.2%</Text>
+              <Text style={styles.performanceSubtitle}>Excellent performance this week3f</Text>
+            </View>
+            <View style={styles.sparkleContainer}>
+              <SparklesIcon size={24} color="#FFFFFF" />
             </View>
           </Animated.View>
 
@@ -549,17 +547,7 @@ const styles = StyleSheet.create({
     color: theme.colors.textMedium,
     marginLeft: 4,
   },
-  performanceCardShadow: {
-    marginBottom: theme.spacing.xl,
-    shadowColor: '#8664EC',
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.12,
-    shadowRadius: 18,
-    elevation: 6,
-    borderRadius: 24,
-    backgroundColor: '#8664EC',
-  },
-  performanceCardContent: {
+  performanceCard: {
     height: 180,
     borderRadius: 24,
     overflow: 'hidden',
@@ -567,8 +555,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: theme.spacing.xl,
     position: 'relative',
-    backgroundColor: 'transparent',
+    backgroundColor: '#8664EC',
+    shadowColor: '#8664EC',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.12,
+    shadowRadius: 16,
+    elevation: 4,
   },
   performanceLeft: {
     flex: 1,

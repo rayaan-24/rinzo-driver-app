@@ -36,5 +36,6 @@ export const driverData: DriverData = {
     { id: "bank", title: "Bank Details", subtitle: "Manage payouts and accounts", icon: "bank" },
     { id: "performance", title: "Performance", subtitle: "View ratings and reviews", icon: "performance" },
     { id: "settings", title: "Settings", subtitle: "App preferences and privacy", icon: "settings" },
+    { id: "terms", title: "Terms & Privacy", subtitle: "View terms of service and privacy policy", icon: "shield" },
   ]
 };
