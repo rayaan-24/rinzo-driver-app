@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, StyleSheet, Animated, Dimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { theme } from '../../theme';
@@ -60,7 +60,14 @@ export const RootNavigator: React.FC = () => {
   const [phone, setPhone] = useState<string>('');
 
   const [activeTab, setActiveTab] = useState<TabType>('Home');
+  const [isHideTabBar, setIsHideTabBar] = useState(false);
   const [prevTab, setPrevTab] = useState<TabType | null>(null);
+
+  useEffect(() => {
+    if (activeTab !== 'Profile') {
+      setIsHideTabBar(false);
+    }
+  }, [activeTab]);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [transitOrder, setTransitOrder] = useState<Order | null>(null);
   const [activePickupOrder, setActivePickupOrder] = useState<Order | null>(null);
@@ -127,7 +134,7 @@ export const RootNavigator: React.FC = () => {
   if (flowState === 'LoginPhone') {
     return (
       <LoginPhoneScreen
-        onSendOTP={(pNum) => {
+        onSendOTP={(pNum: string) => {
           setPhone(pNum);
           setFlowState('OTPVerification');
         }}
@@ -205,7 +212,7 @@ export const RootNavigator: React.FC = () => {
       case 'Alerts':
         return <PerformanceScreen />;
       case 'Profile':
-        return <ProfileScreen />;
+        return <ProfileScreen onSubScreenChange={(isSub) => setIsHideTabBar(isSub)} />;
       default:
         return (
           <HomeScreen
@@ -563,7 +570,7 @@ export const RootNavigator: React.FC = () => {
               setTransitOrder(null);
             }
           }}
-          onNavigateToPickup={(order) => {
+          onNavigateToPickup={(order: Order) => {
             if (transitMode === 'pickup') {
               setActivePickupOrder(order);
               setShowAcceptedBanner(false);
@@ -663,10 +670,12 @@ export const RootNavigator: React.FC = () => {
           {renderScreen(activeTab)}
         </Animated.View>
       </View>
-      <BottomTabBar
-        activeTab={activeTab}
-        onTabPress={handleTabPress}
-      />
+      {!isHideTabBar && (
+        <BottomTabBar
+          activeTab={activeTab}
+          onTabPress={handleTabPress}
+        />
+      )}
     </View>
   );
 };

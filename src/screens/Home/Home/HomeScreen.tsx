@@ -66,7 +66,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     <View style={styles.headerLeft}>
       <Image source={{ uri: stats.driverAvatar }} style={styles.avatar} />
       <View style={styles.headerTextContainer}>
-        <Text style={styles.greeting}>Good Morning, Driver 👋</Text>
+        <Text style={styles.greeting}>Good Morning, Driver ≡ƒæï</Text>
         <View style={styles.statusRow}>
           <View
             style={[
@@ -79,7 +79,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             ]}
           />
           <Text style={styles.statusText}>
-            {isOnline ? 'Online' : 'Offline'} • {stats.onlineHours}
+            {isOnline ? 'Online' : 'Offline'} ΓÇó {stats.onlineHours}
           </Text>
         </View>
       </View>
