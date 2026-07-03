@@ -14,8 +14,14 @@ import { OnboardingScreen1 } from '../../screens/Onboarding/Screen1/OnboardingSc
 import { OnboardingScreen2 } from '../../screens/Onboarding/Screen2/OnboardingScreen2';
 import { OnboardingScreen3 } from '../../screens/Onboarding/Screen3/OnboardingScreen3';
 import { AllowLocationScreen } from '../../screens/Auth/AllowLocation/AllowLocationScreen';
+
+// Hannan's Screens for Auth flow
 import { LoginPhoneScreen } from '../../screens/Auth/LoginPhone/LoginPhoneScreen';
 import { OTPVerificationScreen } from '../../screens/Auth/OTPVerification/OTPVerificationScreen';
+import { LoginEmailScreen } from '../../screens/Auth/LoginEmail/LoginEmailScreen';
+import { CreateNewPasswordScreen } from '../../screens/Auth/CreateNewPassword/CreateNewPasswordScreen';
+import { PasswordResetSuccessScreen } from '../../screens/Auth/PasswordResetSuccess/PasswordResetSuccessScreen';
+import { SignupScreen } from '../../screens/Auth/Signup/SignupScreen';
 
 export const RootNavigator: React.FC = () => {
   type FlowState =
@@ -25,7 +31,11 @@ export const RootNavigator: React.FC = () => {
     | 'Onboarding3'
     | 'AllowLocation'
     | 'LoginPhone'
+    | 'LoginEmail'
     | 'OTPVerification'
+    | 'CreateNewPassword'
+    | 'PasswordResetSuccess'
+    | 'SignUp'
     | 'Main';
   const [flowState, setFlowState] = useState<FlowState>('Splash');
   const [phone, setPhone] = useState<string>('');
@@ -75,7 +85,41 @@ export const RootNavigator: React.FC = () => {
           setPhone(pNum);
           setFlowState('OTPVerification');
         }}
+        onNavigateToEmail={() => setFlowState('LoginEmail')}
         onBack={() => setFlowState('AllowLocation')}
+      />
+    );
+  }
+  if (flowState === 'LoginEmail') {
+    return (
+      <LoginEmailScreen
+        onLoginSuccess={() => setFlowState('Main')}
+        onNavigateToPhone={() => setFlowState('LoginPhone')}
+        onNavigateToForgotPassword={() => setFlowState('CreateNewPassword')}
+        onNavigateToSignUp={() => setFlowState('SignUp')}
+      />
+    );
+  }
+  if (flowState === 'CreateNewPassword') {
+    return (
+      <CreateNewPasswordScreen
+        onResetSuccess={() => setFlowState('PasswordResetSuccess')}
+        onBack={() => setFlowState('LoginEmail')}
+      />
+    );
+  }
+  if (flowState === 'PasswordResetSuccess') {
+    return (
+      <PasswordResetSuccessScreen
+        onGoToLogin={() => setFlowState('LoginEmail')}
+      />
+    );
+  }
+  if (flowState === 'SignUp') {
+    return (
+      <SignupScreen
+        onSignUpSuccess={() => setFlowState('LoginEmail')}
+        onBack={() => setFlowState('LoginEmail')}
       />
     );
   }

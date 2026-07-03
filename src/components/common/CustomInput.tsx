@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, forwardRef } from 'react';
 import {
   View,
   TextInput,
@@ -17,21 +17,23 @@ interface CustomInputProps extends TextInputProps {
   label?: string;
   error?: string;
   prefix?: React.ReactNode;
+  suffix?: React.ReactNode;
   containerStyle?: StyleProp<ViewStyle>;
   inputContainerStyle?: StyleProp<ViewStyle>;
 }
 
-export const CustomInput: React.FC<CustomInputProps> = ({
+export const CustomInput = forwardRef<TextInput, CustomInputProps>(({
   label,
   error,
   prefix,
+  suffix,
   containerStyle,
   inputContainerStyle,
   onFocus,
   onBlur,
   style,
   ...rest
-}) => {
+}, ref) => {
   const [isFocused, setIsFocused] = useState(false);
 
   const handleFocus = (e: any) => {
@@ -63,18 +65,21 @@ export const CustomInput: React.FC<CustomInputProps> = ({
         {prefix && <View style={styles.prefixWrapper}>{prefix}</View>}
         
         <TextInput
+          ref={ref}
           style={[styles.input, style]}
           placeholderTextColor={theme.colors.textLight}
           onFocus={handleFocus}
           onBlur={handleBlur}
           {...rest}
         />
+
+        {suffix && <View style={styles.suffixWrapper}>{suffix}</View>}
       </View>
       
       {error ? <Text style={styles.errorText}>{error}</Text> : null}
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -108,6 +113,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: theme.spacing.xs,
+  },
+  suffixWrapper: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: theme.spacing.xs,
   },
   input: {
     flex: 1,

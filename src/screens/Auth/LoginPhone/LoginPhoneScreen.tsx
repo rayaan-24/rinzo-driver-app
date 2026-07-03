@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   StyleSheet,
   Text,
   TouchableOpacity,
+  TextInput,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   Image,
+  Animated,
+  Easing,
+  BackHandler,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Path } from 'react-native-svg';
@@ -52,6 +56,36 @@ export const LoginPhoneScreen: React.FC<LoginPhoneScreenProps> = ({
   const [phoneNumber, setPhoneNumber] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isKeypadVisible, setIsKeypadVisible] = useState(false);
+  const keypadY = useRef(new Animated.Value(300)).current;
+  const phoneInputRef = useRef<TextInput>(null);
+
+  useEffect(() => {
+    Animated.timing(keypadY, {
+      toValue: isKeypadVisible ? 0 : 300,
+      duration: 250,
+      easing: Easing.out(Easing.ease),
+      useNativeDriver: true,
+    }).start();
+  }, [isKeypadVisible]);
+
+  useEffect(() => {
+    const backAction = () => {
+      if (isKeypadVisible) {
+        setIsKeypadVisible(false);
+        phoneInputRef.current?.blur();
+        return true;
+      }
+      return false;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, [isKeypadVisible]);
 
   const validatePhone = (num: string) => {
     const cleaned = num.replace(/[^0-9]/g, '');
@@ -72,22 +106,104 @@ export const LoginPhoneScreen: React.FC<LoginPhoneScreenProps> = ({
     }
   };
 
-  const handleSubmit = () => {
-    const validationError = validatePhone(phoneNumber);
-    if (validationError) {
-      setError(validationError);
-      return;
-    }
-
-    setError('');
-    setIsLoading(true);
-
-    setTimeout(() => {
-      setIsLoading(false);
-      if (onSendOTP) {
-        onSendOTP(phoneNumber);
+  const handleCustomKeyPress = (key: string) => {
+    if (key === 'dismiss') {
+      setIsKeypadVisible(false);
+      phoneInputRef.current?.blur();
+    } else if (key === 'backspace') {
+      setPhoneNumber((prev) => prev.slice(0, -1));
+    } else {
+      if (phoneNumber.length < 10) {
+        setPhoneNumber((prev) => prev + key);
       }
-    }, 1200);
+    }
+  };
+
+  const renderCustomKeypad = () => {
+    const keys = [
+      ['1', '2', '3'],
+      ['4', '5', '6'],
+      ['7', '8', '9'],
+      ['dismiss', '0', 'backspace'],
+    ];
+
+    return (
+      <Animated.View
+        pointerEvents={isKeypadVisible ? 'auto' : 'none'}
+        style={[
+          styles.keypadContainer,
+          {
+            transform: [{ translateY: keypadY }],
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            zIndex: 99,
+          },
+        ]}
+      >
+        {keys.map((row, rowIdx) => (
+          <View key={rowIdx} style={styles.keypadRow}>
+            {row.map((key, keyIdx) => {
+              if (key === '') {
+                return <View key={keyIdx} style={[styles.keypadKey, styles.keypadKeyEmpty]} />;
+              }
+
+              const isBackspace = key === 'backspace';
+              const isDismiss = key === 'dismiss';
+
+              return (
+                <TouchableOpacity
+                  key={keyIdx}
+                  activeOpacity={0.6}
+                  onPress={() => handleCustomKeyPress(key)}
+                  style={[
+                    styles.keypadKey,
+                    (isBackspace || isDismiss) && styles.keypadKeyBackspace,
+                  ]}
+                >
+                  {isBackspace ? (
+                    <Svg width={s(24)} height={s(18)} viewBox="0 0 24 18" fill="none">
+                      <Path
+                        d="M21 2H9c-.7 0-1.3.4-1.7.9L2 9l5.3 6.1c.4.5 1 .9 1.7.9h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"
+                        stroke="#1C1C1E"
+                        strokeWidth="2"
+                        strokeLinejoin="round"
+                      />
+                      <Path
+                        d="M11 6l6 6M17 6l-6 6"
+                        stroke="#1C1C1E"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                      />
+                    </Svg>
+                  ) : isDismiss ? (
+                    <Svg width={s(24)} height={s(24)} viewBox="0 0 24 24" fill="none">
+                      <Path
+                        d="M18 15l-6 6-6-6M12 3v18"
+                        stroke="#1C1C1E"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </Svg>
+                  ) : (
+                    <Text style={styles.keypadKeyText}>{key}</Text>
+                  )}
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        ))}
+      </Animated.View>
+    );
+  };
+
+  const handleSubmit = () => {
+    setError('');
+    if (onSendOTP) {
+      onSendOTP(phoneNumber || '9876543210');
+    }
   };
 
   return (
@@ -97,17 +213,19 @@ export const LoginPhoneScreen: React.FC<LoginPhoneScreenProps> = ({
         style={styles.keyboardView}
       >
         <ScrollView
-          contentContainerStyle={styles.scrollContent}
+          contentContainerStyle={[
+            styles.scrollContent,
+            isKeypadVisible && { paddingBottom: s(280) },
+          ]}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
           {/* 1. Full Banner Header with Text Overlay */}
           <View style={styles.headerBannerContainer}>
-            {/* Background Illustration Asset containing leaves, city, clouds, pin & scooter courier */}
             <Image
-              source={require('../../../assets/images/login_full_header.jpg')}
+              source={require('../../../assets/images/rider.jpg')}
               style={styles.fullHeaderImage}
-              resizeMode="cover"
+              resizeMode="contain"
             />
 
             {/* Overlay Text Column on Left */}
@@ -125,7 +243,7 @@ export const LoginPhoneScreen: React.FC<LoginPhoneScreenProps> = ({
           </View>
 
           {/* 2. White Card Container */}
-          <View style={styles.card}>
+          <View style={[styles.card, isKeypadVisible && { marginBottom: s(16) }]}>
             {/* Login Toggle Tabs */}
             <View style={styles.tabContainer}>
               <TouchableOpacity
@@ -166,6 +284,7 @@ export const LoginPhoneScreen: React.FC<LoginPhoneScreenProps> = ({
             <View style={styles.inputSection}>
               <Text style={styles.fieldLabel}>Phone number</Text>
               <CustomInput
+                ref={phoneInputRef}
                 placeholder="Enter your phone number"
                 keyboardType="number-pad"
                 maxLength={10}
@@ -173,6 +292,8 @@ export const LoginPhoneScreen: React.FC<LoginPhoneScreenProps> = ({
                 onChangeText={handlePhoneChange}
                 error={error}
                 prefix={<CountryPrefix />}
+                showSoftInputOnFocus={false}
+                onFocus={() => setIsKeypadVisible(true)}
               />
               <Text style={styles.helperText}>
                 We’ll send you a 6-digit OTP to verify your number
@@ -186,28 +307,35 @@ export const LoginPhoneScreen: React.FC<LoginPhoneScreenProps> = ({
               loading={isLoading}
               style={styles.getOtpBtn}
             />
-          </View>
 
-          {/* 3. Or Divider */}
-          <View style={styles.orDividerRow}>
-            <View style={styles.line} />
-            <Text style={styles.orText}>or</Text>
-            <View style={styles.line} />
-          </View>
+            {/* 3. Or Divider */}
+            <View style={styles.orDividerRow}>
+              <View style={styles.line} />
+              <Text style={styles.orText}>or</Text>
+              <View style={styles.line} />
+            </View>
 
-          {/* 4. Footer Sign Up Link */}
-          <TouchableOpacity
-            onPress={onNavigateToSignUp}
-            activeOpacity={0.7}
-            style={styles.signUpRow}
-          >
-            <Text style={styles.noAccountText}>Don't have an account? </Text>
-            <Text style={styles.signUpLink}>Sign up</Text>
-          </TouchableOpacity>
+            {/* 4. Footer Sign Up Link */}
+            <TouchableOpacity
+              onPress={onNavigateToSignUp}
+              activeOpacity={0.7}
+              style={styles.signUpRow}
+            >
+              <Text style={styles.noAccountText}>Don't have an account? </Text>
+              <Text style={styles.signUpLink}>Sign up</Text>
+            </TouchableOpacity>
+          </View>
         </ScrollView>
+        {renderCustomKeypad()}
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
+};
+
+const fontFamily = {
+  regular: 'Poppins-Regular',
+  medium: 'Poppins-Medium',
+  bold: 'Poppins-Bold',
 };
 
 const styles = StyleSheet.create({
@@ -220,17 +348,15 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    paddingHorizontal: theme.spacing.md,
+    paddingHorizontal: 0,
     paddingBottom: theme.spacing.xl,
   },
   headerBannerContainer: {
-    width: screenWidth - theme.spacing.md * 2,
-    height: s(240),
+    width: screenWidth,
+    height: screenWidth * (857 / 1024),
     position: 'relative',
     justifyContent: 'center',
-    marginTop: s(10),
     overflow: 'hidden',
-    borderRadius: s(16),
   },
   fullHeaderImage: {
     position: 'absolute',
@@ -243,24 +369,24 @@ const styles = StyleSheet.create({
   },
   headerOverlayText: {
     position: 'absolute',
-    left: s(12),
-    top: s(20),
+    left: s(20),
+    top: s(88),
     width: s(185),
   },
   wordmarkImage: {
     width: s(140),
     height: s(30),
-    marginLeft: -s(6),
+    marginLeft: 0,
   },
   welcomeTitle: {
-    fontFamily: theme.typography.fontFamily.bold,
+    fontFamily: fontFamily.bold,
     fontSize: s(24),
     fontWeight: theme.typography.fontWeight.bold,
     color: '#1C1C1E',
     marginTop: s(14),
   },
   welcomeSubtitle: {
-    fontFamily: theme.typography.fontFamily.regular,
+    fontFamily: fontFamily.regular,
     fontSize: s(13),
     color: '#6E6A80',
     marginTop: s(6),
@@ -270,7 +396,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: s(24),
     padding: s(20),
-    marginTop: -s(10),
+    marginTop: 0,
+    marginHorizontal: theme.spacing.md,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.04,
@@ -281,27 +408,27 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#F3F4F6',
     borderRadius: s(14),
-    padding: s(4),
-    marginBottom: s(20),
+    padding: 0,
+    marginBottom: s(36),
   },
   tabBtn: {
     flex: 1,
-    paddingVertical: s(10),
+    paddingVertical: s(12),
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: s(10),
+    borderRadius: s(14),
   },
   activeTabBtn: {
     backgroundColor: '#6B46DF',
   },
   tabText: {
-    fontFamily: theme.typography.fontFamily.medium,
+    fontFamily: fontFamily.medium,
     fontSize: s(13),
     fontWeight: theme.typography.fontWeight.medium,
     color: '#6B7280',
   },
   activeTabText: {
-    fontFamily: theme.typography.fontFamily.bold,
+    fontFamily: fontFamily.bold,
     fontWeight: theme.typography.fontWeight.bold,
     color: '#FFFFFF',
   },
@@ -309,7 +436,7 @@ const styles = StyleSheet.create({
     marginBottom: s(10),
   },
   fieldLabel: {
-    fontFamily: theme.typography.fontFamily.bold,
+    fontFamily: fontFamily.bold,
     fontSize: s(15),
     fontWeight: theme.typography.fontWeight.bold,
     color: '#1C1C1E',
@@ -326,7 +453,7 @@ const styles = StyleSheet.create({
     marginRight: s(4),
   },
   countryCodeText: {
-    fontFamily: theme.typography.fontFamily.bold,
+    fontFamily: fontFamily.bold,
     fontSize: s(14),
     fontWeight: theme.typography.fontWeight.bold,
     color: '#1C1C1E',
@@ -342,7 +469,7 @@ const styles = StyleSheet.create({
     marginRight: s(4),
   },
   helperText: {
-    fontFamily: theme.typography.fontFamily.regular,
+    fontFamily: fontFamily.regular,
     fontSize: s(12),
     color: '#7C7985',
     marginTop: s(8),
@@ -359,6 +486,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginVertical: s(24),
+    marginHorizontal: theme.spacing.md,
   },
   line: {
     flex: 1,
@@ -366,7 +494,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#E5E7EB',
   },
   orText: {
-    fontFamily: theme.typography.fontFamily.medium,
+    fontFamily: fontFamily.medium,
     fontSize: s(13),
     color: '#9CA3AF',
     marginHorizontal: s(12),
@@ -376,17 +504,53 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingBottom: s(10),
+    marginHorizontal: theme.spacing.md,
   },
   noAccountText: {
-    fontFamily: theme.typography.fontFamily.regular,
+    fontFamily: fontFamily.regular,
     fontSize: s(14),
     color: '#7C7985',
   },
   signUpLink: {
-    fontFamily: theme.typography.fontFamily.bold,
+    fontFamily: fontFamily.bold,
     fontSize: s(14),
     fontWeight: theme.typography.fontWeight.bold,
     color: '#6B46DF',
+  },
+  keypadContainer: {
+    backgroundColor: '#EAECEF',
+    borderTopLeftRadius: s(30),
+    borderTopRightRadius: s(30),
+    paddingHorizontal: s(16),
+    paddingTop: s(20),
+    paddingBottom: Platform.OS === 'ios' ? s(34) : s(16),
+    width: '100%',
+  },
+  keypadRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: s(10),
+  },
+  keypadKey: {
+    flex: 1,
+    height: s(50),
+    backgroundColor: '#FFFFFF',
+    borderRadius: s(12),
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: s(6),
+  },
+  keypadKeyEmpty: {
+    backgroundColor: 'transparent',
+  },
+  keypadKeyBackspace: {
+    backgroundColor: 'transparent',
+  },
+  keypadKeyText: {
+    fontFamily: fontFamily.medium,
+    fontSize: s(22),
+    fontWeight: '500',
+    color: '#000000',
   },
 });
 

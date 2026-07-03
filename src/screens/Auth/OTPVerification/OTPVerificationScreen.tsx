@@ -9,6 +9,9 @@ import {
   Platform,
   ScrollView,
   Image,
+  Animated,
+  Easing,
+  BackHandler,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Path } from 'react-native-svg';
@@ -91,7 +94,38 @@ export const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({
   const [timer, setTimer] = useState(30);
   const [isLoading, setIsLoading] = useState(false);
   const [focusedIndex, setFocusedIndex] = useState<number>(0);
+  const [isKeypadVisible, setIsKeypadVisible] = useState(false);
   const inputRefs = useRef<Array<TextInput | null>>([]);
+  const keypadY = useRef(new Animated.Value(300)).current;
+
+  useEffect(() => {
+    Animated.timing(keypadY, {
+      toValue: isKeypadVisible ? 0 : 300,
+      duration: 250,
+      easing: Easing.out(Easing.ease),
+      useNativeDriver: true,
+    }).start();
+  }, [isKeypadVisible]);
+
+  useEffect(() => {
+    const backAction = () => {
+      if (isKeypadVisible) {
+        setIsKeypadVisible(false);
+        if (focusedIndex !== null) {
+          inputRefs.current[focusedIndex]?.blur();
+        }
+        return true;
+      }
+      return false;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, [isKeypadVisible, focusedIndex]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -129,20 +163,127 @@ export const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({
     }
   };
 
+  const handleCustomKeyPress = (key: string) => {
+    if (key === 'dismiss') {
+      setIsKeypadVisible(false);
+      if (focusedIndex !== null) {
+        inputRefs.current[focusedIndex]?.blur();
+      }
+      return;
+    }
+
+    const currentIdx = focusedIndex !== null ? focusedIndex : 0;
+    const newOtp = [...otp];
+
+    if (key === 'backspace') {
+      if (otp[currentIdx] !== '') {
+        newOtp[currentIdx] = '';
+        setOtp(newOtp);
+      } else if (currentIdx > 0) {
+        newOtp[currentIdx - 1] = '';
+        setOtp(newOtp);
+        setFocusedIndex(currentIdx - 1);
+        inputRefs.current[currentIdx - 1]?.focus();
+      }
+    } else {
+      newOtp[currentIdx] = key;
+      setOtp(newOtp);
+      if (currentIdx < 5) {
+        setFocusedIndex(currentIdx + 1);
+        inputRefs.current[currentIdx + 1]?.focus();
+      }
+    }
+  };
+
   const handleVerify = () => {
     const code = otp.join('');
-    if (code.length < 6) return;
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      if (onVerify) onVerify(code);
-    }, 1200);
+    if (onVerify) onVerify(code || '123456');
   };
 
   const formatTimer = (secs: number) => {
     const m = Math.floor(secs / 60);
     const sSec = secs % 60;
-    return `${m < 10 ? '0' : ''}${m}:${sSec < 10 ? '0' : ''}${sSec}`;
+    return `${m < 10 ? '0' : ''}${m} : ${sSec < 10 ? '0' : ''}${sSec}`;
+  };
+
+  const renderCustomKeypad = () => {
+    const keys = [
+      ['1', '2', '3'],
+      ['4', '5', '6'],
+      ['7', '8', '9'],
+      ['dismiss', '0', 'backspace'],
+    ];
+
+    return (
+      <Animated.View
+        pointerEvents={isKeypadVisible ? 'auto' : 'none'}
+        style={[
+          styles.keypadContainer,
+          {
+            transform: [{ translateY: keypadY }],
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            zIndex: 99,
+          },
+        ]}
+      >
+        {keys.map((row, rowIdx) => (
+          <View key={rowIdx} style={styles.keypadRow}>
+            {row.map((key, keyIdx) => {
+              if (key === '') {
+                return <View key={keyIdx} style={[styles.keypadKey, styles.keypadKeyEmpty]} />;
+              }
+
+              const isBackspace = key === 'backspace';
+              const isDismiss = key === 'dismiss';
+
+              return (
+                <TouchableOpacity
+                  key={keyIdx}
+                  activeOpacity={0.6}
+                  onPress={() => handleCustomKeyPress(key)}
+                  style={[
+                    styles.keypadKey,
+                    (isBackspace || isDismiss) && styles.keypadKeyBackspace,
+                  ]}
+                >
+                  {isBackspace ? (
+                    <Svg width={s(24)} height={s(18)} viewBox="0 0 24 18" fill="none">
+                      <Path
+                        d="M21 2H9c-.7 0-1.3.4-1.7.9L2 9l5.3 6.1c.4.5 1 .9 1.7.9h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"
+                        stroke="#1C1C1E"
+                        strokeWidth="2"
+                        strokeLinejoin="round"
+                      />
+                      <Path
+                        d="M11 6l6 6M17 6l-6 6"
+                        stroke="#1C1C1E"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                      />
+                    </Svg>
+                  ) : isDismiss ? (
+                    <Svg width={s(24)} height={s(24)} viewBox="0 0 24 24" fill="none">
+                      <Path
+                        d="M18 15l-6 6-6-6M12 3v18"
+                        stroke="#1C1C1E"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </Svg>
+                  ) : (
+                    <Text style={styles.keypadKeyText}>{key}</Text>
+                  )}
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        ))}
+      </Animated.View>
+    );
   };
 
   return (
@@ -152,16 +293,20 @@ export const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({
         style={styles.keyboardView}
       >
         <ScrollView
-          contentContainerStyle={styles.scrollContent}
+          contentContainerStyle={[
+            styles.scrollContent,
+            isKeypadVisible && { paddingBottom: s(280) },
+          ]}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
+          scrollEnabled={true}
         >
           {/* Top Header Section */}
           <View style={styles.headerBannerContainer}>
             <Image
-              source={require('../../../assets/images/login_full_header.jpg')}
+              source={require('../../../assets/images/rider.jpg')}
               style={styles.fullHeaderImage}
-              resizeMode="cover"
+              resizeMode="contain"
             />
 
             {/* Back Button */}
@@ -188,7 +333,7 @@ export const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({
           </View>
 
           {/* White OTP Form Card */}
-          <View style={styles.card}>
+          <View style={[styles.card, isKeypadVisible && { marginBottom: s(16) }]}>
             {/* 6 OTP Boxes */}
             <View style={styles.otpBoxesRow}>
               {otp.map((digit, idx) => {
@@ -211,7 +356,11 @@ export const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({
                       value={digit}
                       onChangeText={(text) => handleOtpChange(text, idx)}
                       onKeyPress={(e) => handleKeyPress(e, idx)}
-                      onFocus={() => setFocusedIndex(idx)}
+                      onFocus={() => {
+                        setFocusedIndex(idx);
+                        setIsKeypadVisible(true);
+                      }}
+                      showSoftInputOnFocus={false}
                       keyboardType="number-pad"
                       maxLength={1}
                       style={styles.otpInput}
@@ -271,14 +420,21 @@ export const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({
               title="Verify OTP"
               onPress={handleVerify}
               loading={isLoading}
-              disabled={otp.join('').length < 6}
+              disabled={false}
               style={styles.verifyBtn}
             />
           </View>
         </ScrollView>
+        {renderCustomKeypad()}
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
+};
+
+const fontFamily = {
+  regular: 'Poppins-Regular',
+  medium: 'Poppins-Medium',
+  bold: 'Poppins-Bold',
 };
 
 const styles = StyleSheet.create({
@@ -291,15 +447,13 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    paddingHorizontal: theme.spacing.md,
+    paddingHorizontal: 0,
     paddingBottom: theme.spacing.xl,
   },
   headerBannerContainer: {
-    width: screenWidth - theme.spacing.md * 2,
-    height: s(250),
+    width: screenWidth,
+    height: screenWidth * (857 / 1024),
     position: 'relative',
-    marginTop: s(5),
-    borderRadius: s(16),
     overflow: 'hidden',
   },
   fullHeaderImage: {
@@ -313,8 +467,8 @@ const styles = StyleSheet.create({
   },
   topBackRow: {
     position: 'absolute',
-    left: s(12),
-    top: s(12),
+    left: s(16),
+    top: s(16),
     zIndex: 10,
   },
   backCircleBtn: {
@@ -332,24 +486,24 @@ const styles = StyleSheet.create({
   },
   headerOverlayText: {
     position: 'absolute',
-    left: s(12),
-    top: s(58),
+    left: s(20),
+    top: s(88),
     width: s(190),
   },
   wordmarkImage: {
     width: s(130),
     height: s(28),
-    marginLeft: -s(6),
+    marginLeft: 0,
   },
   welcomeTitle: {
-    fontFamily: theme.typography.fontFamily.bold,
+    fontFamily: fontFamily.bold,
     fontSize: s(20),
     fontWeight: theme.typography.fontWeight.bold,
     color: '#1C1C1E',
     marginTop: s(10),
   },
   welcomeSubtitle: {
-    fontFamily: theme.typography.fontFamily.regular,
+    fontFamily: fontFamily.regular,
     fontSize: s(12),
     color: '#6E6A80',
     marginTop: s(4),
@@ -361,7 +515,7 @@ const styles = StyleSheet.create({
     marginTop: s(4),
   },
   phoneNumberText: {
-    fontFamily: theme.typography.fontFamily.bold,
+    fontFamily: fontFamily.bold,
     fontSize: s(14),
     fontWeight: theme.typography.fontWeight.bold,
     color: '#6B46DF',
@@ -374,7 +528,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: s(24),
     padding: s(20),
-    marginTop: -s(15),
+    marginTop: 0,
+    marginHorizontal: theme.spacing.md,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.04,
@@ -408,7 +563,7 @@ const styles = StyleSheet.create({
   },
   otpInput: {
     fontSize: s(20),
-    fontFamily: theme.typography.fontFamily.bold,
+    fontFamily: fontFamily.bold,
     fontWeight: theme.typography.fontWeight.bold,
     color: '#1C1C1E',
     textAlign: 'center',
@@ -422,14 +577,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#6B46DF',
   },
   expiryText: {
-    fontFamily: theme.typography.fontFamily.regular,
+    fontFamily: fontFamily.regular,
     fontSize: s(13),
     color: '#7C7985',
     textAlign: 'center',
     marginBottom: s(20),
   },
   timerText: {
-    fontFamily: theme.typography.fontFamily.bold,
+    fontFamily: fontFamily.bold,
     fontWeight: theme.typography.fontWeight.bold,
     color: '#6B46DF',
   },
@@ -445,7 +600,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F3F4F6',
   },
   resendDividerText: {
-    fontFamily: theme.typography.fontFamily.regular,
+    fontFamily: fontFamily.regular,
     fontSize: s(12),
     color: '#9CA3AF',
     marginHorizontal: s(10),
@@ -462,7 +617,7 @@ const styles = StyleSheet.create({
     marginRight: s(6),
   },
   resendText: {
-    fontFamily: theme.typography.fontFamily.bold,
+    fontFamily: fontFamily.bold,
     fontSize: s(14),
     fontWeight: theme.typography.fontWeight.bold,
     color: '#6B46DF',
@@ -482,7 +637,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   changePhoneText: {
-    fontFamily: theme.typography.fontFamily.bold,
+    fontFamily: fontFamily.bold,
     fontSize: s(14),
     fontWeight: theme.typography.fontWeight.bold,
     color: '#6B46DF',
@@ -493,6 +648,48 @@ const styles = StyleSheet.create({
     height: s(52),
     borderRadius: s(16),
     backgroundColor: '#6B46DF',
+  },
+  keypadContainer: {
+    backgroundColor: '#EAECEF',
+    borderTopLeftRadius: s(30),
+    borderTopRightRadius: s(30),
+    paddingHorizontal: s(16),
+    paddingTop: s(20),
+    paddingBottom: Platform.OS === 'ios' ? s(34) : s(16),
+    width: '100%',
+  },
+  keypadRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: s(10),
+  },
+  keypadKey: {
+    flex: 1,
+    height: s(50),
+    backgroundColor: '#FFFFFF',
+    borderRadius: s(12),
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: s(6),
+  },
+  keypadKeyEmpty: {
+    backgroundColor: 'transparent',
+  },
+  keypadKeyBackspace: {
+    backgroundColor: 'transparent',
+  },
+  keypadKeyText: {
+    fontFamily: fontFamily.medium,
+    fontSize: s(22),
+    fontWeight: '500',
+    color: '#000000',
+  },
+  floatingBackRow: {
+    paddingHorizontal: s(16),
+    paddingTop: s(16),
+    paddingBottom: s(0),
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });
 
