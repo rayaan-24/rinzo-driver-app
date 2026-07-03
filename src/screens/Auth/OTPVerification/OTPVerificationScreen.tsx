@@ -346,7 +346,7 @@ export const OTPVerificationScreen: React.FC<OTPVerificationScreenProps> = ({
                 resizeMode="contain"
               />
               <Text style={styles.welcomeTitle}>
-                {verificationType === 'email' ? 'Verify Your' : 'Verify Your Phone Number'}
+                {verificationType === 'email' ? 'Verify Your' : 'Verify Your' + '\n' + 'Phone Number'}
               </Text>
               <Text style={styles.welcomeSubtitle}>
                 {verificationType === 'email'
@@ -532,14 +532,14 @@ const styles = StyleSheet.create({
     fontSize: s(24),
     fontWeight: theme.typography.fontWeight.bold,
     color: '#1C1C1E',
-    marginTop: s(10),
+    marginTop: s(14),
   },
   welcomeSubtitle: {
     fontFamily: fontFamily.regular,
-    fontSize: s(14),
+    fontSize: s(13),
     color: '#6E6A80',
-    marginTop: s(4),
-    lineHeight: s(17),
+    marginTop: s(6),
+    lineHeight: s(19),
   },
   phoneRow: {
     flexDirection: 'row',
