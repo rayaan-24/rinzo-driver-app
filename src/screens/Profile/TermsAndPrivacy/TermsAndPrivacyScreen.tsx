@@ -11,6 +11,7 @@ import {
 import Svg, { Path, Circle } from 'react-native-svg';
 import { theme } from '../../../theme';
 import { moderateScale } from '../../../utils/responsive';
+import { Header } from '../../../components/Header';
 
 const { width } = Dimensions.get('window');
 
@@ -179,28 +180,22 @@ export const TermsAndPrivacyScreen: React.FC<TermsAndPrivacyScreenProps> = ({ on
     <Animated.View style={[styles.outerContainer, { opacity: screenFadeAnim }]}>
       
       {/* 1. FIXED STICKY HEADER */}
-      <View style={styles.headerContainer}>
-        <TouchableOpacity
-          accessible={true}
-          accessibilityLabel="Go Back"
-          accessibilityRole="button"
-          activeOpacity={0.7}
-          onPress={onBack}
-          style={styles.headerLeftBtn}
-        >
-          <ArrowLeftIcon size={24} color={theme.colors.textDark} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Terms & Privacy</Text>
-        <TouchableOpacity
-          accessible={true}
-          accessibilityLabel="Help"
-          accessibilityRole="button"
-          activeOpacity={0.7}
-          style={styles.headerRightBtn}
-        >
-          <HelpIcon size={20} color={theme.colors.textDark} />
-        </TouchableOpacity>
-      </View>
+      <Header
+        title="Terms & Privacy"
+        showBack
+        onBackPress={onBack}
+        rightCustom={
+          <TouchableOpacity
+            accessible={true}
+            accessibilityLabel="Help"
+            accessibilityRole="button"
+            activeOpacity={0.7}
+            style={styles.headerRightBtn}
+          >
+            <HelpIcon size={20} color={theme.colors.textDark} />
+          </TouchableOpacity>
+        }
+      />
 
       {/* 2. SCROLLABLE CONTENT BODY */}
       <ScrollView
@@ -379,33 +374,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FCF9FF', // Light lavender theme background style
   },
-  headerContainer: {
-    flexDirection: 'row',
-    height: 56,
-    backgroundColor: '#FFFFFF',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: theme.spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F1F1F5',
-  },
-  headerLeftBtn: {
-    width: 40,
-    height: 40,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-  },
-  headerTitle: {
-    fontFamily: 'Poppins-SemiBold',
-    fontSize: theme.typography.fontSize.lg,
-    color: theme.colors.textDark,
-  },
-  headerRightBtn: {
-    width: 40,
-    height: 40,
-    justifyContent: 'center',
-    alignItems: 'flex-end',
-  },
+
   scrollContent: {
     paddingHorizontal: theme.spacing.md,
     paddingTop: theme.spacing.lg,
@@ -593,5 +562,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 16,
     paddingHorizontal: 12,
+  },
+  headerRightBtn: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
   },
 });

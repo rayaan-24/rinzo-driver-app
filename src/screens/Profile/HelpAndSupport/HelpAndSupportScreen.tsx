@@ -12,6 +12,7 @@ import {
 import Svg, { Path, Circle } from 'react-native-svg';
 import { theme } from '../../../theme';
 import { moderateScale } from '../../../utils/responsive';
+import { Header } from '../../../components/Header';
 
 const { width } = Dimensions.get('window');
 const cardWidth = (width - theme.spacing.md * 2 - 12) / 2;
@@ -225,28 +226,22 @@ export const HelpAndSupportScreen: React.FC<HelpAndSupportScreenProps> = ({ onBa
     <Animated.View style={[styles.outerContainer, { opacity: screenFade }]}>
       
       {/* 1. FIXED HEADER */}
-      <View style={styles.headerContainer}>
-        <TouchableOpacity
-          accessible={true}
-          accessibilityLabel="Go Back"
-          accessibilityRole="button"
-          activeOpacity={0.7}
-          onPress={onBack}
-          style={styles.headerButton}
-        >
-          <ArrowLeftIcon size={24} color={theme.colors.textDark} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Help & Support</Text>
-        <TouchableOpacity
-          accessible={true}
-          accessibilityLabel="Help Center"
-          accessibilityRole="button"
-          activeOpacity={0.7}
-          style={styles.headerRightPlaceholder}
-        >
-          <HelpIcon size={20} color={theme.colors.textDark} />
-        </TouchableOpacity>
-      </View>
+      <Header
+        title="Help & Support"
+        showBack
+        onBackPress={onBack}
+        rightCustom={
+          <TouchableOpacity
+            accessible={true}
+            accessibilityLabel="Help Center"
+            accessibilityRole="button"
+            activeOpacity={0.7}
+            style={styles.headerRightPlaceholder}
+          >
+            <HelpIcon size={20} color={theme.colors.textDark} />
+          </TouchableOpacity>
+        }
+      />
 
       {/* 2. SCROLL CONTENT */}
       <ScrollView
@@ -419,33 +414,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FCFAFF', // Very light lavender
   },
-  headerContainer: {
-    flexDirection: 'row',
-    height: 56,
-    backgroundColor: '#FFFFFF',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: theme.spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F1F1F5',
-  },
-  headerButton: {
-    width: 40,
-    height: 40,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-  },
-  headerTitle: {
-    fontFamily: 'Poppins-SemiBold',
-    fontSize: theme.typography.fontSize.lg,
-    color: theme.colors.textDark,
-  },
-  headerRightPlaceholder: {
-    width: 40,
-    height: 40,
-    justifyContent: 'center',
-    alignItems: 'flex-end',
-  },
+
   scrollContent: {
     paddingHorizontal: theme.spacing.md,
     paddingTop: theme.spacing.lg,
@@ -599,5 +568,11 @@ const styles = StyleSheet.create({
     letterSpacing: 1.5,
     marginTop: 10,
     marginBottom: 20,
+  },
+  headerRightPlaceholder: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
   },
 });

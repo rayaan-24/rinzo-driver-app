@@ -14,6 +14,7 @@ import Svg, { Path, Circle } from 'react-native-svg';
 import { theme } from '../../../theme';
 import { driverData } from '../../../data/profile';
 import { moderateScale } from '../../../utils/responsive';
+import { Header } from '../../../components/Header';
 
 const { width } = Dimensions.get('window');
 const cardWidth = (width - theme.spacing.md * 2 - 12) / 2;
@@ -306,33 +307,36 @@ export const SupportCenterScreen: React.FC<SupportCenterScreenProps> = ({
     <Animated.View style={[styles.outerContainer, { opacity: screenFade }]}>
       
       {/* 1. FIXED HEADER */}
-      <View style={styles.headerContainer}>
-        <View style={styles.headerLeftCol}>
+      <Header
+        leftCustom={
+          <View style={styles.headerLeftCol}>
+            <TouchableOpacity
+              accessible={true}
+              accessibilityLabel="Go Back"
+              accessibilityRole="button"
+              activeOpacity={0.7}
+              onPress={onBack}
+              style={styles.headerBackTouch}
+            >
+              <ArrowLeftIcon size={24} color={theme.colors.textDark} />
+            </TouchableOpacity>
+            <View style={styles.avatarOutline}>
+              <Image source={driverData.avatar} style={styles.avatarImage} />
+            </View>
+          </View>
+        }
+        rightCustom={
           <TouchableOpacity
             accessible={true}
-            accessibilityLabel="Go Back"
+            accessibilityLabel="Notifications"
             accessibilityRole="button"
             activeOpacity={0.7}
-            onPress={onBack}
-            style={styles.headerBackTouch}
+            style={styles.headerRightBtn}
           >
-            <ArrowLeftIcon size={24} color={theme.colors.textDark} />
+            <BellIcon size={22} color="#7C4DFF" />
           </TouchableOpacity>
-          <View style={styles.avatarOutline}>
-            <Image source={driverData.avatar} style={styles.avatarImage} />
-          </View>
-        </View>
-        <Text style={styles.headerTitle}>Rinzo</Text>
-        <TouchableOpacity
-          accessible={true}
-          accessibilityLabel="Notifications"
-          accessibilityRole="button"
-          activeOpacity={0.7}
-          style={styles.headerRightBtn}
-        >
-          <BellIcon size={22} color="#7C4DFF" />
-        </TouchableOpacity>
-      </View>
+        }
+      />
 
       {/* 2. SCROLL CONTENT BODY */}
       <ScrollView
@@ -550,16 +554,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FCFAFF', // Light lavender theme
   },
-  headerContainer: {
-    flexDirection: 'row',
-    height: 56,
-    backgroundColor: '#FFFFFF',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: theme.spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F1F1F5',
-  },
   headerLeftCol: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -583,11 +577,6 @@ const styles = StyleSheet.create({
   avatarImage: {
     width: '100%',
     height: '100%',
-  },
-  headerTitle: {
-    fontFamily: 'Poppins-Bold',
-    fontSize: 20,
-    color: '#7C4DFF', // Branded center Rinzo title
   },
   headerRightBtn: {
     width: 40,

@@ -11,6 +11,7 @@ import {
 import Svg, { Path, Circle } from 'react-native-svg';
 import { theme } from '../../../theme';
 import { moderateScale } from '../../../utils/responsive';
+import { Header } from '../../../components/Header';
 
 // ==========================================
 // LOCAL SVG ICONS (Android space-safe paths)
@@ -257,28 +258,22 @@ export const UploadSuccessScreen: React.FC<UploadSuccessScreenProps> = ({
       <View style={styles.contentWrapper}>
         
         {/* 1. FIXED HEADER */}
-        <View style={styles.headerContainer}>
-          <TouchableOpacity
-            accessible={true}
-            accessibilityLabel="Go Back"
-            accessibilityRole="button"
-            activeOpacity={0.7}
-            onPress={onViewProfile}
-            style={styles.headerButton}
-          >
-            <ArrowLeftIcon size={22} color={theme.colors.textDark} />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Document Upload</Text>
-          <TouchableOpacity
-            accessible={true}
-            accessibilityLabel="Help"
-            accessibilityRole="button"
-            activeOpacity={0.7}
-            style={styles.headerButtonRight}
-          >
-            <HelpIcon size={20} color={theme.colors.textDark} />
-          </TouchableOpacity>
-        </View>
+        <Header
+          title="Document Upload"
+          showBack
+          onBackPress={onViewProfile}
+          rightCustom={
+            <TouchableOpacity
+              accessible={true}
+              accessibilityLabel="Help"
+              accessibilityRole="button"
+              activeOpacity={0.7}
+              style={styles.headerButtonRight}
+            >
+              <HelpIcon size={20} color={theme.colors.textDark} />
+            </TouchableOpacity>
+          }
+        />
 
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -420,36 +415,7 @@ const styles = StyleSheet.create({
     maxWidth: 600,
     backgroundColor: '#FFFFFF',
   },
-  headerContainer: {
-    flexDirection: 'row',
-    height: moderateScale(60),
-    backgroundColor: '#FFFFFF',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: theme.spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F2F2F7',
-  },
-  headerButton: {
-    width: 40,
-    height: 40,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-  },
-  headerButtonRight: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: theme.colors.borderLight,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  headerTitle: {
-    fontFamily: 'Poppins-Bold',
-    fontSize: theme.typography.fontSize.lg,
-    fontWeight: theme.typography.fontWeight.bold,
-    color: theme.colors.textDark,
-  },
+
   scrollContent: {
     paddingHorizontal: theme.spacing.md,
     paddingTop: theme.spacing.xl,
@@ -602,5 +568,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: theme.typography.fontWeight.bold,
     color: theme.colors.primary,
+  },
+  headerButtonRight: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: theme.colors.borderLight,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

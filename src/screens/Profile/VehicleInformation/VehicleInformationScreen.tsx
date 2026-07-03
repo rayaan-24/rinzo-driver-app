@@ -15,6 +15,7 @@ import { driverData } from '../../../data/profile';
 import { moderateScale } from '../../../utils/responsive';
 import { ImageManager } from '../../../utils/imageManager';
 import { ImageActionSheet } from '../../../components/ImageActionSheet';
+import { Header } from '../../../components/Header';
 
 // ==========================================
 // LOCAL SVG ICONS (Android space-safe paths)
@@ -234,28 +235,22 @@ export const VehicleInformationScreen: React.FC<VehicleInformationScreenProps> =
     <Animated.View style={[styles.outerContainer, { opacity: screenFadeAnim }]}>
       <View style={styles.contentWrapper}>
         {/* 1. HEADER */}
-        <View style={styles.headerContainer}>
-          <TouchableOpacity
-            accessible={true}
-            accessibilityLabel="Go Back"
-            accessibilityRole="button"
-            activeOpacity={0.7}
-            onPress={onBack}
-            style={styles.headerButton}
-          >
-            <ArrowLeftIcon size={22} color={theme.colors.textDark} />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Vehicle Information</Text>
-          <TouchableOpacity
-            accessible={true}
-            accessibilityLabel="Help"
-            accessibilityRole="button"
-            activeOpacity={0.7}
-            style={styles.headerButtonRight}
-          >
-            <HelpIcon size={20} color={theme.colors.textDark} />
-          </TouchableOpacity>
-        </View>
+        <Header
+          title="Vehicle Information"
+          showBack
+          onBackPress={onBack}
+          rightCustom={
+            <TouchableOpacity
+              accessible={true}
+              accessibilityLabel="Help"
+              accessibilityRole="button"
+              activeOpacity={0.7}
+              style={styles.headerButtonRight}
+            >
+              <HelpIcon size={20} color={theme.colors.textDark} />
+            </TouchableOpacity>
+          }
+        />
 
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -445,36 +440,7 @@ const styles = StyleSheet.create({
     maxWidth: 600,
     backgroundColor: theme.colors.background,
   },
-  headerContainer: {
-    flexDirection: 'row',
-    height: moderateScale(60),
-    backgroundColor: '#FFFFFF',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: theme.spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
-  },
-  headerButton: {
-    width: 40,
-    height: 40,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-  },
-  headerButtonRight: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: theme.colors.borderLight,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  headerTitle: {
-    fontFamily: theme.typography.fontFamily.bold,
-    fontSize: theme.typography.fontSize.lg,
-    fontWeight: theme.typography.fontWeight.bold,
-    color: theme.colors.textDark,
-  },
+
   scrollContent: {
     paddingHorizontal: theme.spacing.md,
     paddingTop: theme.spacing.md,
@@ -761,5 +727,13 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: theme.colors.textMedium,
     textAlign: 'center',
+  },
+  headerButtonRight: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: theme.colors.borderLight,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
