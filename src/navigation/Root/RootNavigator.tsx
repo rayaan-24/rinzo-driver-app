@@ -23,10 +23,42 @@ import { CollectionCompleteScreen } from '../../screens/Pickup/CollectionComplet
 import { CustomerHandoffScreen } from '../../screens/Pickup/CustomerHandoff/CustomerHandoffScreen';
 import { Order } from '../../data/mockData';
 
+// Saad's Screens
+import { SplashScreen } from '../../screens/Splash/SplashScreen';
+import { OnboardingScreen1 } from '../../screens/Onboarding/Screen1/OnboardingScreen1';
+import { OnboardingScreen2 } from '../../screens/Onboarding/Screen2/OnboardingScreen2';
+import { OnboardingScreen3 } from '../../screens/Onboarding/Screen3/OnboardingScreen3';
+import { AllowLocationScreen } from '../../screens/Auth/AllowLocation/AllowLocationScreen';
+
+// Hannan's Screens
+import { LoginPhoneScreen } from '../../screens/Auth/LoginPhone/LoginPhoneScreen';
+import { OTPVerificationScreen } from '../../screens/Auth/OTPVerification/OTPVerificationScreen';
+import { LoginEmailScreen } from '../../screens/Auth/LoginEmail/LoginEmailScreen';
+import { CreateNewPasswordScreen } from '../../screens/Auth/CreateNewPassword/CreateNewPasswordScreen';
+import { PasswordResetSuccessScreen } from '../../screens/Auth/PasswordResetSuccess/PasswordResetSuccessScreen';
+import { SignupScreen } from '../../screens/Auth/Signup/SignupScreen';
+
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const TAB_ORDER: TabType[] = ['Home', 'History', 'Alerts', 'Profile'];
 
+type FlowState =
+  | 'Splash'
+  | 'Onboarding1'
+  | 'Onboarding2'
+  | 'Onboarding3'
+  | 'AllowLocation'
+  | 'LoginPhone'
+  | 'LoginEmail'
+  | 'OTPVerification'
+  | 'CreateNewPassword'
+  | 'PasswordResetSuccess'
+  | 'SignUp'
+  | 'Main';
+
 export const RootNavigator: React.FC = () => {
+  const [flowState, setFlowState] = useState<FlowState>('Splash');
+  const [phone, setPhone] = useState<string>('');
+
   const [activeTab, setActiveTab] = useState<TabType>('Home');
   const [prevTab, setPrevTab] = useState<TabType | null>(null);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
@@ -37,7 +69,7 @@ export const RootNavigator: React.FC = () => {
   const [collectedOrder, setCollectedOrder] = useState<Order | null>(null);
   const [generateQrOrder, setGenerateQrOrder] = useState<Order | null>(null);
   const [previewLabelBag, setPreviewLabelBag] = useState<any | null>(null);
-  const [transitMode, setTransitMode] = useState<'pickup' | 'dispatch' | 'franchise'>('pickup');
+  const [transitMode, setTransitMode] = useState<'pickup' | 'dispatch' | 'franchise' | 'delivery_transit' | 'franchise_pickup' | 'delivery_drop' | 'reached_drop'>('pickup');
   const [showAcceptedBanner, setShowAcceptedBanner] = useState(false);
   const [isVerifyingFranchise, setIsVerifyingFranchise] = useState(false);
   const [isOrderCompleted, setIsOrderCompleted] = useState(false);
@@ -48,6 +80,113 @@ export const RootNavigator: React.FC = () => {
   const slideAnim = useRef(new Animated.Value(1)).current;
   const directionRef = useRef(-1);
   const insets = useSafeAreaInsets();
+
+  // ===================== AUTH / ONBOARDING FLOW =====================
+
+  if (flowState === 'Splash') {
+    return <SplashScreen onFinish={() => setFlowState('Onboarding1')} />;
+  }
+
+  if (flowState === 'Onboarding1') {
+    return (
+      <OnboardingScreen1
+        onNext={() => setFlowState('Onboarding2')}
+        onSkip={() => setFlowState('AllowLocation')}
+      />
+    );
+  }
+
+  if (flowState === 'Onboarding2') {
+    return (
+      <OnboardingScreen2
+        onNext={() => setFlowState('Onboarding3')}
+        onBack={() => setFlowState('Onboarding1')}
+        onSkip={() => setFlowState('AllowLocation')}
+      />
+    );
+  }
+
+  if (flowState === 'Onboarding3') {
+    return (
+      <OnboardingScreen3
+        onGetStarted={() => setFlowState('AllowLocation')}
+        onBack={() => setFlowState('Onboarding2')}
+      />
+    );
+  }
+
+  if (flowState === 'AllowLocation') {
+    return (
+      <AllowLocationScreen
+        onAllow={() => setFlowState('LoginPhone')}
+        onDeny={() => setFlowState('LoginPhone')}
+      />
+    );
+  }
+
+  if (flowState === 'LoginPhone') {
+    return (
+      <LoginPhoneScreen
+        onSendOTP={(pNum) => {
+          setPhone(pNum);
+          setFlowState('OTPVerification');
+        }}
+        onNavigateToEmail={() => setFlowState('LoginEmail')}
+        onNavigateToSignUp={() => setFlowState('SignUp')}
+        onBack={() => setFlowState('AllowLocation')}
+      />
+    );
+  }
+
+  if (flowState === 'LoginEmail') {
+    return (
+      <LoginEmailScreen
+        onLoginSuccess={() => setFlowState('Main')}
+        onNavigateToPhone={() => setFlowState('LoginPhone')}
+        onNavigateToForgotPassword={() => setFlowState('CreateNewPassword')}
+        onNavigateToSignUp={() => setFlowState('SignUp')}
+      />
+    );
+  }
+
+  if (flowState === 'CreateNewPassword') {
+    return (
+      <CreateNewPasswordScreen
+        onResetSuccess={() => setFlowState('PasswordResetSuccess')}
+        onBack={() => setFlowState('LoginEmail')}
+      />
+    );
+  }
+
+  if (flowState === 'PasswordResetSuccess') {
+    return (
+      <PasswordResetSuccessScreen
+        onGoToLogin={() => setFlowState('LoginEmail')}
+      />
+    );
+  }
+
+  if (flowState === 'SignUp') {
+    return (
+      <SignupScreen
+        onSignUpSuccess={() => setFlowState('LoginEmail')}
+        onBack={() => setFlowState('LoginEmail')}
+      />
+    );
+  }
+
+  if (flowState === 'OTPVerification') {
+    return (
+      <OTPVerificationScreen
+        phoneNumber={phone ? `+91 ${phone}` : '+91 87777 34343'}
+        onVerify={() => setFlowState('Main')}
+        onChangePhone={() => setFlowState('LoginPhone')}
+        onBack={() => setFlowState('LoginPhone')}
+      />
+    );
+  }
+
+  // ===================== MAIN / PICKUP FLOW =====================
 
   const renderScreen = (tab: TabType) => {
     switch (tab) {
