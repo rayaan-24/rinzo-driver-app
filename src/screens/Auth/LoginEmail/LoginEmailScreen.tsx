@@ -101,7 +101,7 @@ const EyeOffIcon: React.FC<{ color?: string; size?: number }> = ({ color = '#6B4
 interface LoginEmailScreenProps {
   onLoginSuccess?: (session: any) => void;
   onNavigateToPhone?: () => void;
-  onNavigateToForgotPassword?: () => void;
+  onNavigateToForgotPassword?: (email: string) => void;
   onNavigateToSignUp?: () => void;
 }
 
@@ -208,7 +208,7 @@ export const LoginEmailScreen: React.FC<LoginEmailScreenProps> = ({
               />
               <Text style={styles.welcomeTitle}>Welcome Back</Text>
               <Text style={styles.welcomeSubtitle}>
-                Please enter your details to get started
+                Please enter your details{`\n`}to get started
               </Text>
             </View>
           </View>
@@ -297,7 +297,7 @@ export const LoginEmailScreen: React.FC<LoginEmailScreenProps> = ({
               />
               <TouchableOpacity
                 activeOpacity={0.7}
-                onPress={onNavigateToForgotPassword}
+                onPress={() => onNavigateToForgotPassword?.(email)}
                 style={styles.forgotPasswordContainer}
               >
                 <Text style={styles.forgotPasswordLink}>Forgot Password ?</Text>
@@ -383,17 +383,17 @@ const styles = StyleSheet.create({
   },
   welcomeTitle: {
     fontFamily: fontFamily.bold,
-    fontSize: s(22),
+    fontSize: s(24),
     fontWeight: theme.typography.fontWeight.bold,
     color: '#1C1C1E',
-    marginTop: s(8),
+    marginTop: s(14),
   },
   welcomeSubtitle: {
     fontFamily: fontFamily.regular,
-    fontSize: s(12),
+    fontSize: s(13),
     color: '#6E6A80',
-    marginTop: s(4),
-    lineHeight: s(17),
+    marginTop: s(6),
+    lineHeight: s(19),
   },
   card: {
     backgroundColor: '#FFFFFF',

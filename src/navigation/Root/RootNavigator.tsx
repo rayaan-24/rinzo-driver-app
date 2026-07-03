@@ -136,7 +136,7 @@ export const RootNavigator: React.FC = () => {
   if (flowState === 'LoginPhone') {
     return (
       <LoginPhoneScreen
-        onSendOTP={(pNum: string) => {
+        onSendOTP={(pNum) => {
           setVerificationType('phone');
           setPhone(pNum);
           setFlowState('OTPVerification');

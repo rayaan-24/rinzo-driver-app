@@ -94,7 +94,7 @@ export const OrderTransitScreen: React.FC<OrderTransitScreenProps> = ({
 
   // 2. 5-Second Dispatch screen trigger to launch New Order Assigned bottom sheet
   useEffect(() => {
-    let popupTimeout: NodeJS.Timeout;
+    let popupTimeout: any;
     if (transitMode === 'dispatch') {
       popupTimeout = setTimeout(() => {
         // Slide up sheet
@@ -124,7 +124,7 @@ export const OrderTransitScreen: React.FC<OrderTransitScreenProps> = ({
 
   // 3. 60-Second countdown timer logic
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: any;
     if (showNewOrderPopup) {
       // Animate circular SVG outline from 1 to 0 over 60 seconds
       Animated.timing(timerStrokeAnim, {
@@ -247,7 +247,7 @@ export const OrderTransitScreen: React.FC<OrderTransitScreenProps> = ({
           />
 
           {/* Styled purple route overlay paths */}
-          <Svg style={StyleSheet.absoluteFillObject} pointerEvents="none">
+          <Svg style={StyleSheet.absoluteFill} pointerEvents="none">
             {/* Route Line */}
             <Path
               d="M 70 480 L 130 520 L 220 540 L 320 460"
@@ -422,7 +422,7 @@ export const OrderTransitScreen: React.FC<OrderTransitScreenProps> = ({
 
         {/* 6. SLIDE UP OVERLAY: NEW ORDER ASSIGNED POPUP */}
         {showNewOrderPopup && (
-          <View style={StyleSheet.absoluteFillObject}>
+          <View style={StyleSheet.absoluteFill}>
             {/* Dim Backdrop behind popup but under Header */}
             <View style={[styles.dimOverlay, { top: insets.top + 50 }]} />
 
@@ -535,7 +535,7 @@ export const OrderTransitScreen: React.FC<OrderTransitScreenProps> = ({
                     style={styles.miniMapImage}
                     resizeMode="cover"
                   />
-                  <Svg style={StyleSheet.absoluteFillObject}>
+                  <Svg style={StyleSheet.absoluteFill}>
                     {/* Glowing neon paths route */}
                     <Path
                       d="M 20 20 L 70 50 L 90 90"
@@ -641,7 +641,7 @@ export const OrderTransitScreen: React.FC<OrderTransitScreenProps> = ({
           style={styles.mapImage}
         />
 
-        <Svg style={StyleSheet.absoluteFillObject} pointerEvents="none">
+        <Svg style={StyleSheet.absoluteFill} pointerEvents="none">
           {/* Route path to customer pickup point */}
           <Path
             d="M 120 540 Q 240 380 300 240"

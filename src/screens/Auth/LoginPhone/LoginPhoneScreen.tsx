@@ -237,7 +237,7 @@ export const LoginPhoneScreen: React.FC<LoginPhoneScreenProps> = ({
               />
               <Text style={styles.welcomeTitle}>Welcome Back</Text>
               <Text style={styles.welcomeSubtitle}>
-                Please enter your details to get started
+                Please enter your details{`\n`}to get started
               </Text>
             </View>
           </View>

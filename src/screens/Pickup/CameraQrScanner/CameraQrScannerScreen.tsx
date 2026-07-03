@@ -129,7 +129,7 @@ export const CameraQrScannerScreen: React.FC<CameraQrScannerScreenProps> = ({
 
   // Fallback visual simulation for simulator/unbuilt binary
   const cameraFallbackView = (
-    <View style={StyleSheet.absoluteFillObject}>
+    <View style={StyleSheet.absoluteFill}>
       <Image
         source={require('../../../assets/images/camera_scan_bg.png')}
         style={styles.scanBgImage}
@@ -195,7 +195,7 @@ export const CameraQrScannerScreen: React.FC<CameraQrScannerScreenProps> = ({
           <CameraErrorBoundary fallback={cameraFallbackView}>
             {/* Live Camera Viewfinder */}
             <CameraView
-              style={StyleSheet.absoluteFillObject}
+              style={StyleSheet.absoluteFill}
               facing="back"
               enableTorch={flashlightOn}
               barcodeScannerSettings={{
@@ -313,7 +313,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#1E1E22',
   },
   scanBgImage: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     opacity: 0.85,
   },
   simulatedIndicator: {
