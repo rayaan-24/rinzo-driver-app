@@ -38,9 +38,9 @@ export const theme = {
   },
   typography: {
     fontFamily: {
-      regular: 'Poppins-Regular',
-      medium: 'Poppins-Medium',
-      bold: 'Poppins-Bold',
+      regular: 'System',
+      medium: 'System',
+      bold: 'System',
     },
     fontSize: {
       xs: s(11),
