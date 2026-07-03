@@ -58,6 +58,8 @@ type FlowState =
 export const RootNavigator: React.FC = () => {
   const [flowState, setFlowState] = useState<FlowState>('Splash');
   const [phone, setPhone] = useState<string>('');
+  const [verificationType, setVerificationType] = useState<'phone' | 'email'>('phone');
+  const [emailAddress, setEmailAddress] = useState<string>('');
 
   const [activeTab, setActiveTab] = useState<TabType>('Home');
   const [prevTab, setPrevTab] = useState<TabType | null>(null);
@@ -128,6 +130,7 @@ export const RootNavigator: React.FC = () => {
     return (
       <LoginPhoneScreen
         onSendOTP={(pNum) => {
+          setVerificationType('phone');
           setPhone(pNum);
           setFlowState('OTPVerification');
         }}
@@ -143,7 +146,11 @@ export const RootNavigator: React.FC = () => {
       <LoginEmailScreen
         onLoginSuccess={() => setFlowState('Main')}
         onNavigateToPhone={() => setFlowState('LoginPhone')}
-        onNavigateToForgotPassword={() => setFlowState('CreateNewPassword')}
+        onNavigateToForgotPassword={(emailVal) => {
+          setVerificationType('email');
+          setEmailAddress(emailVal || 'driver@rinzo.com');
+          setFlowState('OTPVerification');
+        }}
         onNavigateToSignUp={() => setFlowState('SignUp')}
       />
     );
@@ -178,10 +185,30 @@ export const RootNavigator: React.FC = () => {
   if (flowState === 'OTPVerification') {
     return (
       <OTPVerificationScreen
+        verificationType={verificationType}
         phoneNumber={phone ? `+91 ${phone}` : '+91 87777 34343'}
-        onVerify={() => setFlowState('Main')}
-        onChangePhone={() => setFlowState('LoginPhone')}
-        onBack={() => setFlowState('LoginPhone')}
+        emailAddress={emailAddress || 'driver@rinzo.com'}
+        onVerify={() => {
+          if (verificationType === 'email') {
+            setFlowState('CreateNewPassword');
+          } else {
+            setFlowState('Main');
+          }
+        }}
+        onChangePhone={() => {
+          if (verificationType === 'email') {
+            setFlowState('LoginEmail');
+          } else {
+            setFlowState('LoginPhone');
+          }
+        }}
+        onBack={() => {
+          if (verificationType === 'email') {
+            setFlowState('LoginEmail');
+          } else {
+            setFlowState('LoginPhone');
+          }
+        }}
       />
     );
   }

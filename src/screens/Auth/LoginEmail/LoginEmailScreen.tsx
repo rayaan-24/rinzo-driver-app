@@ -101,7 +101,7 @@ const EyeOffIcon: React.FC<{ color?: string; size?: number }> = ({ color = '#6B4
 interface LoginEmailScreenProps {
   onLoginSuccess?: (session: any) => void;
   onNavigateToPhone?: () => void;
-  onNavigateToForgotPassword?: () => void;
+  onNavigateToForgotPassword?: (email: string) => void;
   onNavigateToSignUp?: () => void;
 }
 
@@ -297,7 +297,7 @@ export const LoginEmailScreen: React.FC<LoginEmailScreenProps> = ({
               />
               <TouchableOpacity
                 activeOpacity={0.7}
-                onPress={onNavigateToForgotPassword}
+                onPress={() => onNavigateToForgotPassword?.(email)}
                 style={styles.forgotPasswordContainer}
               >
                 <Text style={styles.forgotPasswordLink}>Forgot Password ?</Text>
