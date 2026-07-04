@@ -1,16 +1,47 @@
-# Rinzo Driver App
+# Rinzo Delivery Laundry App
 
-A React Native driver application for managing pickups and deliveries, built with React Native 0.86 and Expo SDK 57.
+## Overview
+
+**Rinzo Delivery Laundry App** is a modern on-demand laundry service application that simplifies the entire laundry process. Customers can schedule doorstep pickup and delivery, choose from multiple laundry services, track their orders in real time, and make secure online payments—all from a seamless mobile experience.
+
+## Features
+
+* 🧺 Doorstep laundry pickup and delivery
+* 📅 Easy scheduling of pickup and delivery slots
+* 👕 Multiple services (Wash, Iron, Dry Clean, Fold, etc.)
+* 📍 Real-time order tracking
+* 🔔 Push notifications for order updates
+* 💳 Secure online payment integration
+* 📜 Order history and invoice management
+* 👤 User profile and address management
+* ⭐ Ratings and feedback system
+* 🌙 Clean, responsive, and intuitive UI
 
 ## Tech Stack
 
-- **Framework:** React Native 0.86
-- **Expo SDK:** 57
-- **Language:** TypeScript
-- **Navigation:** Custom root navigator with animated tab transitions
-- **Camera/Scanner:** `expo-camera` for QR scanning
-- **Image Picker:** `expo-image-picker` for photo uploads
-- **Maps:** Static map previews for pickup/delivery locations
+* **Framework:** React Native (Expo)
+* **Language:** TypeScript
+* **Navigation:** Custom root navigator with animated tab transitions
+* **Camera/Scanner:** `expo-camera` for QR scanning
+* **Image Picker:** `expo-image-picker` for photo uploads
+* **Maps:** Static map previews for pickup/delivery locations
+* **State Management:** Context API
+* **Backend:** REST APIs
+* **Authentication:** OTP / JWT
+
+## Project Goal
+
+The objective of the Rinzo Delivery Laundry App is to provide customers with a fast, reliable, and hassle-free laundry service by digitizing the booking, tracking, payment, and delivery workflow while ensuring a premium user experience.
+
+## Highlights
+
+* Modern and responsive UI/UX
+* Smooth animations and optimized performance
+* Scalable architecture
+* Clean and maintainable codebase
+* Secure authentication and payment flow
+* Real-time order status updates
+* Cross-platform support for Android and iOS
 
 ## Project Structure
 
