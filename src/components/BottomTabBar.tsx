@@ -28,7 +28,7 @@ export const BottomTabBar: React.FC<BottomTabBarProps> = ({ activeTab, onTabPres
     if (tabBarWidth > 0) {
       const tabWidth = (tabBarWidth - 16) / 4;
       const index = tabs.findIndex((t) => t.id === activeTab);
-      const toValue = 8 + index * tabWidth + (tabWidth - 40) / 2;
+      const toValue = 8 + index * tabWidth + (tabWidth - 36) / 2;
 
       Animated.spring(slideX, {
         toValue,
@@ -79,7 +79,7 @@ export const BottomTabBar: React.FC<BottomTabBarProps> = ({ activeTab, onTabPres
             >
               <View style={styles.highlightContainer}>
                 <IconComponent
-                  size={20}
+                  size={18}
                   color={isActive ? theme.colors.cardBg : theme.colors.textMedium}
                   active={isActive}
                 />
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     paddingTop: 0,
   },
   tabBar: {
-    height: 80,
+    height: 72,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -138,12 +138,12 @@ const styles = StyleSheet.create({
   },
   slidingIndicator: {
     position: 'absolute',
-    width: 76,
-    height: 64,
-    borderRadius: 32,
+    width: 68,
+    height: 58,
+    borderRadius: 29,
     backgroundColor: theme.colors.primary,
-    top: 8,
-    marginLeft: -18,
+    top: 7,
+    marginLeft: -16,
     zIndex: 1,
     shadowColor: theme.colors.primary,
     shadowOffset: {
@@ -151,19 +151,19 @@ const styles = StyleSheet.create({
       height: 4,
     },
     shadowOpacity: 0.24,
-    shadowRadius: 8,
+    shadowRadius: 7,
     elevation: 4,
   },
   highlightContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    height: 24,
+    height: 22,
     backgroundColor: 'transparent',
   },
   tabLabel: {
     fontFamily: theme.typography.fontFamily.medium,
-    fontSize: 12,
-    marginTop: 4,
+    fontSize: 11,
+    marginTop: 3,
     textAlign: 'center',
     letterSpacing: 0.1,
   },
