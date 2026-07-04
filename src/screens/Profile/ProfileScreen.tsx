@@ -13,7 +13,6 @@ import Svg, { Path, Circle } from 'react-native-svg';
 import { theme } from '../../theme';
 import { driverData } from '../../data/profile';
 import { ChevronRightIcon } from '../../components/Icons';
-import { Header } from '../../components/Header';
 import { moderateScale } from '../../utils/responsive';
 import { PersonalInformationScreen } from './PersonalInformation/PersonalInformationScreen';
 import { VehicleInformationScreen } from './VehicleInformation/VehicleInformationScreen';
@@ -33,15 +32,6 @@ import { vehicleData } from '../../data/vehicleInformation';
 // ==========================================
 // LOCAL SVG ICONS (Satisfying final plan)
 // ==========================================
-
-const BellIcon: React.FC<{ size?: number; color?: string }> = ({ size = 20, color = theme.colors.textDark }) => (
-  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-    <Path
-      d="M 12 22 C 13.1 22 14 21.1 14 20 H 10 C 10 21.1 10.9 22 12 22 Z M 18 16 V 11 C 18 7.93 16.37 5.36 13.5 4.68 V 4 C 13.5 3.17 12.83 2.5 12 2.5 C 11.17 2.5 10.5 3.17 10.5 4 V 4.68 C 7.64 5.36 6 7.92 6 11 V 16 L 4 18 V 19 H 20 V 18 L 18 16 Z M 16 17 H 8 V 11 C 8 8.52 9.51 6.5 12 6.5 C 14.49 6.5 16 8.52 16 11 V 17 Z"
-      fill={color}
-    />
-  </Svg>
-);
 
 const UserPlaceholderIcon: React.FC<{ size?: number; color?: string }> = ({ size = 24, color = theme.colors.primary }) => (
   <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
@@ -503,27 +493,6 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onSubScreenChange 
   return (
     <View style={styles.outerContainer}>
       <View style={styles.contentWrapper}>
-        {/* 1. HEADER */}
-        <Header
-          leftCustom={
-            <View style={styles.headerLeft}>
-              <AvatarPlaceholder size={moderateScale(32)} source={driverAvatar} />
-              <Text style={styles.headerTitle}>Rinzo Driver</Text>
-            </View>
-          }
-          rightCustom={
-            <TouchableOpacity
-              accessible={true}
-              accessibilityLabel="Notifications"
-              accessibilityRole="button"
-              activeOpacity={0.7}
-              style={styles.headerRight}
-            >
-              <BellIcon size={20} color={theme.colors.textDark} />
-            </TouchableOpacity>
-          }
-        />
-
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollContent}
