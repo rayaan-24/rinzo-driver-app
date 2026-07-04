@@ -5,7 +5,14 @@
     "name": "rinzo_driver_app",
     "slug": "rinzo_driver_app",
     "version": "1.0.0",
-    "platforms": ["ios", "android"],
-    "entryPoint": "./index.js"
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "224a4bf5-ad3f-42c8-924b-c2bb567c2e6f"
+      }
+    }
   }
 }
