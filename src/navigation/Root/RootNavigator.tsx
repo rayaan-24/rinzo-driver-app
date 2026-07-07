@@ -38,9 +38,10 @@ import { CreateNewPasswordScreen } from '../../screens/Auth/CreateNewPassword/Cr
 import { PasswordResetSuccessScreen } from '../../screens/Auth/PasswordResetSuccess/PasswordResetSuccessScreen';
 import { SignupScreen } from '../../screens/Auth/Signup/SignupScreen';
 import { AlertsScreen } from '../../screens/Alerts/AlertsScreen';
+import { PerformanceScreen } from '../../screens/Profile/Performance/PerformanceScreen';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
-const TAB_ORDER: TabType[] = ['Home', 'History', 'Alerts', 'Profile'];
+const TAB_ORDER: TabType[] = ['Home', 'History', 'Performance', 'Profile'];
 
 type FlowState =
   | 'Splash'
@@ -237,8 +238,8 @@ export const RootNavigator: React.FC = () => {
         );
       case 'History':
         return <HistoryScreen />;
-      case 'Alerts':
-        return <AlertsScreen />;
+      case 'Performance':
+        return <PerformanceScreen />;
       case 'Profile':
         return <ProfileScreen onSubScreenChange={(isSub) => setIsHideTabBar(isSub)} />;
       default:

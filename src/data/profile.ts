@@ -34,7 +34,6 @@ export const driverData: DriverData = {
     { id: "vehicle", title: "Vehicle Info", subtitle: "Toyota HiAce – KRA 452X", icon: "truck" },
     { id: "documents", title: "Documents", subtitle: "1 document expiring soon", icon: "file", warning: true },
     { id: "bank", title: "Bank Details", subtitle: "Manage payouts and accounts", icon: "bank" },
-    { id: "performance", title: "Performance", subtitle: "View ratings and reviews", icon: "performance" },
     { id: "settings", title: "Settings", subtitle: "App preferences and privacy", icon: "settings" },
     { id: "terms", title: "Terms & Privacy", subtitle: "View terms of service and privacy policy", icon: "shield" },
   ]
