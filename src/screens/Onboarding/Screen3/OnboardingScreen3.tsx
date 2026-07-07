@@ -65,7 +65,7 @@ export const OnboardingScreen3: React.FC<OnboardingScreen3Props> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#EEE2FA',
+    backgroundColor: '#ffffffff',
   },
   headerSpacer: {
     height: vs(16),
@@ -77,15 +77,16 @@ const styles = StyleSheet.create({
     marginVertical: vs(8),
   },
   illustrationImage: {
-    width: screenWidth * 0.9,
+    width: screenWidth * 1.05,
     height: '100%',
-    maxHeight: vs(340),
+    maxHeight: vs(460),
+    marginBottom: vs(-65),
   },
   content: {
     paddingHorizontal: theme.spacing.xl,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: vs(12),
+    marginBottom: vs(8),
   },
   title: {
     fontFamily: theme.typography.fontFamily.bold,
@@ -102,14 +103,15 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: s(22),
     paddingHorizontal: theme.spacing.md,
+    marginBottom: vs(8),
   },
   footer: {
     paddingHorizontal: theme.spacing.lg,
-    paddingBottom: vs(16),
+    paddingBottom: vs(20),
     paddingTop: theme.spacing.xs,
   },
   indicator: {
-    marginBottom: vs(16),
+    marginBottom: vs(20),
   },
   buttonColumn: {
     flexDirection: 'column',

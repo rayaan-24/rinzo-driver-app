@@ -1,5 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, StyleSheet, Animated, Dimensions } from 'react-native';
+import { View, StyleSheet, Animated, Dimensions, ScrollView, Image, Text, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { moderateScale, verticalScale } from '../../utils/responsive';
+import { CustomButton } from '../../components/common/CustomButton';
+import { PageIndicator } from '../../components/common/PageIndicator';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { theme } from '../../theme';
 import { HomeScreen } from '../../screens/Home/Home/HomeScreen';
@@ -43,11 +47,324 @@ import { PerformanceScreen } from '../../screens/Profile/Performance/Performance
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const TAB_ORDER: TabType[] = ['Home', 'History', 'Performance', 'Profile'];
 
+const s = (size: number) => moderateScale(size, 0.3);
+const vs = (size: number) => verticalScale(size);
+
+const OnboardingFlow: React.FC<{ onFinish: () => void }> = ({ onFinish }) => {
+  const scrollViewRef = useRef<ScrollView>(null);
+  const [currentPage, setCurrentPage] = useState(0);
+  const scrollX = useRef(new Animated.Value(0)).current;
+
+  const handleSkip = () => {
+    onFinish();
+  };
+
+  const handleNext = () => {
+    if (currentPage < 2) {
+      scrollViewRef.current?.scrollTo({
+        x: SCREEN_WIDTH * (currentPage + 1),
+        animated: true,
+      });
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handleBack = () => {
+    if (currentPage > 0) {
+      scrollViewRef.current?.scrollTo({
+        x: SCREEN_WIDTH * (currentPage - 1),
+        animated: true,
+      });
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const footerTransition = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.timing(footerTransition, {
+      toValue: currentPage === 2 ? 1 : 0,
+      duration: 200,
+      useNativeDriver: false,
+    }).start();
+  }, [currentPage]);
+
+  // Skip button opacity animation (fades out as page 3 comes into view)
+  const skipOpacity = footerTransition.interpolate({
+    inputRange: [0, 1],
+    outputRange: [1, 0],
+  });
+
+  // Next button layout animations (fades out and translates upward)
+  const nextOpacity = footerTransition.interpolate({
+    inputRange: [0, 1],
+    outputRange: [1, 0],
+  });
+
+  const nextTranslateY = footerTransition.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, -30],
+  });
+
+  // Page 3 buttons layout animations (fades in and translates upward)
+  const getStartedOpacity = footerTransition.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 1],
+  });
+
+  const getStartedTranslateY = footerTransition.interpolate({
+    inputRange: [0, 1],
+    outputRange: [30, 0],
+  });
+
+  // Footer dynamic height animation to accommodate 2 stacked buttons cleanly
+  const footerHeightAnimation = footerTransition.interpolate({
+    inputRange: [0, 1],
+    outputRange: [vs(54), vs(114)],
+  });
+
+  return (
+    <SafeAreaView style={onboardingStyles.container}>
+      {/* Top Header Row - STICKY / STATIONARY */}
+      <View style={onboardingStyles.header}>
+        <Animated.View
+          pointerEvents={currentPage < 2 ? 'auto' : 'none'}
+          style={{ opacity: skipOpacity }}
+        >
+          <TouchableOpacity onPress={handleSkip} activeOpacity={0.7} style={onboardingStyles.skipBtn}>
+            <Text style={onboardingStyles.skipText}>Skip</Text>
+          </TouchableOpacity>
+        </Animated.View>
+      </View>
+
+      {/* Swipeable ScrollView (Center only) */}
+      <ScrollView
+        ref={scrollViewRef}
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        bounces={false}
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+          {
+            useNativeDriver: false,
+            listener: (e: any) => {
+              const page = Math.round(e.nativeEvent.contentOffset.x / SCREEN_WIDTH);
+              if (page !== currentPage) {
+                setCurrentPage(page);
+              }
+            }
+          }
+        )}
+        scrollEventThrottle={16}
+        style={{ flex: 1 }}
+      >
+        {/* Page 1 */}
+        <View style={{ width: SCREEN_WIDTH, flex: 1 }}>
+          <View style={onboardingStyles.illustrationContainer}>
+            <Image
+              source={require('../../assets/images/onboarding1_courier.jpg')}
+              style={onboardingStyles.illustrationImage}
+              resizeMode="contain"
+            />
+          </View>
+          <View style={onboardingStyles.content}>
+            <Text style={onboardingStyles.title}>Pickup. Track. Deliver.</Text>
+            <Text style={onboardingStyles.subtitle}>
+              Receive assigned orders and complete{"\n"}pickups with confidence.
+            </Text>
+          </View>
+        </View>
+
+        {/* Page 2 */}
+        <View style={{ width: SCREEN_WIDTH, flex: 1 }}>
+          <View style={onboardingStyles.illustrationContainer}>
+            <Image
+              source={require('../../assets/images/onboarding2_courier.jpg')}
+              style={[onboardingStyles.illustrationImage, { marginBottom: vs(-95) }]}
+              resizeMode="contain"
+            />
+          </View>
+          <View style={onboardingStyles.content}>
+            <Text style={onboardingStyles.title}>Every Parcel Tracked</Text>
+            <Text style={onboardingStyles.subtitle}>
+              Each laundry bag receives a unique QR tag{"\n"}for complete traceability.
+            </Text>
+          </View>
+        </View>
+
+        {/* Page 3 */}
+        <View style={{ width: SCREEN_WIDTH, flex: 1 }}>
+          <View style={onboardingStyles.illustrationContainer}>
+            <Image
+              source={require('../../assets/images/onboarding3_courier.jpg')}
+              style={onboardingStyles.illustrationImage}
+              resizeMode="contain"
+            />
+          </View>
+          <View style={onboardingStyles.content}>
+            <Text style={onboardingStyles.title}>Secure Every Delivery</Text>
+            <Text style={onboardingStyles.subtitle}>
+              Verify delivery with OTP and ensure every order reaches the right customer.
+            </Text>
+          </View>
+        </View>
+      </ScrollView>
+
+      {/* Bottom Action Footer - STICKY / STATIONARY */}
+      <View style={onboardingStyles.footer}>
+        <PageIndicator total={3} current={currentPage} scrollX={scrollX} style={onboardingStyles.indicator} />
+        
+        <Animated.View style={{ height: footerHeightAnimation, width: '100%', overflow: 'hidden', position: 'relative' }}>
+          {/* Next Button Container */}
+          <Animated.View
+            pointerEvents={currentPage < 2 ? 'auto' : 'none'}
+            style={[
+              StyleSheet.absoluteFill,
+              {
+                opacity: nextOpacity,
+                transform: [{ translateY: nextTranslateY }],
+                height: vs(54),
+              }
+            ]}
+          >
+            <CustomButton
+              title="Next"
+              onPress={handleNext}
+              style={onboardingStyles.button}
+            />
+          </Animated.View>
+
+          {/* Page 3 Stacked Buttons Container */}
+          <Animated.View
+            pointerEvents={currentPage === 2 ? 'auto' : 'none'}
+            style={[
+              StyleSheet.absoluteFill,
+              {
+                opacity: getStartedOpacity,
+                transform: [{ translateY: getStartedTranslateY }],
+                height: vs(114),
+              }
+            ]}
+          >
+            <CustomButton
+              title="Get Started  →"
+              onPress={onFinish}
+              style={onboardingStyles.getStartedButton}
+            />
+            <CustomButton
+              title="Back"
+              variant="secondary"
+              onPress={handleBack}
+              style={onboardingStyles.backButton}
+            />
+          </Animated.View>
+        </Animated.View>
+      </View>
+    </SafeAreaView>
+  );
+};
+
+const onboardingStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    paddingHorizontal: theme.spacing.lg,
+    paddingTop: theme.spacing.xs,
+    height: vs(48),
+  },
+  headerSpacer: {
+    height: vs(48),
+  },
+  skipBtn: {
+    paddingVertical: theme.spacing.xs,
+    paddingHorizontal: theme.spacing.xs,
+  },
+  skipText: {
+    fontFamily: theme.typography.fontFamily.bold,
+    fontSize: s(16),
+    fontWeight: theme.typography.fontWeight.bold,
+    color: '#1C1C1E',
+    textDecorationLine: 'underline',
+  },
+  illustrationContainer: {
+    flex: 1.4,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: vs(8),
+  },
+  illustrationImage: {
+    width: SCREEN_WIDTH * 1.05,
+    height: '100%',
+    maxHeight: vs(460),
+    marginBottom: vs(-65),
+  },
+  content: {
+    paddingHorizontal: theme.spacing.xl,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: vs(8),
+  },
+  title: {
+    fontFamily: theme.typography.fontFamily.bold,
+    fontSize: s(24),
+    fontWeight: theme.typography.fontWeight.bold,
+    color: '#1C1C1E',
+    textAlign: 'center',
+    marginBottom: vs(8),
+  },
+  subtitle: {
+    fontFamily: theme.typography.fontFamily.regular,
+    fontSize: s(15),
+    color: '#7C7985',
+    textAlign: 'center',
+    lineHeight: s(22),
+    paddingHorizontal: theme.spacing.md,
+    marginBottom: vs(8),
+  },
+  footer: {
+    paddingHorizontal: theme.spacing.lg,
+    paddingBottom: vs(20),
+    paddingTop: theme.spacing.xs,
+  },
+  indicator: {
+    marginBottom: vs(20),
+  },
+  button: {
+    width: '100%',
+    height: vs(54),
+    borderRadius: s(16),
+    backgroundColor: '#7952F3',
+  },
+  buttonColumn: {
+    flexDirection: 'column',
+    width: '100%',
+  },
+  getStartedButton: {
+    width: '100%',
+    height: vs(52),
+    borderRadius: s(16),
+    backgroundColor: '#7952F3',
+  },
+  backButton: {
+    width: '100%',
+    height: vs(52),
+    borderRadius: s(16),
+    backgroundColor: '#FFFFFF',
+    borderColor: '#E2DEF0',
+    borderWidth: 1,
+    marginTop: vs(10),
+  },
+});
+
 type FlowState =
   | 'Splash'
-  | 'Onboarding1'
-  | 'Onboarding2'
-  | 'Onboarding3'
+  | 'Onboarding'
   | 'AllowLocation'
   | 'LoginPhone'
   | 'LoginEmail'
@@ -95,34 +412,12 @@ export const RootNavigator: React.FC = () => {
   // ===================== AUTH / ONBOARDING FLOW =====================
 
   if (flowState === 'Splash') {
-    return <SplashScreen onFinish={() => setFlowState('Onboarding1')} />;
+    return <SplashScreen onFinish={() => setFlowState('Onboarding')} />;
   }
 
-  if (flowState === 'Onboarding1') {
+  if (flowState === 'Onboarding') {
     return (
-      <OnboardingScreen1
-        onNext={() => setFlowState('Onboarding2')}
-        onSkip={() => setFlowState('AllowLocation')}
-      />
-    );
-  }
-
-  if (flowState === 'Onboarding2') {
-    return (
-      <OnboardingScreen2
-        onNext={() => setFlowState('Onboarding3')}
-        onBack={() => setFlowState('Onboarding1')}
-        onSkip={() => setFlowState('AllowLocation')}
-      />
-    );
-  }
-
-  if (flowState === 'Onboarding3') {
-    return (
-      <OnboardingScreen3
-        onGetStarted={() => setFlowState('AllowLocation')}
-        onBack={() => setFlowState('Onboarding2')}
-      />
+      <OnboardingFlow onFinish={() => setFlowState('AllowLocation')} />
     );
   }
 

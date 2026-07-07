@@ -42,7 +42,7 @@ export const OnboardingScreen2: React.FC<OnboardingScreen2Props> = ({
       <View style={styles.content}>
         <Text style={styles.title}>Every Parcel Tracked</Text>
         <Text style={styles.subtitle}>
-          Each laundry bag receives a unique QR tag for complete traceability.
+          Each laundry bag receives a unique QR tag {'\n'}for complete traceability.
         </Text>
       </View>
 
@@ -62,7 +62,7 @@ export const OnboardingScreen2: React.FC<OnboardingScreen2Props> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#EEE5F8',
+    backgroundColor: '#ffffffff',
   },
   header: {
     flexDirection: 'row',
@@ -93,15 +93,16 @@ const styles = StyleSheet.create({
     marginVertical: vs(8),
   },
   illustrationImage: {
-    width: screenWidth * 0.9,
+    width: screenWidth * 1.05,
     height: '100%',
-    maxHeight: vs(340),
+    maxHeight: vs(460),
+    marginBottom: vs(-95),
   },
   content: {
     paddingHorizontal: theme.spacing.xl,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: vs(12),
+    marginBottom: vs(8),
   },
   title: {
     fontFamily: theme.typography.fontFamily.bold,
@@ -118,6 +119,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: s(22),
     paddingHorizontal: theme.spacing.md,
+    marginBottom: vs(8),
   },
   footer: {
     paddingHorizontal: theme.spacing.lg,
