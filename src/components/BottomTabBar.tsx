@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { theme } from '../theme';
 import { HomeIcon, HistoryIcon, PerformanceIcon, ProfileIcon } from './Icons';
 
-export type TabType = 'Home' | 'History' | 'Alerts' | 'Profile';
+export type TabType = 'Home' | 'History' | 'Performance' | 'Profile';
 
 interface BottomTabBarProps {
   activeTab: TabType;
@@ -19,7 +19,7 @@ export const BottomTabBar: React.FC<BottomTabBarProps> = ({ activeTab, onTabPres
   const tabs: { id: TabType; label: string; IconComponent: React.ComponentType<any> }[] = [
     { id: 'Home', label: 'Home', IconComponent: HomeIcon },
     { id: 'History', label: 'History', IconComponent: HistoryIcon },
-    { id: 'Alerts', label: 'Alerts', IconComponent: PerformanceIcon },
+    { id: 'Performance', label: 'Performance', IconComponent: PerformanceIcon },
     { id: 'Profile', label: 'Profile', IconComponent: ProfileIcon },
   ];
 
@@ -28,7 +28,8 @@ export const BottomTabBar: React.FC<BottomTabBarProps> = ({ activeTab, onTabPres
     if (tabBarWidth > 0) {
       const tabWidth = (tabBarWidth - 16) / 4;
       const index = tabs.findIndex((t) => t.id === activeTab);
-      const toValue = 8 + index * tabWidth + (tabWidth - 36) / 2;
+      const indicatorWidth = 84;
+      const toValue = 8 + index * tabWidth + (tabWidth - indicatorWidth) / 2;
 
       Animated.spring(slideX, {
         toValue,
@@ -138,12 +139,11 @@ const styles = StyleSheet.create({
   },
   slidingIndicator: {
     position: 'absolute',
-    width: 68,
-    height: 58,
-    borderRadius: 29,
+    width: 84,
+    height: 54,
+    borderRadius: 27,
     backgroundColor: theme.colors.primary,
-    top: 7,
-    marginLeft: -16,
+    top: 9,
     zIndex: 1,
     shadowColor: theme.colors.primary,
     shadowOffset: {

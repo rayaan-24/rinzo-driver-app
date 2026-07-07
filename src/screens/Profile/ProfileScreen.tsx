@@ -22,6 +22,7 @@ import { UploadSuccessScreen } from './Documents/UploadSuccessScreen';
 import { BankDetailsScreen } from './BankDetails/BankDetailsScreen';
 import { PerformanceScreen } from './Performance/PerformanceScreen';
 import { SettingsScreen } from './Settings/SettingsScreen';
+import { AlertsScreen } from '../Alerts/AlertsScreen';
 import { TermsAndPrivacyScreen } from './TermsAndPrivacy/TermsAndPrivacyScreen';
 import { HelpAndSupportScreen } from './HelpAndSupport/HelpAndSupportScreen';
 import { SupportCenterScreen } from './SupportCenter/SupportCenterScreen';
@@ -292,7 +293,7 @@ interface ProfileScreenProps {
 }
 
 export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onSubScreenChange }) => {
-  const [currentSubScreen, setCurrentSubScreen] = useState<'profile' | 'personal' | 'vehicle' | 'documents' | 'document_details' | 'upload_success' | 'bank_details' | 'performance' | 'settings' | 'terms' | 'help' | 'support_center' | 'order_chat' | 'emergency_report'>('profile');
+  const [currentSubScreen, setCurrentSubScreen] = useState<'profile' | 'personal' | 'vehicle' | 'documents' | 'document_details' | 'upload_success' | 'bank_details' | 'performance' | 'settings' | 'terms' | 'help' | 'support_center' | 'order_chat' | 'emergency_report' | 'alerts'>('profile');
   const [driverAvatar, setDriverAvatar] = useState(driverData.avatar);
   const [vehicleImage, setVehicleImage] = useState(vehicleData.image);
 
@@ -441,6 +442,15 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onSubScreenChange 
       <SettingsScreen
         onBack={() => setCurrentSubScreen('profile')}
         onNavigateHelp={() => setCurrentSubScreen('help')}
+        onNavigateAlerts={() => setCurrentSubScreen('alerts')}
+      />
+    );
+  }
+
+  if (currentSubScreen === 'alerts') {
+    return (
+      <AlertsScreen
+        onBack={() => setCurrentSubScreen('settings')}
       />
     );
   }
