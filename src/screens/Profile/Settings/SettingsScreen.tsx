@@ -194,9 +194,10 @@ const TappableRow: React.FC<TappableRowProps> = ({ onPress, children }) => {
 interface SettingsScreenProps {
   onBack: () => void;
   onNavigateHelp?: () => void;
+  onNavigateAlerts?: () => void;
 }
 
-export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onNavigateHelp }) => {
+export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onNavigateHelp, onNavigateAlerts }) => {
   // Sync profiles
   const avatarImage = driverData.avatar;
   const driverName = driverData.name;
@@ -306,6 +307,21 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onNaviga
                   thumbColor={Platform.OS === 'android' ? '#FFFFFF' : undefined}
                 />
               </View>
+              <View style={styles.rowDivider} />
+
+              {/* Row 1b: View Alerts History */}
+              <TappableRow onPress={onNavigateAlerts}>
+                <View style={styles.rowLeft}>
+                  <View style={styles.iconCircle}>
+                    <BellIcon size={20} color="#7C4DFF" />
+                  </View>
+                  <View style={styles.rowTextContainer}>
+                    <Text style={styles.rowTitle}>View Alerts History</Text>
+                    <Text style={styles.rowSubtitle}>View logs of recent alerts and updates</Text>
+                  </View>
+                </View>
+                <ChevronRightIcon size={16} color="#8E8E93" />
+              </TappableRow>
               <View style={styles.rowDivider} />
 
               {/* Row 2: Dark Mode */}
