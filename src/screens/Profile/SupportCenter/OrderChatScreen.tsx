@@ -12,6 +12,7 @@ import {
   Platform,
 } from 'react-native';
 import Svg, { Path, Circle } from 'react-native-svg';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { theme } from '../../../theme';
 import { moderateScale } from '../../../utils/responsive';
 import { Header } from '../../../components/Header';
@@ -175,6 +176,7 @@ interface OrderChatScreenProps {
 }
 
 export const OrderChatScreen: React.FC<OrderChatScreenProps> = ({ onBack }) => {
+  const insets = useSafeAreaInsets();
   const [messages, setMessages] = useState<MessageItem[]>(initialMessages);
   const [inputText, setInputText] = useState('');
   const scrollViewRef = useRef<ScrollView>(null);
@@ -255,8 +257,8 @@ export const OrderChatScreen: React.FC<OrderChatScreenProps> = ({ onBack }) => {
               <View style={styles.onlineStatusDot} />
             </View>
             <View style={styles.supportAgentTitleCol}>
-              <Text style={styles.agentTitle}>Rinzo Support</Text>
-              <Text style={styles.agentSubtitle}>Online</Text>
+              <Text style={styles.agentTitle} maxFontSizeMultiplier={1.3}>Rinzo Support</Text>
+              <Text style={styles.agentSubtitle} maxFontSizeMultiplier={1.3}>Online</Text>
             </View>
           </View>
         }
@@ -286,19 +288,29 @@ export const OrderChatScreen: React.FC<OrderChatScreenProps> = ({ onBack }) => {
 
       {/* 2. CHAT SCROLL AREA WRAPPER */}
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 56 : 56}
         style={styles.keyboardContainer}
       >
         <ScrollView
           ref={scrollViewRef}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.scrollContent}
+          contentContainerStyle={[
+            styles.scrollContent,
+            {
+              paddingBottom: theme.spacing.md,
+            },
+          ]}
         >
           {/* Date Stamp capsule */}
           <View style={styles.dateCapsuleWrapper}>
-            <View style={styles.dateCapsule}>
-              <Text style={styles.dateCapsuleText}>Today</Text>
+            <View 
+              style={styles.dateCapsule}
+              accessible={true}
+              accessibilityLabel="Date: Today"
+              accessibilityRole="text"
+            >
+              <Text style={styles.dateCapsuleText} maxFontSizeMultiplier={1.3}>Today</Text>
             </View>
           </View>
 
@@ -309,16 +321,22 @@ export const OrderChatScreen: React.FC<OrderChatScreenProps> = ({ onBack }) => {
               <View
                 key={msg.id}
                 style={[styles.messageRow, isUser ? styles.userRow : styles.supportRow]}
+                accessible={true}
+                accessibilityLabel={`Message from ${msg.sender === 'user' ? 'you' : 'Rinzo Support'} at ${msg.timestamp}: ${msg.text}`}
+                accessibilityRole="text"
               >
                 <View style={[styles.bubble, isUser ? styles.userBubble : styles.supportBubble]}>
-                  <Text style={[styles.messageText, isUser ? styles.userMessageText : styles.supportMessageText]}>
+                  <Text 
+                    style={[styles.messageText, isUser ? styles.userMessageText : styles.supportMessageText]}
+                    maxFontSizeMultiplier={1.3}
+                  >
                     {msg.text}
                   </Text>
                 </View>
                 
                 {/* Timestamp Row */}
                 <View style={[styles.timestampRow, isUser && styles.userTimestampRow]}>
-                  <Text style={styles.timeText}>{msg.timestamp}</Text>
+                  <Text style={styles.timeText} maxFontSizeMultiplier={1.3}>{msg.timestamp}</Text>
                   {isUser && <DoubleCheckIcon size={14} color="#7C4DFF" />}
                 </View>
               </View>
@@ -327,14 +345,19 @@ export const OrderChatScreen: React.FC<OrderChatScreenProps> = ({ onBack }) => {
 
           {/* Attachment Card Document Layout */}
           <View style={styles.attachmentWrapper}>
-            <View style={styles.attachmentCard}>
+            <View 
+              style={styles.attachmentCard}
+              accessible={true}
+              accessibilityLabel="Attachment file: Order_#8892_Verification.pdf, size 1.2 megabytes, logistics log."
+              accessibilityRole="text"
+            >
               <View style={styles.attachmentCardHeader}>
                 <View style={styles.attachmentIconCircle}>
                   <DocumentTextIcon size={20} color="#7C4DFF" />
                 </View>
                 <View style={styles.attachmentInfoCol}>
-                  <Text style={styles.attachmentFileName}>Order_#8892_Verification.pdf</Text>
-                  <Text style={styles.attachmentFileSize}>1.2 MB • Logistics Log</Text>
+                  <Text style={styles.attachmentFileName} maxFontSizeMultiplier={1.3}>Order_#8892_Verification.pdf</Text>
+                  <Text style={styles.attachmentFileSize} maxFontSizeMultiplier={1.3}>1.2 MB • Logistics Log</Text>
                 </View>
               </View>
 
@@ -345,21 +368,33 @@ export const OrderChatScreen: React.FC<OrderChatScreenProps> = ({ onBack }) => {
                 activeOpacity={0.8}
                 style={styles.viewDocButton}
               >
-                <Text style={styles.viewDocButtonText}>View Verification Log</Text>
+                <Text style={styles.viewDocButtonText} maxFontSizeMultiplier={1.3}>View Verification Log</Text>
               </TouchableOpacity>
             </View>
           </View>
 
           {/* Security Banner Lock */}
-          <View style={styles.securityLockWrapper}>
+          <View 
+            style={styles.securityLockWrapper}
+            accessible={true}
+            accessibilityLabel="Messages are encrypted and secure"
+            accessibilityRole="text"
+          >
             <LockIcon size={14} color="#8E8E93" />
-            <Text style={styles.securityText}>Messages are encrypted and secure</Text>
+            <Text style={styles.securityText} maxFontSizeMultiplier={1.3}>Messages are encrypted and secure</Text>
           </View>
 
         </ScrollView>
 
         {/* 3. FLOATING BOTTOM MESSAGE INPUT */}
-        <View style={styles.messageInputFooterContainer}>
+        <View 
+          style={[
+            styles.messageInputFooterContainer,
+            {
+              paddingBottom: insets.bottom > 0 ? insets.bottom : theme.spacing.md,
+            },
+          ]}
+        >
           <View style={styles.messageInputCard}>
             
             <TouchableOpacity
@@ -379,6 +414,7 @@ export const OrderChatScreen: React.FC<OrderChatScreenProps> = ({ onBack }) => {
               onChangeText={setInputText}
               multiline
               style={styles.textInputBox}
+              maxFontSizeMultiplier={1.3}
             />
 
             <TouchableOpacity
@@ -434,21 +470,21 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   headerBackTouch: {
-    width: 32,
-    height: 40,
+    width: moderateScale(32),
+    height: moderateScale(40),
     justifyContent: 'center',
     alignItems: 'flex-start',
   },
   avatarOutline: {
     position: 'relative',
-    width: 34,
-    height: 34,
+    width: moderateScale(34),
+    height: moderateScale(34),
     marginLeft: 4,
   },
   agentAvatarContainer: {
-    width: 34,
-    height: 34,
-    borderRadius: 17,
+    width: moderateScale(34),
+    height: moderateScale(34),
+    borderRadius: moderateScale(17),
     backgroundColor: '#F3EFFF',
     justifyContent: 'center',
     alignItems: 'center',
@@ -460,24 +496,24 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: -1,
     right: -1,
-    width: 9,
-    height: 9,
-    borderRadius: 4.5,
+    width: moderateScale(9),
+    height: moderateScale(9),
+    borderRadius: moderateScale(4.5),
     backgroundColor: '#22C55E', // Green Online dot indicator
     borderWidth: 1.5,
     borderColor: '#FFFFFF',
   },
   supportAgentTitleCol: {
-    marginLeft: 10,
+    marginLeft: moderateScale(10),
   },
   agentTitle: {
-    fontFamily: 'Poppins-Bold',
-    fontSize: 14,
+    fontFamily: theme.typography.fontFamily.bold,
+    fontSize: moderateScale(14),
     color: theme.colors.textDark,
   },
   agentSubtitle: {
-    fontFamily: 'Poppins-Medium',
-    fontSize: 11,
+    fontFamily: theme.typography.fontFamily.medium,
+    fontSize: moderateScale(11),
     color: '#7C4DFF', // Branded subtitle color
   },
   headerRightCol: {
@@ -485,13 +521,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerCircleBtn: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    width: moderateScale(36),
+    height: moderateScale(36),
+    borderRadius: moderateScale(18),
     backgroundColor: '#F2F2F7',
     alignItems: 'center',
     justifyContent: 'center',
-    marginLeft: 10,
+    marginLeft: moderateScale(10),
   },
   keyboardContainer: {
     flex: 1,
@@ -499,25 +535,24 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingHorizontal: theme.spacing.md,
     paddingTop: theme.spacing.lg,
-    paddingBottom: moderateScale(90),
   },
   dateCapsuleWrapper: {
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: moderateScale(20),
   },
   dateCapsule: {
     backgroundColor: '#E5E5EA',
-    paddingHorizontal: 16,
-    paddingVertical: 5,
-    borderRadius: 14,
+    paddingHorizontal: moderateScale(16),
+    paddingVertical: moderateScale(5),
+    borderRadius: moderateScale(14),
   },
   dateCapsuleText: {
-    fontFamily: 'Poppins-Medium',
-    fontSize: 11,
+    fontFamily: theme.typography.fontFamily.medium,
+    fontSize: moderateScale(11),
     color: '#6C6C70',
   },
   messageRow: {
-    marginBottom: 16,
+    marginBottom: moderateScale(16),
     maxWidth: '80%',
   },
   supportRow: {
@@ -528,22 +563,30 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   bubble: {
-    borderRadius: 18,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingHorizontal: moderateScale(16),
+    paddingVertical: moderateScale(12),
+    ...theme.shadows.small,
   },
   supportBubble: {
-    backgroundColor: '#E9E9EB', // Light grey bubble
-    borderTopLeftRadius: 4,
+    backgroundColor: '#FFFFFF', // Clean white background for support bubble
+    borderTopRightRadius: moderateScale(20),
+    borderBottomRightRadius: moderateScale(20),
+    borderBottomLeftRadius: moderateScale(20),
+    borderTopLeftRadius: moderateScale(4),
+    borderWidth: 1,
+    borderColor: 'rgba(124, 77, 255, 0.06)',
   },
   userBubble: {
     backgroundColor: '#7C4DFF', // Purple bubble
-    borderTopRightRadius: 4,
+    borderTopLeftRadius: moderateScale(20),
+    borderBottomLeftRadius: moderateScale(20),
+    borderBottomRightRadius: moderateScale(4),
+    borderTopRightRadius: moderateScale(20),
   },
   messageText: {
-    fontFamily: 'Poppins-Regular',
-    fontSize: 14,
-    lineHeight: 20,
+    fontFamily: theme.typography.fontFamily.regular,
+    fontSize: moderateScale(14),
+    lineHeight: moderateScale(20),
   },
   supportMessageText: {
     color: theme.colors.textDark,
@@ -554,27 +597,27 @@ const styles = StyleSheet.create({
   timestampRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 4,
-    paddingHorizontal: 4,
+    marginTop: moderateScale(4),
+    paddingHorizontal: moderateScale(4),
   },
   userTimestampRow: {
     alignSelf: 'flex-end',
   },
   timeText: {
-    fontFamily: 'Poppins-Medium',
-    fontSize: 11,
+    fontFamily: theme.typography.fontFamily.medium,
+    fontSize: moderateScale(11),
     color: '#8E8E93',
-    marginRight: 4,
+    marginRight: moderateScale(4),
   },
   attachmentWrapper: {
     alignSelf: 'flex-start',
     maxWidth: '80%',
-    marginBottom: 16,
+    marginBottom: moderateScale(16),
   },
   attachmentCard: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 22,
-    padding: 16,
+    borderRadius: moderateScale(22),
+    padding: moderateScale(16),
     borderWidth: 1,
     borderColor: '#F2F2F7',
     shadowColor: '#7C4DFF',
@@ -586,35 +629,36 @@ const styles = StyleSheet.create({
   attachmentCardHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: moderateScale(16),
   },
   attachmentIconCircle: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
+    width: moderateScale(40),
+    height: moderateScale(40),
+    borderRadius: moderateScale(12),
     backgroundColor: '#F3EFFF',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 12,
+    marginRight: moderateScale(12),
   },
   attachmentInfoCol: {
     flex: 1,
-    paddingRight: 8,
+    paddingRight: moderateScale(8),
   },
   attachmentFileName: {
-    fontFamily: 'Poppins-Bold',
-    fontSize: 13,
+    fontFamily: theme.typography.fontFamily.bold,
+    fontSize: moderateScale(13),
     color: theme.colors.textDark,
   },
   attachmentFileSize: {
-    fontFamily: 'Poppins-Medium',
-    fontSize: 11,
+    fontFamily: theme.typography.fontFamily.medium,
+    fontSize: moderateScale(11),
     color: '#8E8E93',
-    marginTop: 2,
+    marginTop: moderateScale(2),
   },
   viewDocButton: {
-    height: 44,
-    borderRadius: 12,
+    minHeight: moderateScale(44),
+    paddingVertical: theme.spacing.xs,
+    borderRadius: moderateScale(12),
     borderWidth: 1,
     borderColor: '#F2F2F7',
     backgroundColor: '#FFFFFF',
@@ -622,39 +666,39 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   viewDocButtonText: {
-    fontFamily: 'Poppins-SemiBold',
-    fontSize: 13,
+    fontFamily: theme.typography.fontFamily.bold,
+    fontSize: moderateScale(13),
     color: '#7C4DFF',
   },
   securityLockWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 10,
-    marginBottom: 20,
+    marginTop: moderateScale(10),
+    marginBottom: moderateScale(20),
   },
   securityText: {
-    fontFamily: 'Poppins-Regular',
-    fontSize: 11,
+    fontFamily: theme.typography.fontFamily.regular,
+    fontSize: moderateScale(11),
     color: '#8E8E93',
-    marginLeft: 6,
+    marginLeft: moderateScale(6),
   },
   messageInputFooterContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
+    width: '100%',
     paddingHorizontal: theme.spacing.md,
-    paddingBottom: Platform.OS === 'ios' ? 24 : 12,
-    backgroundColor: 'transparent',
+    paddingTop: theme.spacing.xs,
+    backgroundColor: '#FCFAFF', // Matches screen background
+    borderTopWidth: 1,
+    borderColor: 'rgba(124, 77, 255, 0.08)',
   },
   messageInputCard: {
     flexDirection: 'row',
     backgroundColor: '#FFFFFF',
-    borderRadius: 28,
-    height: 56,
+    borderRadius: moderateScale(28),
+    minHeight: moderateScale(56),
+    paddingVertical: moderateScale(4),
     alignItems: 'center',
-    paddingHorizontal: 8,
+    paddingHorizontal: moderateScale(8),
     shadowColor: '#7C4DFF',
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.05,
@@ -664,30 +708,34 @@ const styles = StyleSheet.create({
     borderColor: '#F2F2F7',
   },
   inputAttachmentTouch: {
-    width: 38,
-    height: 38,
+    width: moderateScale(38),
+    height: moderateScale(38),
     justifyContent: 'center',
     alignItems: 'center',
   },
   textInputBox: {
     flex: 1,
-    fontFamily: 'Poppins-Regular',
-    fontSize: 14,
+    fontFamily: theme.typography.fontFamily.regular,
+    fontSize: moderateScale(14),
     color: theme.colors.textDark,
-    paddingHorizontal: 8,
-    maxHeight: 44,
+    paddingHorizontal: moderateScale(8),
+    paddingTop: Platform.OS === 'ios' ? moderateScale(6) : moderateScale(2),
+    paddingBottom: Platform.OS === 'ios' ? moderateScale(6) : moderateScale(2),
+    minHeight: moderateScale(36),
+    maxHeight: moderateScale(80),
+    textAlignVertical: 'top',
   },
   inputCameraTouch: {
-    width: 38,
-    height: 38,
+    width: moderateScale(38),
+    height: moderateScale(38),
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 4,
+    marginRight: moderateScale(4),
   },
   sendButtonCircle: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: moderateScale(40),
+    height: moderateScale(40),
+    borderRadius: moderateScale(20),
     backgroundColor: '#7C4DFF',
     justifyContent: 'center',
     alignItems: 'center',

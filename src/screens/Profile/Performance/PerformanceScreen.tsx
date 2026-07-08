@@ -1,8 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { theme } from '../../../theme';
 import { Header } from '../../../components/Header';
 import Svg, { Path } from 'react-native-svg';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { moderateScale } from '../../../utils/responsive';
 
 interface PerformanceScreenProps {
   onBack?: () => void;
@@ -28,6 +30,12 @@ const TrendIcon = ({ size = 64, color = theme.colors.primary }) => (
 );
 
 export const PerformanceScreen: React.FC<PerformanceScreenProps> = ({ onBack }) => {
+  const insets = useSafeAreaInsets();
+  const hasTabBar = !onBack;
+  const bottomPadding = hasTabBar
+    ? 72 + (insets.bottom > 0 ? insets.bottom : theme.spacing.md) + theme.spacing.md
+    : insets.bottom > 0 ? insets.bottom : theme.spacing.md;
+
   return (
     <View style={styles.outerContainer}>
       <View style={styles.contentWrapper}>
@@ -36,15 +44,28 @@ export const PerformanceScreen: React.FC<PerformanceScreenProps> = ({ onBack }) 
           showBack={!!onBack}
           onBackPress={onBack}
         />
-        <View style={styles.comingSoonContainer}>
-          <View style={styles.iconWrapper}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={[
+            styles.comingSoonContainer,
+            {
+              paddingBottom: bottomPadding,
+            },
+          ]}
+        >
+          <View 
+            style={styles.iconWrapper}
+            accessible={true}
+            accessibilityRole="image"
+            accessibilityLabel="Trend chart icon"
+          >
             <TrendIcon size={48} color="#7C4DFF" />
           </View>
-          <Text style={styles.title}>Coming Soon</Text>
-          <Text style={styles.description}>
+          <Text style={styles.title} maxFontSizeMultiplier={1.3}>Coming Soon</Text>
+          <Text style={styles.description} maxFontSizeMultiplier={1.3}>
             We're building a comprehensive dashboard to help you track your ratings, earnings, and delivery efficiency.
           </Text>
-        </View>
+        </ScrollView>
       </View>
     </View>
   );
@@ -59,33 +80,32 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   comingSoonContainer: {
-    flex: 1,
+    flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 32,
-    paddingBottom: 80,
+    paddingHorizontal: moderateScale(32),
   },
   iconWrapper: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: moderateScale(100),
+    height: moderateScale(100),
+    borderRadius: moderateScale(50),
     backgroundColor: '#F3E8FF',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 24,
+    marginBottom: moderateScale(24),
   },
   title: {
     fontFamily: 'Poppins-Bold',
-    fontSize: 24,
+    fontSize: moderateScale(24),
     color: theme.colors.textDark,
-    marginBottom: 12,
+    marginBottom: moderateScale(12),
     textAlign: 'center',
   },
   description: {
     fontFamily: 'Poppins-Regular',
-    fontSize: 16,
+    fontSize: moderateScale(16),
     color: theme.colors.textMedium,
     textAlign: 'center',
-    lineHeight: 24,
+    lineHeight: moderateScale(24),
   },
 });

@@ -10,6 +10,7 @@ import {
   BackHandler,
 } from 'react-native';
 import Svg, { Path, Circle } from 'react-native-svg';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { theme } from '../../theme';
 import { driverData } from '../../data/profile';
 import { ChevronRightIcon } from '../../components/Icons';
@@ -28,6 +29,8 @@ import { HelpAndSupportScreen } from './HelpAndSupport/HelpAndSupportScreen';
 import { SupportCenterScreen } from './SupportCenter/SupportCenterScreen';
 import { OrderChatScreen } from './SupportCenter/OrderChatScreen';
 import { EmergencySupportScreen } from './SupportCenter/EmergencySupportScreen';
+import { TechnicalSupportScreen } from './SupportCenter/TechnicalSupportScreen';
+import { PaymentQueriesScreen } from './SupportCenter/PaymentQueriesScreen';
 import { vehicleData } from '../../data/vehicleInformation';
 
 // ==========================================
@@ -192,6 +195,9 @@ const TrendingUpIcon: React.FC<{ size?: number; color?: string }> = ({ size = 20
 const AvatarPlaceholder: React.FC<{ size: number; source: any }> = ({ size, source }) => {
   return (
     <Image
+      accessible={true}
+      accessibilityLabel="Driver avatar picture"
+      accessibilityRole="image"
       source={source}
       style={[
         styles.avatarPlaceholderContainer,
@@ -293,7 +299,8 @@ interface ProfileScreenProps {
 }
 
 export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onSubScreenChange }) => {
-  const [currentSubScreen, setCurrentSubScreen] = useState<'profile' | 'personal' | 'vehicle' | 'documents' | 'document_details' | 'upload_success' | 'bank_details' | 'performance' | 'settings' | 'terms' | 'help' | 'support_center' | 'order_chat' | 'emergency_report' | 'alerts'>('profile');
+  const insets = useSafeAreaInsets();
+  const [currentSubScreen, setCurrentSubScreen] = useState<'profile' | 'personal' | 'vehicle' | 'documents' | 'document_details' | 'upload_success' | 'bank_details' | 'performance' | 'settings' | 'terms' | 'help' | 'support_center' | 'order_chat' | 'emergency_report' | 'technical_support' | 'payment_queries' | 'alerts'>('profile');
   const [driverAvatar, setDriverAvatar] = useState(driverData.avatar);
   const [vehicleImage, setVehicleImage] = useState(vehicleData.image);
 
@@ -478,6 +485,24 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onSubScreenChange 
         onBack={() => setCurrentSubScreen('help')}
         onNavigateOrderSupport={() => setCurrentSubScreen('order_chat')}
         onNavigateEmergencySupport={() => setCurrentSubScreen('emergency_report')}
+        onNavigateTechnicalSupport={() => setCurrentSubScreen('technical_support')}
+        onNavigatePaymentQueries={() => setCurrentSubScreen('payment_queries')}
+      />
+    );
+  }
+
+  if (currentSubScreen === 'technical_support') {
+    return (
+      <TechnicalSupportScreen
+        onBack={() => setCurrentSubScreen('support_center')}
+      />
+    );
+  }
+
+  if (currentSubScreen === 'payment_queries') {
+    return (
+      <PaymentQueriesScreen
+        onBack={() => setCurrentSubScreen('support_center')}
       />
     );
   }
@@ -505,7 +530,12 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onSubScreenChange 
       <View style={styles.contentWrapper}>
         <ScrollView
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.scrollContent}
+          contentContainerStyle={[
+            styles.scrollContent,
+            {
+              paddingBottom: 72 + (insets.bottom > 0 ? insets.bottom : theme.spacing.md) + theme.spacing.lg,
+            },
+          ]}
         >
           {/* 2. PROFILE HERO SECTION */}
           <Animated.View style={[styles.heroCard, getAnimatedStyle(heroFadeAnim)]}>
@@ -516,17 +546,27 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onSubScreenChange 
               </View>
             </View>
 
-            <Text style={styles.driverName}>{driverData.name}</Text>
-            <Text style={styles.employeeId}>Employee ID: {driverData.employeeId}</Text>
+            <Text style={styles.driverName} maxFontSizeMultiplier={1.3}>{driverData.name}</Text>
+            <Text style={styles.employeeId} maxFontSizeMultiplier={1.3}>Employee ID: {driverData.employeeId}</Text>
 
             <View style={styles.chipsContainer}>
-              <View style={[styles.statusChip, styles.verifiedChip]}>
+              <View 
+                style={[styles.statusChip, styles.verifiedChip]}
+                accessible={true}
+                accessibilityLabel="Account status: Verified"
+                accessibilityRole="text"
+              >
                 <VerifiedIcon size={13} color={theme.colors.primary} />
-                <Text style={styles.verifiedChipText}>Verified</Text>
+                <Text style={styles.verifiedChipText} maxFontSizeMultiplier={1.3}>Verified</Text>
               </View>
-              <View style={[styles.statusChip, styles.onlineChip]}>
+              <View 
+                style={[styles.statusChip, styles.onlineChip]}
+                accessible={true}
+                accessibilityLabel="Duty status: Online"
+                accessibilityRole="text"
+              >
                 <OnlineDotIcon size={7} color={theme.colors.success} />
-                <Text style={styles.onlineChipText}>Online</Text>
+                <Text style={styles.onlineChipText} maxFontSizeMultiplier={1.3}>Online</Text>
               </View>
             </View>
           </Animated.View>
@@ -534,41 +574,61 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onSubScreenChange 
           {/* 3. STATISTICS GRID */}
           <Animated.View style={[styles.statsGrid, getAnimatedStyle(statsGridAnim)]}>
             {/* Card 1: Total Orders */}
-            <View style={[styles.statCard, styles.purpleStatCard]}>
+            <View 
+              style={[styles.statCard, styles.purpleStatCard]}
+              accessible={true}
+              accessibilityLabel={`Total orders: ${driverData.stats.totalOrders}`}
+              accessibilityRole="text"
+            >
               <View style={styles.statCardHeader}>
-                <Text style={styles.purpleStatTitle}>TOTAL ORDERS</Text>
+                <Text style={styles.purpleStatTitle} maxFontSizeMultiplier={1.3}>TOTAL ORDERS</Text>
                 <BoxIcon size={18} color={theme.colors.cardBg} />
               </View>
-              <Text style={styles.purpleStatValue}>{driverData.stats.totalOrders}</Text>
+              <Text style={styles.purpleStatValue} maxFontSizeMultiplier={1.3}>{driverData.stats.totalOrders}</Text>
             </View>
 
             {/* Card 2: Today */}
-            <View style={styles.statCard}>
+            <View 
+              style={styles.statCard}
+              accessible={true}
+              accessibilityLabel={`Today's orders: ${driverData.stats.today}`}
+              accessibilityRole="text"
+            >
               <View style={styles.statCardHeader}>
-                <Text style={styles.statTitle}>TODAY</Text>
+                <Text style={styles.statTitle} maxFontSizeMultiplier={1.3}>TODAY</Text>
                 <CalendarIcon size={18} color={theme.colors.textMedium} />
               </View>
-              <Text style={styles.statValue}>{driverData.stats.today}</Text>
+              <Text style={styles.statValue} maxFontSizeMultiplier={1.3}>{driverData.stats.today}</Text>
             </View>
 
             {/* Card 3: On-Time */}
-            <View style={styles.statCard}>
+            <View 
+              style={styles.statCard}
+              accessible={true}
+              accessibilityLabel={`On-time percentage: ${driverData.stats.onTime}`}
+              accessibilityRole="text"
+            >
               <View style={styles.statCardHeader}>
-                <Text style={styles.statTitle}>ON-TIME</Text>
+                <Text style={styles.statTitle} maxFontSizeMultiplier={1.3}>ON-TIME</Text>
                 <ClockIcon size={18} color={theme.colors.textMedium} />
               </View>
-              <Text style={[styles.statValue, styles.purpleStatText]}>
+              <Text style={[styles.statValue, styles.purpleStatText]} maxFontSizeMultiplier={1.3}>
                 {driverData.stats.onTime}
               </Text>
             </View>
 
             {/* Card 4: Hours */}
-            <View style={styles.statCard}>
+            <View 
+              style={styles.statCard}
+              accessible={true}
+              accessibilityLabel={`Hours worked: ${driverData.stats.hours}`}
+              accessibilityRole="text"
+            >
               <View style={styles.statCardHeader}>
-                <Text style={styles.statTitle}>HOURS</Text>
+                <Text style={styles.statTitle} maxFontSizeMultiplier={1.3}>HOURS</Text>
                 <HourglassIcon size={18} color={theme.colors.textMedium} />
               </View>
-              <Text style={styles.statValue}>{driverData.stats.hours}</Text>
+              <Text style={styles.statValue} maxFontSizeMultiplier={1.3}>{driverData.stats.hours}</Text>
             </View>
           </Animated.View>
 
@@ -601,8 +661,11 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onSubScreenChange 
                     {getMenuIcon(item.icon, theme.colors.primary)}
                   </View>
                   <View style={styles.menuTextContainer}>
-                    <Text style={styles.menuTitle}>{item.title}</Text>
-                    <Text style={[styles.menuSubtitle, item.warning && styles.warningText]}>
+                    <Text style={styles.menuTitle} maxFontSizeMultiplier={1.3}>{item.title}</Text>
+                    <Text 
+                      style={[styles.menuSubtitle, item.warning && styles.warningText]}
+                      maxFontSizeMultiplier={1.3}
+                    >
                       {item.subtitle}
                     </Text>
                   </View>
@@ -616,7 +679,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onSubScreenChange 
           <Animated.View style={getAnimatedStyle(logoutBtnAnim)}>
             <TappableLogoutButton>
               <LogOutIcon size={18} color={theme.colors.error} />
-              <Text style={styles.logoutText}>Logout</Text>
+              <Text style={styles.logoutText} maxFontSizeMultiplier={1.3}>Logout</Text>
             </TappableLogoutButton>
           </Animated.View>
         </ScrollView>
@@ -644,14 +707,13 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingHorizontal: theme.spacing.md,
     paddingTop: theme.spacing.md,
-    paddingBottom: moderateScale(130), // Floating bottom navigation safe padding
   },
   headerLeft: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   headerTitle: {
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: 'Poppins-Bold',
     fontSize: theme.typography.fontSize.lg,
     color: theme.colors.textDark,
     marginLeft: theme.spacing.sm,
@@ -669,6 +731,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 1.5,
     borderColor: '#FFFFFF',
+    overflow: 'hidden', // Fix image corners clipping on Android
   },
   heroCard: {
     alignItems: 'center',
@@ -727,7 +790,7 @@ const styles = StyleSheet.create({
   },
   verifiedChipText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: 12,
+    fontSize: moderateScale(12),
     color: theme.colors.primary,
     marginLeft: 5,
   },
@@ -736,7 +799,7 @@ const styles = StyleSheet.create({
   },
   onlineChipText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: 12,
+    fontSize: moderateScale(12),
     color: theme.colors.success,
     marginLeft: 5,
   },
@@ -749,7 +812,7 @@ const styles = StyleSheet.create({
   statCard: {
     width: '48%',
     backgroundColor: theme.colors.cardBg,
-    borderRadius: 22,
+    borderRadius: moderateScale(22),
     padding: theme.spacing.md,
     marginBottom: theme.spacing.sm,
     borderWidth: 1,
@@ -772,13 +835,13 @@ const styles = StyleSheet.create({
   },
   statTitle: {
     fontFamily: 'Poppins-Medium',
-    fontSize: 11,
+    fontSize: moderateScale(11),
     color: theme.colors.textMedium,
     letterSpacing: 1.0,
   },
   purpleStatTitle: {
     fontFamily: 'Poppins-Medium',
-    fontSize: 11,
+    fontSize: moderateScale(11),
     color: theme.colors.primaryLight,
     letterSpacing: 1.0,
   },
@@ -803,9 +866,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: theme.colors.cardBg,
-    borderRadius: 22,
+    borderRadius: moderateScale(22),
     padding: theme.spacing.md,
-    marginBottom: 12, // Restores vertical spacing between card rows
+    marginBottom: moderateScale(12),
     borderWidth: 1,
     borderColor: '#F2F2F7',
     shadowColor: '#7C4DFF',
@@ -822,7 +885,7 @@ const styles = StyleSheet.create({
   menuIconContainer: {
     width: moderateScale(40),
     height: moderateScale(40),
-    borderRadius: 12,
+    borderRadius: moderateScale(12),
     backgroundColor: theme.colors.primaryLight,
     alignItems: 'center',
     justifyContent: 'center',
@@ -832,10 +895,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   menuTitle: {
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: 'Poppins-Bold',
     fontSize: theme.typography.fontSize.md,
     color: theme.colors.textDark,
-    marginBottom: 2,
+    marginBottom: moderateScale(2),
   },
   menuSubtitle: {
     fontFamily: 'Poppins-Regular',
@@ -850,15 +913,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#FFF5F5',
-    borderRadius: 22,
-    height: 56,
+    borderRadius: moderateScale(22),
+    minHeight: moderateScale(56),
+    paddingVertical: theme.spacing.sm,
     borderWidth: 1,
     borderColor: '#FEE2E2',
     marginTop: theme.spacing.md,
     marginBottom: theme.spacing.md,
   },
   logoutText: {
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: 'Poppins-Bold',
     fontSize: theme.typography.fontSize.md,
     color: theme.colors.error,
     marginLeft: theme.spacing.xs,
