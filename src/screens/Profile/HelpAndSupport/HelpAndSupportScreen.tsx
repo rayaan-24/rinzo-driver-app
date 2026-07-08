@@ -21,17 +21,7 @@ const cardWidth = (width - theme.spacing.md * 2 - 12) / 2;
 // OUTLINED SVG ICONS (Help & Support layout)
 // ==========================================
 
-const ArrowLeftIcon = ({ size = 24, color = theme.colors.textDark }) => (
-  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-    <Path
-      d="M20 12H4M10 18l-6-6 6-6"
-      stroke={color}
-      strokeWidth={2.5}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </Svg>
-);
+
 
 const HelpIcon = ({ size = 20, color = theme.colors.textDark }) => (
   <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
@@ -168,10 +158,10 @@ const TappableCard: React.FC<TappableCardProps> = ({ onPress, style, children })
 
 interface HelpAndSupportScreenProps {
   onBack: () => void;
-  onNavigateSupportCenter?: () => void;
+  onNavigateLiveChat?: () => void;
 }
 
-export const HelpAndSupportScreen: React.FC<HelpAndSupportScreenProps> = ({ onBack, onNavigateSupportCenter }) => {
+export const HelpAndSupportScreen: React.FC<HelpAndSupportScreenProps> = ({ onBack, onNavigateLiveChat }) => {
   // Staggered entry transitions
   const screenFade = useRef(new Animated.Value(0)).current;
   const searchBarSlide = useRef(new Animated.Value(0)).current;
@@ -384,8 +374,8 @@ export const HelpAndSupportScreen: React.FC<HelpAndSupportScreenProps> = ({ onBa
               onPressIn={chatPressIn}
               onPressOut={chatPressOut}
               onPress={() => {
-                if (onNavigateSupportCenter) {
-                  onNavigateSupportCenter();
+                if (onNavigateLiveChat) {
+                  onNavigateLiveChat();
                 }
               }}
               style={styles.chatButton}

@@ -24,9 +24,7 @@ import { PerformanceScreen } from './Performance/PerformanceScreen';
 import { SettingsScreen } from './Settings/SettingsScreen';
 import { TermsAndPrivacyScreen } from './TermsAndPrivacy/TermsAndPrivacyScreen';
 import { HelpAndSupportScreen } from './HelpAndSupport/HelpAndSupportScreen';
-import { SupportCenterScreen } from './SupportCenter/SupportCenterScreen';
 import { OrderChatScreen } from './SupportCenter/OrderChatScreen';
-import { EmergencySupportScreen } from './SupportCenter/EmergencySupportScreen';
 import { vehicleData } from '../../data/vehicleInformation';
 
 // ==========================================
@@ -292,7 +290,7 @@ interface ProfileScreenProps {
 }
 
 export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onSubScreenChange }) => {
-  const [currentSubScreen, setCurrentSubScreen] = useState<'profile' | 'personal' | 'vehicle' | 'documents' | 'document_details' | 'upload_success' | 'bank_details' | 'performance' | 'settings' | 'terms' | 'help' | 'support_center' | 'order_chat' | 'emergency_report'>('profile');
+  const [currentSubScreen, setCurrentSubScreen] = useState<'profile' | 'personal' | 'vehicle' | 'documents' | 'document_details' | 'upload_success' | 'bank_details' | 'performance' | 'settings' | 'terms' | 'help' | 'order_chat'>('profile');
   const [driverAvatar, setDriverAvatar] = useState(driverData.avatar);
   const [vehicleImage, setVehicleImage] = useState(vehicleData.image);
 
@@ -457,35 +455,15 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onSubScreenChange 
     return (
       <HelpAndSupportScreen
         onBack={() => setCurrentSubScreen('settings')}
-        onNavigateSupportCenter={() => setCurrentSubScreen('support_center')}
+        onNavigateLiveChat={() => setCurrentSubScreen('order_chat')}
       />
     );
   }
-
-  if (currentSubScreen === 'support_center') {
-    return (
-      <SupportCenterScreen
-        onBack={() => setCurrentSubScreen('help')}
-        onNavigateOrderSupport={() => setCurrentSubScreen('order_chat')}
-        onNavigateEmergencySupport={() => setCurrentSubScreen('emergency_report')}
-      />
-    );
-  }
-
-  if (currentSubScreen === 'emergency_report') {
-    return (
-      <EmergencySupportScreen
-        onBack={() => setCurrentSubScreen('support_center')}
-      />
-    );
-  }
-
-
 
   if (currentSubScreen === 'order_chat') {
     return (
       <OrderChatScreen
-        onBack={() => setCurrentSubScreen('support_center')}
+        onBack={() => setCurrentSubScreen('help')}
       />
     );
   }
