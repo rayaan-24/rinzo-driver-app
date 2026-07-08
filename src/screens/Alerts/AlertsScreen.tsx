@@ -500,7 +500,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   headerTitle: {
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: 'Poppins-Medium',
     fontSize: theme.typography.fontSize.md,
     color: '#7C4DFF', // Branded purple headers
     marginLeft: 12,
@@ -540,7 +540,7 @@ const styles = StyleSheet.create({
     color: theme.colors.textMedium,
   },
   clearAllText: {
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: 'Poppins-Medium',
     fontSize: 14,
     color: '#7C4DFF',
     paddingTop: 8,

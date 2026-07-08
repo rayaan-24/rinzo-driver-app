@@ -9,6 +9,7 @@ import {
   Image,
 } from 'react-native';
 import Svg, { Path, Circle } from 'react-native-svg';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { theme } from '../../../theme';
 import { vehicleData } from '../../../data/vehicleInformation';
 import { driverData } from '../../../data/profile';
@@ -21,17 +22,7 @@ import { Header } from '../../../components/Header';
 // LOCAL SVG ICONS (Android space-safe paths)
 // ==========================================
 
-const ArrowLeftIcon: React.FC<{ size?: number; color?: string }> = ({ size = 24, color = theme.colors.textDark }) => (
-  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-    <Path
-      d="M 20 12 H 4 M 10 18 L 4 12 L 10 6"
-      stroke={color}
-      strokeWidth={2.5}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </Svg>
-);
+
 
 const HelpIcon: React.FC<{ size?: number; color?: string }> = ({ size = 20, color = theme.colors.textDark }) => (
   <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
@@ -159,6 +150,7 @@ export const VehicleInformationScreen: React.FC<VehicleInformationScreenProps> =
   onChangeVehicleImage,
   onBack,
 }) => {
+  const insets = useSafeAreaInsets();
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
 
   // Animation values
@@ -254,13 +246,29 @@ export const VehicleInformationScreen: React.FC<VehicleInformationScreenProps> =
 
         <ScrollView
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.scrollContent}
+          contentContainerStyle={[
+            styles.scrollContent,
+            {
+              paddingBottom: insets.bottom > 0 ? insets.bottom + theme.spacing.md : theme.spacing.md,
+            },
+          ]}
         >
           {/* 2. DRIVER WELCOME ROW */}
-          <Animated.View style={[styles.welcomeRow, getAnimatedItemStyle()]}>
+          <Animated.View 
+            style={[styles.welcomeRow, getAnimatedItemStyle()]}
+            accessible={true}
+            accessibilityLabel="Driver Welcome Banner"
+            accessibilityRole="text"
+          >
             <View style={styles.driverWelcomeLeft}>
-              <Image source={driverData.avatar} style={styles.driverAvatar} />
-              <Text style={styles.welcomeText}>Welcome, Driver</Text>
+              <Image 
+                accessible={true}
+                accessibilityLabel="Driver Profile Avatar"
+                accessibilityRole="image"
+                source={driverData.avatar} 
+                style={styles.driverAvatar} 
+              />
+              <Text style={styles.welcomeText} maxFontSizeMultiplier={1.3}>Welcome, Driver</Text>
             </View>
             <SignalIcon size={20} color={theme.colors.primary} />
           </Animated.View>
@@ -269,24 +277,30 @@ export const VehicleInformationScreen: React.FC<VehicleInformationScreenProps> =
           <Animated.View style={getAnimatedItemStyle()}>
             <TouchableOpacity
               accessible={true}
-              accessibilityLabel="Change Vehicle Photo"
+              accessibilityLabel={`Change vehicle photo. Current vehicle: ${vehicleData.name}, model edition: ${vehicleData.edition}`}
               accessibilityRole="button"
               activeOpacity={0.9}
               onPress={() => setIsBottomSheetVisible(true)}
               style={styles.heroCard}
             >
-              <Image source={resolveImageSource(vehicleImage)} style={styles.heroImage} />
+              <Image 
+                accessible={true}
+                accessibilityLabel="Vehicle Image"
+                accessibilityRole="image"
+                source={resolveImageSource(vehicleImage)} 
+                style={styles.heroImage} 
+              />
               <View style={styles.darkOverlay} />
 
               {/* Top-left Pill Badge */}
               <View style={styles.assignedBadge}>
-                <Text style={styles.assignedBadgeText}>ASSIGNED VEHICLE</Text>
+                <Text style={styles.assignedBadgeText} maxFontSizeMultiplier={1.3}>ASSIGNED VEHICLE</Text>
               </View>
 
               {/* Bottom Overlay text */}
               <View style={styles.vehicleDetailsOverlay}>
-                <Text style={styles.vehicleName}>{vehicleData.name}</Text>
-                <Text style={styles.vehicleEdition}>{vehicleData.edition}</Text>
+                <Text style={styles.vehicleName} maxFontSizeMultiplier={1.3}>{vehicleData.name}</Text>
+                <Text style={styles.vehicleEdition} maxFontSizeMultiplier={1.3}>{vehicleData.edition}</Text>
               </View>
             </TouchableOpacity>
           </Animated.View>
@@ -294,39 +308,54 @@ export const VehicleInformationScreen: React.FC<VehicleInformationScreenProps> =
           {/* 4. STATISTICS CARDS */}
           <Animated.View style={[styles.statsGridRow, getAnimatedItemStyle()]}>
             {/* Card 1: Plate */}
-            <View style={styles.statCard}>
+            <View 
+              style={styles.statCard}
+              accessible={true}
+              accessibilityLabel={`Vehicle license plate: ${vehicleData.plate}`}
+              accessibilityRole="text"
+            >
               <View style={styles.statCardHeader}>
                 <View style={styles.statCardIconBox}>
                   <PlateIcon size={16} color={theme.colors.primary} />
                 </View>
-                <Text style={styles.statLabel}>PLATE</Text>
+                <Text style={styles.statLabel} maxFontSizeMultiplier={1.3}>PLATE</Text>
               </View>
-              <Text style={styles.statValueDark}>{vehicleData.plate}</Text>
+              <Text style={styles.statValueDark} maxFontSizeMultiplier={1.3}>{vehicleData.plate}</Text>
             </View>
 
             {/* Card 2: Mileage */}
-            <View style={styles.statCard}>
+            <View 
+              style={styles.statCard}
+              accessible={true}
+              accessibilityLabel={`Vehicle Mileage: ${vehicleData.mileage} kilometers`}
+              accessibilityRole="text"
+            >
               <View style={styles.statCardHeader}>
                 <View style={styles.statCardIconBox}>
                   <MileageIcon size={16} color={theme.colors.primary} />
                 </View>
-                <Text style={styles.statLabel}>MILEAGE</Text>
+                <Text style={styles.statLabel} maxFontSizeMultiplier={1.3}>MILEAGE</Text>
               </View>
-              <Text style={styles.statValueDark}>{vehicleData.mileage}</Text>
-              <Text style={styles.statCardSubtitle}>Total Kilometers</Text>
+              <Text style={styles.statValueDark} maxFontSizeMultiplier={1.3}>{vehicleData.mileage}</Text>
+              <Text style={styles.statCardSubtitle} maxFontSizeMultiplier={1.3}>Total Kilometers</Text>
             </View>
           </Animated.View>
 
           {/* 5. FUEL LEVEL CARD */}
-          <Animated.View style={[styles.fuelCard, getAnimatedItemStyle()]}>
+          <Animated.View 
+            style={[styles.fuelCard, getAnimatedItemStyle()]}
+            accessible={true}
+            accessibilityLabel={`Fuel Level: ${Math.round(vehicleData.fuelLevel * 100)} percent. Range is ${vehicleData.range}. Fuel Type is ${vehicleData.fuelType}`}
+            accessibilityRole="text"
+          >
             <View style={styles.fuelHeaderRow}>
               <View style={styles.fuelTitleBox}>
                 <View style={styles.fuelIconBox}>
                   <FuelPumpIcon size={18} color={theme.colors.primary} />
                 </View>
-                <Text style={styles.fuelCardTitle}>Fuel Level</Text>
+                <Text style={styles.fuelCardTitle} maxFontSizeMultiplier={1.3}>Fuel Level</Text>
               </View>
-              <Text style={styles.fuelPercentageText}>{Math.round(vehicleData.fuelLevel * 100)}%</Text>
+              <Text style={styles.fuelPercentageText} maxFontSizeMultiplier={1.3}>{Math.round(vehicleData.fuelLevel * 100)}%</Text>
             </View>
 
             {/* Progress Bar */}
@@ -341,20 +370,20 @@ export const VehicleInformationScreen: React.FC<VehicleInformationScreenProps> =
 
             {/* Range & Fuel type indicators */}
             <View style={styles.fuelFooterRow}>
-              <Text style={styles.rangeText}>• Range: {vehicleData.range}</Text>
-              <Text style={styles.fuelTypeText}>{vehicleData.fuelType}</Text>
+              <Text style={styles.rangeText} maxFontSizeMultiplier={1.3}>• Range: {vehicleData.range}</Text>
+              <Text style={styles.fuelTypeText} maxFontSizeMultiplier={1.3}>{vehicleData.fuelType}</Text>
             </View>
           </Animated.View>
 
           {/* 6. MAINTENANCE SECTION */}
           <Animated.View style={[styles.maintenanceSection, getAnimatedItemStyle()]}>
-            <Text style={styles.sectionHeaderTitle}>MAINTENANCE STATUS</Text>
+            <Text style={styles.sectionHeaderTitle} maxFontSizeMultiplier={1.3}>MAINTENANCE STATUS</Text>
 
             {vehicleData.maintenanceItems.map((item) => (
               <TouchableOpacity
                 key={item.id}
                 accessible={true}
-                accessibilityLabel={`Go to ${item.title}`}
+                accessibilityLabel={`Maintenance item: ${item.title}. status: ${item.subtitle}. ${item.urgent ? 'Urgent attention required.' : ''}`}
                 accessibilityRole="button"
                 activeOpacity={0.7}
                 style={styles.maintenanceRow}
@@ -373,15 +402,15 @@ export const VehicleInformationScreen: React.FC<VehicleInformationScreenProps> =
                     )}
                   </View>
                   <View style={styles.maintenanceTextContainer}>
-                    <Text style={styles.maintenanceTitle}>{item.title}</Text>
-                    <Text style={styles.maintenanceSubtitle}>{item.subtitle}</Text>
+                    <Text style={styles.maintenanceTitle} maxFontSizeMultiplier={1.3}>{item.title}</Text>
+                    <Text style={styles.maintenanceSubtitle} maxFontSizeMultiplier={1.3}>{item.subtitle}</Text>
                   </View>
                 </View>
 
                 <View style={styles.maintenanceRight}>
                   {item.urgent && (
                     <View style={styles.urgentBadge}>
-                      <Text style={styles.urgentBadgeText}>URGENT</Text>
+                      <Text style={styles.urgentBadgeText} maxFontSizeMultiplier={1.3}>URGENT</Text>
                     </View>
                   )}
                   <ChevronRightIcon size={14} color={theme.colors.textLight} />
@@ -402,9 +431,9 @@ export const VehicleInformationScreen: React.FC<VehicleInformationScreenProps> =
               style={styles.primaryButton}
             >
               <ClipboardIcon size={18} color="#FFFFFF" />
-              <Text style={styles.primaryButtonText}>Submit Daily Check</Text>
+              <Text style={styles.primaryButtonText} maxFontSizeMultiplier={1.3}>Submit Daily Check</Text>
             </TouchableOpacity>
-            <Text style={styles.lastUpdatedText}>Last updated {vehicleData.lastUpdated}</Text>
+            <Text style={styles.lastUpdatedText} maxFontSizeMultiplier={1.3}>Last updated {vehicleData.lastUpdated}</Text>
           </Animated.View>
         </ScrollView>
 
@@ -444,7 +473,6 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingHorizontal: theme.spacing.md,
     paddingTop: theme.spacing.md,
-    paddingBottom: moderateScale(130), // Spacing for floating footer
   },
   welcomeRow: {
     flexDirection: 'row',
@@ -457,22 +485,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   driverAvatar: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: moderateScale(32),
+    height: moderateScale(32),
+    borderRadius: moderateScale(16),
     marginRight: theme.spacing.sm,
+    overflow: 'hidden', // Ensures round clipping on Android
   },
   welcomeText: {
     fontFamily: theme.typography.fontFamily.bold,
-    fontSize: 16,
+    fontSize: moderateScale(16),
     fontWeight: theme.typography.fontWeight.bold,
     color: theme.colors.primary,
   },
   heroCard: {
     position: 'relative',
     height: moderateScale(200),
-    borderRadius: 20,
-    overflow: 'hidden',
+    borderRadius: moderateScale(20),
+    overflow: 'hidden', // Required for rounded image bounds
     marginBottom: theme.spacing.lg,
     ...theme.shadows.medium,
   },
@@ -480,6 +509,8 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     resizeMode: 'cover',
+    borderRadius: moderateScale(20),
+    overflow: 'hidden', // Fix image corners overflow on Android
   },
   darkOverlay: {
     position: 'absolute',
@@ -491,35 +522,35 @@ const styles = StyleSheet.create({
   },
   assignedBadge: {
     position: 'absolute',
-    top: 14,
-    left: 14,
+    top: moderateScale(14),
+    left: moderateScale(14),
     backgroundColor: theme.colors.primary,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
+    paddingVertical: moderateScale(5),
+    paddingHorizontal: moderateScale(10),
     borderRadius: 999,
   },
   assignedBadgeText: {
     fontFamily: theme.typography.fontFamily.bold,
-    fontSize: 10,
+    fontSize: moderateScale(10),
     color: '#FFFFFF',
     fontWeight: theme.typography.fontWeight.bold,
     letterSpacing: 0.5,
   },
   vehicleDetailsOverlay: {
     position: 'absolute',
-    bottom: 14,
-    left: 14,
+    bottom: moderateScale(14),
+    left: moderateScale(14),
   },
   vehicleName: {
     fontFamily: theme.typography.fontFamily.bold,
-    fontSize: 20,
+    fontSize: moderateScale(20),
     fontWeight: theme.typography.fontWeight.bold,
     color: '#FFFFFF',
-    marginBottom: 2,
+    marginBottom: moderateScale(2),
   },
   vehicleEdition: {
     fontFamily: theme.typography.fontFamily.regular,
-    fontSize: 12,
+    fontSize: moderateScale(12),
     color: '#E0E0E0',
   },
   statsGridRow: {
@@ -530,45 +561,45 @@ const styles = StyleSheet.create({
   statCard: {
     width: '48%',
     backgroundColor: '#FFFFFF',
-    borderRadius: 16,
+    borderRadius: moderateScale(16),
     padding: theme.spacing.md,
     ...theme.shadows.small,
   },
   statCardHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: moderateScale(8),
   },
   statCardIconBox: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
+    width: moderateScale(28),
+    height: moderateScale(28),
+    borderRadius: moderateScale(14),
     backgroundColor: theme.colors.primaryLight,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 6,
+    marginRight: moderateScale(6),
   },
   statLabel: {
     fontFamily: theme.typography.fontFamily.medium,
-    fontSize: 10,
+    fontSize: moderateScale(10),
     color: theme.colors.textMedium,
     fontWeight: theme.typography.fontWeight.semibold,
   },
   statValueDark: {
     fontFamily: theme.typography.fontFamily.bold,
-    fontSize: 20,
+    fontSize: moderateScale(20),
     fontWeight: theme.typography.fontWeight.bold,
     color: theme.colors.textDark,
   },
   statCardSubtitle: {
     fontFamily: theme.typography.fontFamily.regular,
-    fontSize: 10,
+    fontSize: moderateScale(10),
     color: theme.colors.textMedium,
-    marginTop: 2,
+    marginTop: moderateScale(2),
   },
   fuelCard: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 16,
+    borderRadius: moderateScale(16),
     padding: theme.spacing.md,
     marginBottom: theme.spacing.lg,
     ...theme.shadows.small,
@@ -584,9 +615,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   fuelIconBox: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: moderateScale(32),
+    height: moderateScale(32),
+    borderRadius: moderateScale(16),
     backgroundColor: theme.colors.primaryLight,
     alignItems: 'center',
     justifyContent: 'center',
@@ -594,27 +625,27 @@ const styles = StyleSheet.create({
   },
   fuelCardTitle: {
     fontFamily: theme.typography.fontFamily.bold,
-    fontSize: 14,
+    fontSize: moderateScale(14),
     fontWeight: theme.typography.fontWeight.bold,
     color: theme.colors.textDark,
   },
   fuelPercentageText: {
     fontFamily: theme.typography.fontFamily.bold,
-    fontSize: 16,
+    fontSize: moderateScale(16),
     fontWeight: theme.typography.fontWeight.bold,
     color: theme.colors.primary,
   },
   progressBarTrack: {
-    height: 10,
+    height: moderateScale(10),
     backgroundColor: '#E5E7EB',
-    borderRadius: 5,
+    borderRadius: moderateScale(5),
     overflow: 'hidden',
     marginBottom: theme.spacing.sm,
   },
   progressBarFill: {
     height: '100%',
     backgroundColor: theme.colors.primary,
-    borderRadius: 5,
+    borderRadius: moderateScale(5),
   },
   fuelFooterRow: {
     flexDirection: 'row',
@@ -623,13 +654,13 @@ const styles = StyleSheet.create({
   },
   rangeText: {
     fontFamily: theme.typography.fontFamily.medium,
-    fontSize: 11,
+    fontSize: moderateScale(11),
     color: theme.colors.textMedium,
     fontWeight: theme.typography.fontWeight.semibold,
   },
   fuelTypeText: {
     fontFamily: theme.typography.fontFamily.bold,
-    fontSize: 10,
+    fontSize: moderateScale(10),
     color: theme.colors.textMedium,
     fontWeight: theme.typography.fontWeight.bold,
     letterSpacing: 0.2,
@@ -639,7 +670,7 @@ const styles = StyleSheet.create({
   },
   sectionHeaderTitle: {
     fontFamily: theme.typography.fontFamily.bold,
-    fontSize: 12,
+    fontSize: moderateScale(12),
     color: theme.colors.textMedium,
     fontWeight: theme.typography.fontWeight.bold,
     letterSpacing: 1,
@@ -650,7 +681,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: '#FFFFFF',
-    borderRadius: 16,
+    borderRadius: moderateScale(16),
     padding: theme.spacing.md,
     marginBottom: theme.spacing.sm,
     ...theme.shadows.small,
@@ -661,9 +692,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   maintenanceIconContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
+    width: moderateScale(40),
+    height: moderateScale(40),
+    borderRadius: moderateScale(12),
     backgroundColor: theme.colors.primaryLight,
     alignItems: 'center',
     justifyContent: 'center',
@@ -677,14 +708,14 @@ const styles = StyleSheet.create({
   },
   maintenanceTitle: {
     fontFamily: theme.typography.fontFamily.bold,
-    fontSize: 14,
+    fontSize: moderateScale(14),
     fontWeight: theme.typography.fontWeight.bold,
     color: theme.colors.textDark,
-    marginBottom: 2,
+    marginBottom: moderateScale(2),
   },
   maintenanceSubtitle: {
     fontFamily: theme.typography.fontFamily.regular,
-    fontSize: 12,
+    fontSize: moderateScale(12),
     color: theme.colors.textMedium,
   },
   maintenanceRight: {
@@ -693,22 +724,23 @@ const styles = StyleSheet.create({
   },
   urgentBadge: {
     backgroundColor: '#FEE2E2',
-    paddingVertical: 4,
-    paddingHorizontal: 8,
+    paddingVertical: moderateScale(4),
+    paddingHorizontal: moderateScale(8),
     borderRadius: 999,
     marginRight: theme.spacing.sm,
   },
   urgentBadgeText: {
     fontFamily: theme.typography.fontFamily.bold,
-    fontSize: 9,
+    fontSize: moderateScale(9),
     color: '#EF4444',
     fontWeight: theme.typography.fontWeight.bold,
   },
   primaryButton: {
     flexDirection: 'row',
-    height: 56,
+    minHeight: moderateScale(56),
+    paddingVertical: theme.spacing.sm,
     backgroundColor: theme.colors.primary,
-    borderRadius: 16,
+    borderRadius: moderateScale(16),
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: theme.spacing.sm,
@@ -717,21 +749,21 @@ const styles = StyleSheet.create({
   },
   primaryButtonText: {
     fontFamily: theme.typography.fontFamily.bold,
-    fontSize: 16,
+    fontSize: moderateScale(16),
     fontWeight: theme.typography.fontWeight.bold,
     color: '#FFFFFF',
     marginLeft: theme.spacing.xs,
   },
   lastUpdatedText: {
     fontFamily: theme.typography.fontFamily.regular,
-    fontSize: 12,
+    fontSize: moderateScale(12),
     color: theme.colors.textMedium,
     textAlign: 'center',
   },
   headerButtonRight: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: moderateScale(40),
+    height: moderateScale(40),
+    borderRadius: moderateScale(20),
     backgroundColor: theme.colors.borderLight,
     justifyContent: 'center',
     alignItems: 'center',
