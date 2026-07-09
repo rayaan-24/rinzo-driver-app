@@ -94,12 +94,12 @@ const styles = StyleSheet.create({
   },
   brandingContainer: {
     alignItems: 'center',
-    marginTop: vs(30),
+    marginTop: vs(120),
   },
   mainLogo: {
-    width: s(110),
-    height: s(110),
-    marginBottom: vs(10),
+    width: s(180),
+    height: s(180),
+    marginBottom: vs(-20),
   },
   wordmarkImage: {
     width: s(210),
@@ -122,13 +122,14 @@ const styles = StyleSheet.create({
     marginVertical: vs(10),
   },
   scooterImage: {
-    width: screenWidth * 0.9,
-    height: vs(260),
+    width: screenWidth * 1.05,
+    height: vs(370),
+    marginTop: vs(-50),
   },
   loaderContainer: {
     width: '100%',
     alignItems: 'center',
-    marginBottom: vs(25),
+    marginBottom: vs(40),
   },
   progressTrack: {
     width: s(150),

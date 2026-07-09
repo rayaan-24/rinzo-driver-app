@@ -41,7 +41,7 @@ export const OnboardingScreen1: React.FC<OnboardingScreen1Props> = ({
       <View style={styles.content}>
         <Text style={styles.title}>Pickup. Track. Deliver.</Text>
         <Text style={styles.subtitle}>
-          Receive assigned orders and complete pickups with confidence.
+          Receive assigned orders and complete{'\n'}pickups with confidence.
         </Text>
       </View>
 
@@ -61,7 +61,7 @@ export const OnboardingScreen1: React.FC<OnboardingScreen1Props> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F1FC',
+    backgroundColor: '#ffffffff',
   },
   header: {
     flexDirection: 'row',
@@ -92,15 +92,16 @@ const styles = StyleSheet.create({
     marginVertical: vs(8),
   },
   illustrationImage: {
-    width: screenWidth * 0.9,
+    width: screenWidth * 1.05,
     height: '100%',
-    maxHeight: vs(340),
+    maxHeight: vs(460),
+    marginBottom: vs(-65),
   },
   content: {
     paddingHorizontal: theme.spacing.xl,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: vs(12),
+    marginBottom: vs(8),
   },
   title: {
     fontFamily: theme.typography.fontFamily.bold,
@@ -117,6 +118,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: s(22),
     paddingHorizontal: theme.spacing.md,
+    marginBottom: vs(8),
   },
   footer: {
     paddingHorizontal: theme.spacing.lg,

@@ -223,7 +223,11 @@ const TappableCard: React.FC<TappableCardProps> = ({ onPress, children }) => {
 // SCREEN IMPLEMENTATION
 // ==========================================
 
-export const AlertsScreen: React.FC = () => {
+interface AlertsScreenProps {
+  onBack?: () => void;
+}
+
+export const AlertsScreen: React.FC<AlertsScreenProps> = ({ onBack }) => {
   const [alerts, setAlerts] = useState<AlertItem[]>(initialAlerts);
   const [activeChip, setActiveChip] = useState<'All' | 'Route Alerts' | 'Earnings' | 'System'>('All');
 
@@ -318,24 +322,31 @@ export const AlertsScreen: React.FC = () => {
       {/* 1. STICKY HEADER */}
       <Animated.View style={{ opacity: headerFade }}>
         <Header
+          title={onBack ? "Alerts" : undefined}
+          showBack={!!onBack}
+          onBackPress={onBack}
           leftCustom={
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <View style={styles.avatarOutline}>
-                <Image source={driverData.avatar} style={styles.avatarImage} />
+            !onBack ? (
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <View style={styles.avatarOutline}>
+                  <Image source={driverData.avatar} style={styles.avatarImage} />
+                </View>
+                <Text style={styles.headerTitle}>Rinzo Driver</Text>
               </View>
-              <Text style={styles.headerTitle}>Rinzo Driver</Text>
-            </View>
+            ) : undefined
           }
           rightCustom={
-            <TouchableOpacity
-              accessible={true}
-              accessibilityLabel="Settings"
-              accessibilityRole="button"
-              activeOpacity={0.7}
-              style={styles.settingsTouchBox}
-            >
-              <SettingsIcon size={20} color={theme.colors.textDark} />
-            </TouchableOpacity>
+            !onBack ? (
+              <TouchableOpacity
+                accessible={true}
+                accessibilityLabel="Settings"
+                accessibilityRole="button"
+                activeOpacity={0.7}
+                style={styles.settingsTouchBox}
+              >
+                <SettingsIcon size={20} color={theme.colors.textDark} />
+              </TouchableOpacity>
+            ) : undefined
           }
         />
       </Animated.View>
@@ -489,7 +500,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   headerTitle: {
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: 'Poppins-Medium',
     fontSize: theme.typography.fontSize.md,
     color: '#7C4DFF', // Branded purple headers
     marginLeft: 12,
@@ -529,7 +540,7 @@ const styles = StyleSheet.create({
     color: theme.colors.textMedium,
   },
   clearAllText: {
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: 'Poppins-Medium',
     fontSize: 14,
     color: '#7C4DFF',
     paddingTop: 8,
