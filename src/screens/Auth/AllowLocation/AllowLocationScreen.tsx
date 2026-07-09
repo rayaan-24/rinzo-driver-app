@@ -24,7 +24,7 @@ export const AllowLocationScreen: React.FC<AllowLocationScreenProps> = ({
       <View style={styles.textContainer}>
         <Text style={styles.title}>Allow Location Access</Text>
         <Text style={styles.subtitle}>
-          We use your location to show nearby laundries and enable pickup
+          We use your location to show nearby{"\n"}laundries and enable pickup
         </Text>
       </View>
 
@@ -68,11 +68,11 @@ export const AllowLocationScreen: React.FC<AllowLocationScreenProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#EDE6F9',
+    backgroundColor: '#FFFFFF',
   },
   textContainer: {
     paddingHorizontal: theme.spacing.xl,
-    paddingTop: vs(20),
+    paddingTop: vs(80),
     alignItems: 'center',
   },
   title: {
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     fontWeight: theme.typography.fontWeight.bold,
     color: '#1C1C1E',
     textAlign: 'center',
-    marginBottom: vs(8),
+    marginBottom: vs(12),
   },
   subtitle: {
     fontFamily: theme.typography.fontFamily.regular,
@@ -98,9 +98,9 @@ const styles = StyleSheet.create({
     marginVertical: vs(8),
   },
   illustrationImage: {
-    width: screenWidth * 0.85,
+    width: screenWidth * 0.95,
     height: '100%',
-    maxHeight: vs(320),
+    maxHeight: vs(340),
   },
   footer: {
     paddingHorizontal: theme.spacing.lg,
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
   maybeLaterBtn: {
     paddingVertical: vs(10),
     paddingHorizontal: s(20),
-    marginTop: vs(12),
+    marginTop: vs(20),
   },
   maybeLaterText: {
     fontFamily: theme.typography.fontFamily.bold,

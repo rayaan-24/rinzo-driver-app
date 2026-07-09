@@ -252,12 +252,16 @@ interface SupportCenterScreenProps {
   onBack: () => void;
   onNavigateOrderSupport?: () => void;
   onNavigateEmergencySupport?: () => void;
+  onNavigateTechnicalSupport?: () => void;
+  onNavigatePaymentQueries?: () => void;
 }
 
 export const SupportCenterScreen: React.FC<SupportCenterScreenProps> = ({
   onBack,
   onNavigateOrderSupport,
   onNavigateEmergencySupport,
+  onNavigateTechnicalSupport,
+  onNavigatePaymentQueries,
 }) => {
   const screenFade = useRef(new Animated.Value(0)).current;
   const cardsFade = useRef([
@@ -375,7 +379,9 @@ export const SupportCenterScreen: React.FC<SupportCenterScreenProps> = ({
           <Animated.View style={[getCardAnimStyle(cardsFade[1]), { width: cardWidth }]}>
             <TappableCard
               onPress={() => {
-                // TODO: Navigate to Technical Support Screen
+                if (onNavigateTechnicalSupport) {
+                  onNavigateTechnicalSupport();
+                }
               }}
             >
               <View style={styles.iconCircleBg}>
@@ -392,7 +398,9 @@ export const SupportCenterScreen: React.FC<SupportCenterScreenProps> = ({
           <Animated.View style={[getCardAnimStyle(cardsFade[2]), { width: cardWidth }]}>
             <TappableCard
               onPress={() => {
-                // TODO: Navigate to Payment Help Screen
+                if (onNavigatePaymentQueries) {
+                  onNavigatePaymentQueries();
+                }
               }}
             >
               <View style={[styles.iconCircleBg, styles.goldIcon]}>

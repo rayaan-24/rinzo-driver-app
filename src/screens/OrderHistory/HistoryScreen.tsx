@@ -11,6 +11,7 @@ import {
 import Svg, { Path, Circle } from 'react-native-svg';
 import { theme } from '../../theme';
 import { Header } from '../../components/Header';
+import { AlertsScreen } from '../Alerts/AlertsScreen';
 
 interface HistoryItem {
   id: string;
@@ -59,10 +60,15 @@ const mockHistoryData: HistoryItem[] = [
 export const HistoryScreen: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<'Today' | 'This Week' | 'Completed'>('Today');
+  const [showNotifications, setShowNotifications] = useState(false);
 
   // Custom Header Bell Button on the right
   const headerRightBlock = (
-    <TouchableOpacity activeOpacity={0.7} style={styles.headerRight}>
+    <TouchableOpacity
+      activeOpacity={0.7}
+      style={styles.headerRight}
+      onPress={() => setShowNotifications(true)}
+    >
       <Svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8664EC" strokeWidth="2.5">
         <Path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0" />
       </Svg>
@@ -88,6 +94,10 @@ export const HistoryScreen: React.FC = () => {
       item.customerName.toLowerCase().includes(query)
     );
   });
+
+  if (showNotifications) {
+    return <AlertsScreen onBack={() => setShowNotifications(false)} />;
+  }
 
   return (
     <View style={styles.container}>
