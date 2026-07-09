@@ -10,6 +10,7 @@ import {
   BackHandler,
   KeyboardAvoidingView,
   Platform,
+  Image,
 } from 'react-native';
 import Svg, { Path, Circle } from 'react-native-svg';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -114,29 +115,11 @@ const DocumentTextIcon = ({ size = 20, color = '#7C4DFF' }) => (
 
 const DedicatedAgentAvatar = () => (
   <View style={styles.agentAvatarContainer}>
-    <Svg width={20} height={20} viewBox="0 0 24 24" fill="none">
-      {/* agent head shape */}
-      <Circle cx="12" cy="8" r="4" fill="#7C4DFF" />
-      {/* agent shoulders */}
-      <Path
-        d="M12 14c-4 0-7 2-7 4.5v1.5h14V18.5c0-2.5-3-4.5-7-4.5z"
-        fill="#7C4DFF"
-      />
-      {/* headset outline overlay */}
-      <Path
-        d="M8.5 8a3.5 3.5 0 017 0v2"
-        stroke="#512DA8"
-        strokeWidth={1}
-        strokeLinecap="round"
-      />
-      {/* microphone vector */}
-      <Path
-        d="M15 10c0 0.8-0.5 1.2-1 1.2h-1"
-        stroke="#512DA8"
-        strokeWidth={1}
-        strokeLinecap="round"
-      />
-    </Svg>
+    <Image
+      source={require('../../../assets/images/support_agent.png')}
+      style={styles.agentAvatarImage}
+      resizeMode="cover"
+    />
   </View>
 );
 
@@ -491,6 +474,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#E5E5EA',
     overflow: 'hidden',
+  },
+  agentAvatarImage: {
+    width: moderateScale(34),
+    height: moderateScale(34),
+    borderRadius: moderateScale(17),
   },
   onlineStatusDot: {
     position: 'absolute',
