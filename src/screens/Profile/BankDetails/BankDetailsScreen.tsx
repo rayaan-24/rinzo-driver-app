@@ -147,7 +147,7 @@ interface BankDetailsScreenProps {
 
 export const BankDetailsScreen: React.FC<BankDetailsScreenProps> = ({ onBack }) => {
   // Navigation entrance transition
-  const screenFadeAnim = useRef(new Animated.Value(0)).current;
+  const screenFadeAnim = useRef(new Animated.Value(1)).current;
 
   // Form input value states
   const [bankName, setBankName] = useState('');
@@ -175,11 +175,7 @@ export const BankDetailsScreen: React.FC<BankDetailsScreenProps> = ({ onBack }) 
   const ifscFocusAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    Animated.timing(screenFadeAnim, {
-      toValue: 1,
-      duration: 250,
-      useNativeDriver: true,
-    }).start();
+    screenFadeAnim.setValue(1);
   }, [screenFadeAnim]);
 
   // Focus transition handlers

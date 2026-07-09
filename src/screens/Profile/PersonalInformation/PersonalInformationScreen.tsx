@@ -135,23 +135,13 @@ export const PersonalInformationScreen: React.FC<PersonalInformationScreenProps>
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
 
   // Animation values
-  const screenFadeAnim = useRef(new Animated.Value(0)).current;
-  const itemsFadeAnim = useRef(new Animated.Value(0)).current;
+  const screenFadeAnim = useRef(new Animated.Value(1)).current;
+  const itemsFadeAnim = useRef(new Animated.Value(1)).current;
   const buttonScaleAnim = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    Animated.sequence([
-      Animated.timing(screenFadeAnim, {
-        toValue: 1,
-        duration: 250,
-        useNativeDriver: true,
-      }),
-      Animated.timing(itemsFadeAnim, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    screenFadeAnim.setValue(1);
+    itemsFadeAnim.setValue(1);
   }, [screenFadeAnim, itemsFadeAnim]);
 
   const handleTakePhoto = async () => {
@@ -175,17 +165,7 @@ export const PersonalInformationScreen: React.FC<PersonalInformationScreenProps>
     onChangeAvatar(personalData.avatar);
   };
 
-  const getAnimatedItemStyle = () => ({
-    opacity: itemsFadeAnim,
-    transform: [
-      {
-        translateY: itemsFadeAnim.interpolate({
-          inputRange: [0, 1],
-          outputRange: [20, 0],
-        }),
-      },
-    ],
-  });
+  const getAnimatedItemStyle = () => ({});
 
   const handlePressIn = () => {
     Animated.timing(buttonScaleAnim, {

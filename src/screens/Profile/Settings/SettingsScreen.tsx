@@ -208,12 +208,12 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onNaviga
   const [biometricsEnabled, setBiometricsEnabled] = useState(true);
 
   // Reanimated staggered entrance animations
-  const headerFade = useRef(new Animated.Value(0)).current;
-  const profileFade = useRef(new Animated.Value(0)).current;
-  const prefsFade = useRef(new Animated.Value(0)).current;
-  const securityFade = useRef(new Animated.Value(0)).current;
-  const aboutFade = useRef(new Animated.Value(0)).current;
-  const logoutFade = useRef(new Animated.Value(0)).current;
+  const headerFade = useRef(new Animated.Value(1)).current;
+  const profileFade = useRef(new Animated.Value(1)).current;
+  const prefsFade = useRef(new Animated.Value(1)).current;
+  const securityFade = useRef(new Animated.Value(1)).current;
+  const aboutFade = useRef(new Animated.Value(1)).current;
+  const logoutFade = useRef(new Animated.Value(1)).current;
 
   // Recoil scale for buttons
   const backScale = useRef(new Animated.Value(1)).current;
@@ -221,22 +221,12 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack, onNaviga
   const logoutScale = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    Animated.sequence([
-      Animated.parallel([
-        Animated.timing(headerFade, { toValue: 1, duration: 250, useNativeDriver: true }),
-        Animated.timing(profileFade, { toValue: 1, duration: 300, useNativeDriver: true }),
-      ]),
-      Animated.parallel([
-        Animated.timing(prefsFade, { toValue: 1, duration: 350, useNativeDriver: true }),
-      ]),
-      Animated.parallel([
-        Animated.timing(securityFade, { toValue: 1, duration: 350, useNativeDriver: true }),
-      ]),
-      Animated.parallel([
-        Animated.timing(aboutFade, { toValue: 1, duration: 350, useNativeDriver: true }),
-        Animated.timing(logoutFade, { toValue: 1, duration: 400, useNativeDriver: true }),
-      ]),
-    ]).start();
+    headerFade.setValue(1);
+    profileFade.setValue(1);
+    prefsFade.setValue(1);
+    securityFade.setValue(1);
+    aboutFade.setValue(1);
+    logoutFade.setValue(1);
   }, [headerFade, profileFade, prefsFade, securityFade, aboutFade, logoutFade]);
 
   const pressIn = (scale: Animated.Value) => {

@@ -182,7 +182,7 @@ export const OrderChatScreen: React.FC<OrderChatScreenProps> = ({ onBack }) => {
   const scrollViewRef = useRef<ScrollView>(null);
 
   // Entrance animations
-  const screenFade = useRef(new Animated.Value(0)).current;
+  const screenFade = useRef(new Animated.Value(1)).current;
   const sendBtnScale = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
@@ -193,7 +193,7 @@ export const OrderChatScreen: React.FC<OrderChatScreenProps> = ({ onBack }) => {
     };
     const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
 
-    Animated.timing(screenFade, { toValue: 1, duration: 250, useNativeDriver: true }).start();
+    screenFade.setValue(1);
 
     return () => backHandler.remove();
   }, [onBack, screenFade]);

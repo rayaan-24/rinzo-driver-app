@@ -116,35 +116,19 @@ interface TermsAndPrivacyScreenProps {
 
 export const TermsAndPrivacyScreen: React.FC<TermsAndPrivacyScreenProps> = ({ onBack }) => {
   // Animation refs
-  const screenFadeAnim = useRef(new Animated.Value(0)).current;
+  const screenFadeAnim = useRef(new Animated.Value(1)).current;
   const cardsStaggerAnim = useRef([
-    new Animated.Value(0),
-    new Animated.Value(0),
-    new Animated.Value(0),
-    new Animated.Value(0),
-    new Animated.Value(0),
+    new Animated.Value(1),
+    new Animated.Value(1),
+    new Animated.Value(1),
+    new Animated.Value(1),
+    new Animated.Value(1),
   ]).current;
   const btnScaleAnim = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    // 1. Entrance transitions
-    Animated.sequence([
-      Animated.timing(screenFadeAnim, {
-        toValue: 1,
-        duration: 250,
-        useNativeDriver: true,
-      }),
-      Animated.stagger(
-        60,
-        cardsStaggerAnim.map((anim) =>
-          Animated.timing(anim, {
-            toValue: 1,
-            duration: 350,
-            useNativeDriver: true,
-          })
-        )
-      ),
-    ]).start();
+    screenFadeAnim.setValue(1);
+    cardsStaggerAnim.forEach((anim) => anim.setValue(1));
   }, [screenFadeAnim, cardsStaggerAnim]);
 
   const handlePressIn = () => {
@@ -164,17 +148,7 @@ export const TermsAndPrivacyScreen: React.FC<TermsAndPrivacyScreenProps> = ({ on
   };
 
   // Card slide animation values
-  const getCardAnimStyle = (animVal: Animated.Value) => ({
-    opacity: animVal,
-    transform: [
-      {
-        translateY: animVal.interpolate({
-          inputRange: [0, 1],
-          outputRange: [20, 0],
-        }),
-      },
-    ],
-  });
+  const getCardAnimStyle = (_animVal: Animated.Value) => ({});
 
   return (
     <Animated.View style={[styles.outerContainer, { opacity: screenFadeAnim }]}>
