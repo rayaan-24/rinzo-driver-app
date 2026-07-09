@@ -163,32 +163,23 @@ interface HelpAndSupportScreenProps {
 
 export const HelpAndSupportScreen: React.FC<HelpAndSupportScreenProps> = ({ onBack, onNavigateLiveChat }) => {
   // Staggered entry transitions
-  const screenFade = useRef(new Animated.Value(0)).current;
-  const searchBarSlide = useRef(new Animated.Value(0)).current;
+  const screenFade = useRef(new Animated.Value(1)).current;
+  const searchBarSlide = useRef(new Animated.Value(1)).current;
   const gridCardsStagger = useRef([
-    new Animated.Value(0),
-    new Animated.Value(0),
-    new Animated.Value(0),
-    new Animated.Value(0),
-    new Animated.Value(0),
+    new Animated.Value(1),
+    new Animated.Value(1),
+    new Animated.Value(1),
+    new Animated.Value(1),
+    new Animated.Value(1),
   ]).current;
-  const bottomSupportAnim = useRef(new Animated.Value(0)).current;
+  const bottomSupportAnim = useRef(new Animated.Value(1)).current;
   const chatBtnScale = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    Animated.sequence([
-      Animated.parallel([
-        Animated.timing(screenFade, { toValue: 1, duration: 250, useNativeDriver: true }),
-        Animated.timing(searchBarSlide, { toValue: 1, duration: 300, useNativeDriver: true }),
-      ]),
-      Animated.stagger(
-        50,
-        gridCardsStagger.map((anim) =>
-          Animated.timing(anim, { toValue: 1, duration: 300, useNativeDriver: true })
-        )
-      ),
-      Animated.timing(bottomSupportAnim, { toValue: 1, duration: 300, useNativeDriver: true }),
-    ]).start();
+    screenFade.setValue(1);
+    searchBarSlide.setValue(1);
+    gridCardsStagger.forEach((anim) => anim.setValue(1));
+    bottomSupportAnim.setValue(1);
   }, [screenFade, searchBarSlide, gridCardsStagger, bottomSupportAnim]);
 
   const chatPressIn = () => {
@@ -200,17 +191,7 @@ export const HelpAndSupportScreen: React.FC<HelpAndSupportScreenProps> = ({ onBa
   };
 
   // Stagger scale helper
-  const getStaggerStyle = (animVal: Animated.Value) => ({
-    opacity: animVal,
-    transform: [
-      {
-        translateY: animVal.interpolate({
-          inputRange: [0, 1],
-          outputRange: [20, 0],
-        }),
-      },
-    ],
-  });
+  const getStaggerStyle = (_animVal: Animated.Value) => ({});
 
   return (
     <Animated.View style={[styles.outerContainer, { opacity: screenFade }]}>

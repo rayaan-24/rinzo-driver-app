@@ -192,36 +192,16 @@ export const DocumentUploadScreen: React.FC<DocumentUploadScreenProps> = ({ onVi
   const [documentsList] = useState(documentUploadData.documents);
 
   // Entrance animations
-  const screenFadeAnim = useRef(new Animated.Value(0)).current;
-  const itemsFadeAnim = useRef(new Animated.Value(0)).current;
+  const screenFadeAnim = useRef(new Animated.Value(1)).current;
+  const itemsFadeAnim = useRef(new Animated.Value(1)).current;
   const uploadScaleAnim = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    Animated.sequence([
-      Animated.timing(screenFadeAnim, {
-        toValue: 1,
-        duration: 250,
-        useNativeDriver: true,
-      }),
-      Animated.timing(itemsFadeAnim, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    screenFadeAnim.setValue(1);
+    itemsFadeAnim.setValue(1);
   }, [screenFadeAnim, itemsFadeAnim]);
 
-  const getAnimatedItemStyle = () => ({
-    opacity: itemsFadeAnim,
-    transform: [
-      {
-        translateY: itemsFadeAnim.interpolate({
-          inputRange: [0, 1],
-          outputRange: [20, 0],
-        }),
-      },
-    ],
-  });
+  const getAnimatedItemStyle = () => ({});
 
   const handleUploadPressIn = () => {
     Animated.timing(uploadScaleAnim, {

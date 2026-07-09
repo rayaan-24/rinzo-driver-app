@@ -6,7 +6,6 @@ import {
   ScrollView,
   TouchableOpacity,
   Animated,
-  Image,
 } from 'react-native';
 import Svg, { Path, Circle } from 'react-native-svg';
 import { theme } from '../../../theme';
@@ -17,12 +16,12 @@ import { Header } from '../../../components/Header';
 // LOCAL SVG ICONS (Android space-safe paths)
 // ==========================================
 
-const ArrowLeftIcon = ({ size = 24, color = theme.colors.textDark }) => (
+const ShieldIcon = ({ size = 64, color = theme.colors.primary }) => (
   <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
     <Path
-      d="M 20 12 H 4 M 10 18 L 4 12 L 10 6"
+      d="M 12 22 C 17.5 20.5 21 15.5 21 10.5 V 5 L 12 2 L 3 5 V 10.5 C 3 15.5 6.5 20.5 12 22 Z"
       stroke={color}
-      strokeWidth={2.5}
+      strokeWidth={2}
       strokeLinecap="round"
       strokeLinejoin="round"
     />
@@ -42,7 +41,19 @@ const HelpIcon = ({ size = 20, color = theme.colors.textDark }) => (
   </Svg>
 );
 
-const ClockIcon = ({ size = 24, color = '#D97706' }) => (
+const CheckIcon = ({ size = 10, color = '#FFFFFF' }) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <Path
+      d="M 20 6 L 9 17 L 4 12"
+      stroke={color}
+      strokeWidth={3}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </Svg>
+);
+
+const ClockIcon = ({ size = 12, color = '#FFFFFF' }) => (
   <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
     <Circle cx="12" cy="12" r="10" stroke={color} strokeWidth={2} />
     <Path
@@ -81,163 +92,52 @@ export const UploadSuccessScreen: React.FC<UploadSuccessScreenProps> = ({
   onViewProfile,
 }) => {
   // Timeline Animation values
-  const screenFade = useRef(new Animated.Value(0)).current;
+  const screenFade = useRef(new Animated.Value(1)).current;
 
-  // Cohesive Illustration Card Entrance Animations
-  const cardScale = useRef(new Animated.Value(0.7)).current;
-  const cardOpacity = useRef(new Animated.Value(0)).current;
-  const cardRotate = useRef(new Animated.Value(-6)).current; // -6 to 0 degrees
-
-  // Continuous floats and breathes (loops)
-  const cardFloatY = useRef(new Animated.Value(0)).current;
-  const cardBreathScale = useRef(new Animated.Value(1)).current;
-
-  // Soft Green Glow behind the tick area
-  const glowScale = useRef(new Animated.Value(1)).current;
-  const glowOpacity = useRef(new Animated.Value(0)).current;
-
-  // Verification status card progress
-  const progressBarWidth = useRef(new Animated.Value(0)).current;
-
-  // Staggered Action Button entries
-  const primaryBtnOpacity = useRef(new Animated.Value(0)).current;
-  const primaryBtnTranslateY = useRef(new Animated.Value(20)).current;
-  const secondaryBtnOpacity = useRef(new Animated.Value(0)).current;
-  const secondaryBtnTranslateY = useRef(new Animated.Value(20)).current;
+  // Shield Check animation values
+  const shieldScale = useRef(new Animated.Value(0.5)).current;
+  const checkmarkScale = useRef(new Animated.Value(0)).current;
+  const rippleScale = useRef(new Animated.Value(0.8)).current;
+  const rippleOpacity = useRef(new Animated.Value(0.8)).current;
 
   // Pressed scales
   const dashboardScale = useRef(new Animated.Value(1)).current;
   const profileScale = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    // 1. Screen Entry Fade In (250ms)
-    Animated.timing(screenFade, {
-      toValue: 1,
-      duration: 250,
-      useNativeDriver: true,
-    }).start();
+    screenFade.setValue(1);
 
-    // 2. Cohesive Illustration Entrance (Scale 0.7 -> 1.15 -> 1.0, Opacity 0 -> 1, Rotate -6 -> 0: spring over 700ms)
+    // Sequence: Shield springs up, ripple expands/fades, checkmark pops in
     Animated.parallel([
-      Animated.spring(cardScale, {
-        toValue: 1.0,
-        friction: 5,
-        tension: 30,
-        useNativeDriver: true,
-      }),
-      Animated.timing(cardOpacity, {
+      Animated.spring(shieldScale, {
         toValue: 1,
-        duration: 700,
-        useNativeDriver: true,
-      }),
-      Animated.spring(cardRotate, {
-        toValue: 0,
+        tension: 80,
         friction: 6,
-        tension: 30,
         useNativeDriver: true,
       }),
-    ]).start(() => {
-      // 3. Continuous breathing loop (Scale 1.0 -> 1.04 -> 1.0 over 2200ms)
-      Animated.loop(
-        Animated.sequence([
-          Animated.timing(cardBreathScale, {
-            toValue: 1.04,
-            duration: 1100,
-            useNativeDriver: true,
-          }),
-          Animated.timing(cardBreathScale, {
-            toValue: 1.0,
-            duration: 1100,
-            useNativeDriver: true,
-          }),
-        ])
-      ).start();
-    });
-
-    // 4. Soft green glow pulse overlay behind checkmark (repeat every 3 seconds)
-    Animated.loop(
-      Animated.sequence([
-        Animated.parallel([
-          Animated.timing(glowScale, {
-            toValue: 1.4,
-            duration: 1200,
-            useNativeDriver: true,
-          }),
-          Animated.sequence([
-            Animated.timing(glowOpacity, {
-              toValue: 0.3,
-              duration: 300,
-              useNativeDriver: true,
-            }),
-            Animated.timing(glowOpacity, {
-              toValue: 0,
-              duration: 900,
-              useNativeDriver: true,
-            }),
-          ]),
-        ]),
-        // Reset scale and opacity instantly for next cycle
-        Animated.parallel([
-          Animated.timing(glowScale, { toValue: 1.0, duration: 0, useNativeDriver: true }),
-          Animated.timing(glowOpacity, { toValue: 0, duration: 0, useNativeDriver: true }),
-        ]),
-        Animated.delay(1800), // 1200ms pulse + 1800ms delay = 3000ms cycle
-      ])
-    ).start();
-
-    // 5. Phone float loop (translateY 0 -> -6 -> 0: 2400ms infinite easeInOut)
-    Animated.loop(
-      Animated.sequence([
-        Animated.timing(cardFloatY, {
-          toValue: -6,
-          duration: 1200,
+      Animated.parallel([
+        Animated.timing(rippleScale, {
+          toValue: 1.6,
+          duration: 600,
           useNativeDriver: true,
         }),
-        Animated.timing(cardFloatY, {
+        Animated.timing(rippleOpacity, {
           toValue: 0,
-          duration: 1200,
+          duration: 600,
           useNativeDriver: true,
         }),
-      ])
-    ).start();
-
-    // 6. Progress Bar filling (0% -> 33% over 800ms)
-    Animated.timing(progressBarWidth, {
-      toValue: 1,
-      duration: 800,
-      useNativeDriver: false,
-    }).start();
-
-    // 7. Buttons Stagger Fade Up (translateY 20 -> 0)
-    // Primary: Go to Dashboard (delay 600ms)
-    Animated.parallel([
-      Animated.timing(primaryBtnOpacity, { toValue: 1, duration: 400, delay: 600, useNativeDriver: true }),
-      Animated.timing(primaryBtnTranslateY, { toValue: 0, duration: 400, delay: 600, useNativeDriver: true }),
+      ]),
+      Animated.sequence([
+        Animated.delay(150),
+        Animated.spring(checkmarkScale, {
+          toValue: 1,
+          tension: 100,
+          friction: 6,
+          useNativeDriver: true,
+        }),
+      ]),
     ]).start();
-
-    // Secondary: View My Profile (delay 700ms)
-    Animated.parallel([
-      Animated.timing(secondaryBtnOpacity, { toValue: 1, duration: 400, delay: 700, useNativeDriver: true }),
-      Animated.timing(secondaryBtnTranslateY, { toValue: 0, duration: 400, delay: 700, useNativeDriver: true }),
-    ]).start();
-
-  }, [screenFade, cardScale, cardOpacity, cardRotate, cardBreathScale, glowScale, glowOpacity, cardFloatY, progressBarWidth, primaryBtnOpacity, primaryBtnTranslateY, secondaryBtnOpacity, secondaryBtnTranslateY]);
-
-  // Width Interpolations
-  const widthInterpolation = progressBarWidth.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0%', '33%'],
-  });
-
-  const getPrimaryBtnStyle = () => ({
-    opacity: primaryBtnOpacity,
-    transform: [{ translateY: primaryBtnTranslateY }, { scale: dashboardScale }],
-  });
-
-  const getSecondaryBtnStyle = () => ({
-    opacity: secondaryBtnOpacity,
-    transform: [{ translateY: secondaryBtnTranslateY }, { scale: profileScale }],
-  });
+  }, [screenFade, shieldScale, checkmarkScale, rippleScale, rippleOpacity]);
 
   // Haptic feedbacks
   const handleDashboardIn = () => {
@@ -279,88 +179,110 @@ export const UploadSuccessScreen: React.FC<UploadSuccessScreenProps> = ({
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollContent}
         >
-          {/* 2. SUCCESS HERO ILLUSTRATION WRAPPER */}
+          {/* 2. SUCCESS HERO BADGE WRAPPER */}
           <View style={styles.heroWrapper}>
-            <Animated.View
-              style={[
-                styles.illustrationContainer,
-                {
-                  opacity: cardOpacity,
-                  transform: [
-                    { scale: cardScale },
-                    { scale: cardBreathScale },
-                    { translateY: cardFloatY },
-                    {
-                      rotate: cardRotate.interpolate({
-                        inputRange: [-180, 180],
-                        outputRange: ['-180deg', '180deg'],
-                      }),
-                    },
-                  ],
-                },
-              ]}
-            >
-              
-              {/* Layer 1: Core 3D Illustration Graphic */}
-              <Image
-                source={require('../../../assets/images/upload_success_hero.png')}
-                style={styles.successImage}
-                resizeMode="contain"
-              />
-
-              {/* Layer 2: Soft Green Glow Pulse Overlay behind checkmark area */}
+            <View style={styles.badgeWrapperContainer}>
+              {/* Expanding Ripple Ring */}
               <Animated.View
                 style={[
-                  styles.glowPulseRing,
+                  styles.rippleRing,
                   {
-                    opacity: glowOpacity,
-                    transform: [{ scale: glowScale }],
+                    transform: [{ scale: rippleScale }],
+                    opacity: rippleOpacity,
                   },
                 ]}
               />
 
-            </Animated.View>
-          </View>
-
-          {/* 3. TITLE & DESCRIPTION */}
-          <View style={styles.textBlock}>
-            <Text style={styles.titleText}>Upload Successful</Text>
-            <Text style={styles.descriptionText}>
-              Your documents have been received. Our compliance team will review them within the next 24–48 hours.
-            </Text>
-          </View>
-
-          {/* 4. VERIFICATION STATUS CARD */}
-          <View style={styles.statusCard}>
-            <View style={styles.statusHeaderRow}>
-              <View style={styles.clockIconBox}>
-                <ClockIcon size={22} color="#D97706" />
-              </View>
-              <View style={styles.statusTitles}>
-                <Text style={styles.statusTitle}>Verification in Progress</Text>
-                <Text style={styles.statusSubtitle}>Status: Pending Review</Text>
-              </View>
-            </View>
-
-            {/* Horizontal progress bar */}
-            <View style={styles.progressBarTrack}>
+              {/* Shield Badge Wrapper */}
               <Animated.View
                 style={[
-                  styles.progressBarFill,
-                  { width: widthInterpolation },
+                  styles.shieldBadgeWrapper,
+                  {
+                    transform: [{ scale: shieldScale }],
+                  },
                 ]}
-              />
+              >
+                <ShieldIcon size={44} color="#7C4DFF" />
+                
+                {/* Checkmark overlay */}
+                <Animated.View
+                  style={[
+                    styles.checkmarkOverlay,
+                    {
+                      transform: [{ scale: checkmarkScale }],
+                    },
+                  ]}
+                >
+                  <CheckIcon size={20} color="#7C4DFF" />
+                </Animated.View>
+              </Animated.View>
             </View>
-
-            <Text style={styles.progressCaption}>
-              Step 1 of 3 · Technical Integrity Check
-            </Text>
+            <Text style={styles.titleText} maxFontSizeMultiplier={1.3}>Upload Successful</Text>
+            <Text style={styles.refText} maxFontSizeMultiplier={1.3}>REFERENCE ID: #INS-7729</Text>
           </View>
 
-          {/* 5. ACTIONS (Fade Up Staggered) */}
+          {/* 3. VERIFICATION STATUS TIMELINE (Uber Style) */}
+          <View style={styles.timelineCard}>
+            <Text style={styles.timelineHeader} maxFontSizeMultiplier={1.3}>VERIFICATION PIPELINE</Text>
+            
+            {/* Step 1: Uploaded */}
+            <View style={styles.timelineItem}>
+              <View style={styles.timelineLeftCol}>
+                <View style={[styles.timelineNode, styles.successNode]}>
+                  <CheckIcon size={10} color="#FFFFFF" />
+                </View>
+                <View style={[styles.timelineLine, styles.activeLine]} />
+              </View>
+              <View style={styles.timelineRightCol}>
+                <View style={styles.timelineTitleRow}>
+                  <Text style={styles.stepTitle} maxFontSizeMultiplier={1.3}>Commercial Insurance Uploaded</Text>
+                  <Text style={styles.stepTime} maxFontSizeMultiplier={1.3}>Just now</Text>
+                </View>
+                <Text style={styles.stepDesc} maxFontSizeMultiplier={1.3}>
+                  Your document certificate has been securely uploaded and encrypted.
+                </Text>
+              </View>
+            </View>
+
+            {/* Step 2: Under Review */}
+            <View style={styles.timelineItem}>
+              <View style={styles.timelineLeftCol}>
+                <View style={[styles.timelineNode, styles.activeNode]}>
+                  <ClockIcon size={12} color="#FFFFFF" />
+                </View>
+                <View style={styles.timelineLine} />
+              </View>
+              <View style={styles.timelineRightCol}>
+                <View style={styles.timelineTitleRow}>
+                  <Text style={styles.stepTitle} maxFontSizeMultiplier={1.3}>Compliance Verification</Text>
+                  <View style={styles.reviewBadge}>
+                    <Text style={styles.reviewBadgeText} maxFontSizeMultiplier={1.3}>IN REVIEW</Text>
+                  </View>
+                </View>
+                <Text style={styles.stepDesc} maxFontSizeMultiplier={1.3}>
+                  Our compliance team is validating policy cover limits and expiration details. This takes 1–2 hours.
+                </Text>
+              </View>
+            </View>
+
+            {/* Step 3: Active */}
+            <View style={styles.timelineItem}>
+              <View style={styles.timelineLeftCol}>
+                <View style={[styles.timelineNode, styles.pendingNode]} />
+              </View>
+              <View style={styles.timelineRightCol}>
+                <Text style={[styles.stepTitle, styles.pendingTitle]} maxFontSizeMultiplier={1.3}>Ready for Deliveries</Text>
+                <Text style={styles.stepDesc} maxFontSizeMultiplier={1.3}>
+                  Once approved, your account status will activate to start receiving collection requests.
+                </Text>
+              </View>
+            </View>
+          </View>
+
+          {/* 4. ACTIONS */}
           <View>
             {/* Primary: Go to Dashboard */}
-            <Animated.View style={getPrimaryBtnStyle()}>
+            <Animated.View style={{ transform: [{ scale: dashboardScale }] }}>
               <TouchableOpacity
                 accessible={true}
                 accessibilityLabel="Go to Dashboard"
@@ -371,13 +293,13 @@ export const UploadSuccessScreen: React.FC<UploadSuccessScreenProps> = ({
                 onPress={onGoToDashboard}
                 style={styles.primaryButton}
               >
-                <Text style={styles.primaryButtonText}>Go to Dashboard</Text>
+                <Text style={styles.primaryButtonText} maxFontSizeMultiplier={1.3}>Go to Dashboard</Text>
                 <ArrowRightIcon size={18} color="#FFFFFF" />
               </TouchableOpacity>
             </Animated.View>
 
             {/* Secondary: View My Profile */}
-            <Animated.View style={getSecondaryBtnStyle()}>
+            <Animated.View style={{ transform: [{ scale: profileScale }] }}>
               <TouchableOpacity
                 accessible={true}
                 accessibilityLabel="View My Profile"
@@ -388,7 +310,7 @@ export const UploadSuccessScreen: React.FC<UploadSuccessScreenProps> = ({
                 onPress={onViewProfile}
                 style={styles.secondaryButton}
               >
-                <Text style={styles.secondaryButtonText}>View My Profile</Text>
+                <Text style={styles.secondaryButtonText} maxFontSizeMultiplier={1.3}>View My Profile</Text>
               </TouchableOpacity>
             </Animated.View>
           </View>
@@ -415,127 +337,172 @@ const styles = StyleSheet.create({
     maxWidth: 600,
     backgroundColor: '#FFFFFF',
   },
-
   scrollContent: {
     paddingHorizontal: theme.spacing.md,
     paddingTop: theme.spacing.xl,
-    paddingBottom: moderateScale(110), // Spacing for floating bottom tabs
+    paddingBottom: moderateScale(40),
   },
   heroWrapper: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 10,
+    marginTop: moderateScale(10),
     marginBottom: theme.spacing.xl,
   },
-  illustrationContainer: {
-    width: 260,
-    height: 260,
-    borderRadius: 28,
-    backgroundColor: 'transparent',
-    position: 'relative',
-    alignItems: 'center',
+  badgeWrapperContainer: {
+    width: moderateScale(140),
+    height: moderateScale(140),
     justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+    marginBottom: moderateScale(16),
   },
-  successImage: {
-    width: 260,
-    height: 260,
-    borderRadius: 28,
-  },
-  glowPulseRing: {
+  rippleRing: {
     position: 'absolute',
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: 'rgba(74, 222, 128, 0.15)', // Very subtle soft green radial pulse (#4ADE80)
-    top: 50,
-    left: 90,
+    width: moderateScale(88),
+    height: moderateScale(88),
+    borderRadius: moderateScale(44),
+    backgroundColor: 'rgba(124, 77, 255, 0.15)', // light purple ripple ring
+    zIndex: 0,
+  },
+  shieldBadgeWrapper: {
+    width: moderateScale(88),
+    height: moderateScale(88),
+    borderRadius: moderateScale(44),
+    backgroundColor: '#F3EFFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
     zIndex: 1,
   },
-  textBlock: {
+  checkmarkOverlay: {
+    position: 'absolute',
+    justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: theme.spacing.xl,
-    paddingHorizontal: 12,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
   titleText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: 24,
+    fontSize: moderateScale(22),
     fontWeight: theme.typography.fontWeight.bold,
     color: theme.colors.primary,
-    marginBottom: 8,
+    marginBottom: 4,
   },
-  descriptionText: {
-    fontFamily: 'Poppins-SemiBold',
-    fontSize: 14,
-    fontWeight: theme.typography.fontWeight.semibold,
-    color: theme.colors.textDark,
-    textAlign: 'center',
-    lineHeight: 22,
+  refText: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: moderateScale(11),
+    color: '#8E8E93',
+    letterSpacing: 1.5,
+    marginTop: 4,
   },
-  statusCard: {
+  timelineCard: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 24,
-    padding: 20,
+    borderRadius: moderateScale(22),
+    padding: moderateScale(20),
     marginBottom: theme.spacing.xl,
     borderWidth: 1,
     borderColor: '#E5E7EB',
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.04,
+    shadowColor: '#7C4DFF',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.02,
     shadowRadius: 10,
     elevation: 2,
   },
-  statusHeaderRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  clockIconBox: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: '#FEF3C7',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 14,
-  },
-  statusTitles: {
-    flex: 1,
-  },
-  statusTitle: {
+  timelineHeader: {
     fontFamily: 'Poppins-Bold',
-    fontSize: 16,
-    fontWeight: theme.typography.fontWeight.bold,
-    color: theme.colors.textDark,
-    marginBottom: 2,
+    fontSize: moderateScale(11),
+    color: '#8E8E93',
+    letterSpacing: 1.5,
+    marginBottom: moderateScale(20),
   },
-  statusSubtitle: {
-    fontFamily: 'Poppins-Regular',
-    fontSize: 13,
-    color: theme.colors.textMedium,
+  timelineItem: {
+    flexDirection: 'row',
+    minHeight: moderateScale(80),
   },
-  progressBarTrack: {
-    height: 8,
-    backgroundColor: '#E5E7EB',
-    borderRadius: 4,
-    marginBottom: 10,
-    overflow: 'hidden',
+  timelineLeftCol: {
+    alignItems: 'center',
+    marginRight: moderateScale(16),
+    width: moderateScale(24),
   },
-  progressBarFill: {
-    height: '100%',
+  timelineRightCol: {
+    flex: 1,
+    paddingBottom: moderateScale(20),
+  },
+  timelineNode: {
+    width: moderateScale(24),
+    height: moderateScale(24),
+    borderRadius: moderateScale(12),
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 2,
+  },
+  successNode: {
+    backgroundColor: theme.colors.success,
+  },
+  activeNode: {
     backgroundColor: theme.colors.primary,
+  },
+  pendingNode: {
+    backgroundColor: '#E5E7EB',
+    borderWidth: 2,
+    borderColor: '#FFFFFF',
+  },
+  timelineLine: {
+    position: 'absolute',
+    top: moderateScale(24),
+    bottom: 0,
+    width: 2,
+    backgroundColor: '#E5E7EB',
+    zIndex: 1,
+  },
+  activeLine: {
+    backgroundColor: theme.colors.success,
+  },
+  timelineTitleRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  stepTitle: {
+    fontFamily: 'Poppins-Bold',
+    fontSize: moderateScale(14),
+    color: theme.colors.textDark,
+  },
+  pendingTitle: {
+    fontFamily: 'Poppins-Bold',
+    color: '#8E8E93',
+  },
+  stepTime: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: moderateScale(11),
+    color: theme.colors.success,
+  },
+  reviewBadge: {
+    backgroundColor: '#FFF7E6',
+    paddingHorizontal: 8,
+    paddingVertical: 2,
     borderRadius: 4,
   },
-  progressCaption: {
-    fontFamily: 'Poppins-Medium',
-    fontSize: 12,
-    fontWeight: theme.typography.fontWeight.medium,
+  reviewBadgeText: {
+    fontFamily: 'Poppins-Bold',
+    fontSize: moderateScale(9),
+    color: '#D97706',
+  },
+  stepDesc: {
+    fontFamily: 'Poppins-Regular',
+    fontSize: moderateScale(12),
     color: theme.colors.textMedium,
+    lineHeight: moderateScale(18),
+    marginTop: 2,
   },
   primaryButton: {
     flexDirection: 'row',
-    height: 56,
+    height: moderateScale(56),
     backgroundColor: theme.colors.primary,
-    borderRadius: 18,
+    borderRadius: moderateScale(18),
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 12,
@@ -547,32 +514,32 @@ const styles = StyleSheet.create({
   },
   primaryButtonText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: 16,
+    fontSize: moderateScale(16),
     fontWeight: theme.typography.fontWeight.bold,
     color: '#FFFFFF',
     marginRight: 8,
   },
   secondaryButton: {
     flexDirection: 'row',
-    height: 56,
+    height: moderateScale(56),
     backgroundColor: '#FFFFFF',
     borderWidth: 1.5,
     borderColor: theme.colors.primary,
-    borderRadius: 18,
+    borderRadius: moderateScale(18),
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: theme.spacing.lg,
   },
   secondaryButtonText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: 16,
+    fontSize: moderateScale(16),
     fontWeight: theme.typography.fontWeight.bold,
     color: theme.colors.primary,
   },
   headerButtonRight: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: moderateScale(40),
+    height: moderateScale(40),
+    borderRadius: moderateScale(20),
     backgroundColor: theme.colors.borderLight,
     justifyContent: 'center',
     alignItems: 'center',

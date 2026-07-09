@@ -10,6 +10,7 @@ import {
   Alert,
 } from 'react-native';
 import Svg, { Path, Circle } from 'react-native-svg';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { theme } from '../../../theme';
 import { documentDetailsData } from '../../../data/documentDetails';
 import { moderateScale } from '../../../utils/responsive';
@@ -98,38 +99,19 @@ const resolveImageSource = (source: any) => {
 };
 
 export const DocumentDetailsScreen: React.FC<DocumentDetailsScreenProps> = ({ onUploadSuccess, onBack }) => {
+  const insets = useSafeAreaInsets();
   // Animation values
-  const screenFadeAnim = useRef(new Animated.Value(0)).current;
-  const itemsFadeAnim = useRef(new Animated.Value(0)).current;
+  const screenFadeAnim = useRef(new Animated.Value(1)).current;
+  const itemsFadeAnim = useRef(new Animated.Value(1)).current;
   const updateBtnScale = useRef(new Animated.Value(1)).current;
   const downloadBtnScale = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    Animated.sequence([
-      Animated.timing(screenFadeAnim, {
-        toValue: 1,
-        duration: 250,
-        useNativeDriver: true,
-      }),
-      Animated.timing(itemsFadeAnim, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    screenFadeAnim.setValue(1);
+    itemsFadeAnim.setValue(1);
   }, [screenFadeAnim, itemsFadeAnim]);
 
-  const getAnimatedItemStyle = () => ({
-    opacity: itemsFadeAnim,
-    transform: [
-      {
-        translateY: itemsFadeAnim.interpolate({
-          inputRange: [0, 1],
-          outputRange: [20, 0],
-        }),
-      },
-    ],
-  });
+  const getAnimatedItemStyle = () => ({});
 
   const handleUpdatePressIn = () => {
     Animated.timing(updateBtnScale, {
@@ -250,44 +232,44 @@ export const DocumentDetailsScreen: React.FC<DocumentDetailsScreenProps> = ({ on
             </View>
           </Animated.View>
 
-          {/* 7. ACTIONS (Update & Download) */}
-          <Animated.View style={getAnimatedItemStyle()}>
-            {/* Primary: Update */}
-            <Animated.View style={{ transform: [{ scale: updateBtnScale }] }}>
-              <TouchableOpacity
-                accessible={true}
-                accessibilityLabel="Update Document"
-                accessibilityRole="button"
-                activeOpacity={0.85}
-                onPressIn={handleUpdatePressIn}
-                onPressOut={handleUpdatePressOut}
-                onPress={handleUpdateDocument}
-                style={styles.primaryButton}
-              >
-                <CloudUploadIcon size={18} color="#FFFFFF" />
-                <Text style={styles.primaryButtonText}>Update Document</Text>
-              </TouchableOpacity>
-            </Animated.View>
+        </ScrollView>
 
-            {/* Secondary: Download */}
-            <Animated.View style={{ transform: [{ scale: downloadBtnScale }] }}>
-              <TouchableOpacity
-                accessible={true}
-                accessibilityLabel="Download PDF"
-                accessibilityRole="button"
-                activeOpacity={0.85}
-                onPressIn={handleDownloadPressIn}
-                onPressOut={handleDownloadPressOut}
-                onPress={handleDownloadPDF}
-                style={styles.secondaryButton}
-              >
-                <DownloadIcon size={18} color={theme.colors.primary} />
-                <Text style={styles.secondaryButtonText}>Download PDF</Text>
-              </TouchableOpacity>
-            </Animated.View>
+        {/* 7. STICKY ACTIONS BAR (Always visible) */}
+        <View style={[styles.stickyBottomBar, { paddingBottom: Math.max(insets.bottom, 16) }]}>
+          {/* Primary: Update */}
+          <Animated.View style={{ transform: [{ scale: updateBtnScale }] }}>
+            <TouchableOpacity
+              accessible={true}
+              accessibilityLabel="Update Document"
+              accessibilityRole="button"
+              activeOpacity={0.85}
+              onPressIn={handleUpdatePressIn}
+              onPressOut={handleUpdatePressOut}
+              onPress={handleUpdateDocument}
+              style={styles.primaryButton}
+            >
+              <CloudUploadIcon size={18} color="#FFFFFF" />
+              <Text style={styles.primaryButtonText}>Update Document</Text>
+            </TouchableOpacity>
           </Animated.View>
 
-        </ScrollView>
+          {/* Secondary: Download */}
+          <Animated.View style={{ transform: [{ scale: downloadBtnScale }] }}>
+            <TouchableOpacity
+              accessible={true}
+              accessibilityLabel="Download PDF"
+              accessibilityRole="button"
+              activeOpacity={0.85}
+              onPressIn={handleDownloadPressIn}
+              onPressOut={handleDownloadPressOut}
+              onPress={handleDownloadPDF}
+              style={styles.secondaryButton}
+            >
+              <DownloadIcon size={18} color={theme.colors.primary} />
+              <Text style={styles.secondaryButtonText}>Download PDF</Text>
+            </TouchableOpacity>
+          </Animated.View>
+        </View>
       </View>
     </Animated.View>
   );
@@ -313,7 +295,7 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingHorizontal: theme.spacing.md,
     paddingTop: theme.spacing.md,
-    paddingBottom: moderateScale(110), // Spacing for floating tab bar
+    paddingBottom: moderateScale(20),
   },
   infoSection: {
     marginTop: 6,
@@ -479,7 +461,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: theme.spacing.lg,
+    marginBottom: moderateScale(4),
   },
   secondaryButtonText: {
     fontFamily: 'Poppins-Bold',
@@ -495,5 +477,17 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.borderLight,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  stickyBottomBar: {
+    backgroundColor: '#FFFFFF',
+    borderTopWidth: 1,
+    borderColor: '#E5E7EB',
+    paddingTop: 16,
+    paddingHorizontal: theme.spacing.md,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: -4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 8,
   },
 });

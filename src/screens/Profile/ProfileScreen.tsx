@@ -26,11 +26,7 @@ import { SettingsScreen } from './Settings/SettingsScreen';
 import { AlertsScreen } from '../Alerts/AlertsScreen';
 import { TermsAndPrivacyScreen } from './TermsAndPrivacy/TermsAndPrivacyScreen';
 import { HelpAndSupportScreen } from './HelpAndSupport/HelpAndSupportScreen';
-import { SupportCenterScreen } from './SupportCenter/SupportCenterScreen';
 import { OrderChatScreen } from './SupportCenter/OrderChatScreen';
-import { EmergencySupportScreen } from './SupportCenter/EmergencySupportScreen';
-import { TechnicalSupportScreen } from './SupportCenter/TechnicalSupportScreen';
-import { PaymentQueriesScreen } from './SupportCenter/PaymentQueriesScreen';
 import { vehicleData } from '../../data/vehicleInformation';
 
 // ==========================================
@@ -300,7 +296,7 @@ interface ProfileScreenProps {
 
 export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onSubScreenChange }) => {
   const insets = useSafeAreaInsets();
-  const [currentSubScreen, setCurrentSubScreen] = useState<'profile' | 'personal' | 'vehicle' | 'documents' | 'document_details' | 'upload_success' | 'bank_details' | 'performance' | 'settings' | 'terms' | 'help' | 'support_center' | 'order_chat' | 'emergency_report' | 'technical_support' | 'payment_queries' | 'alerts'>('profile');
+  const [currentSubScreen, setCurrentSubScreen] = useState<'profile' | 'personal' | 'vehicle' | 'documents' | 'document_details' | 'upload_success' | 'bank_details' | 'performance' | 'settings' | 'terms' | 'help' | 'order_chat' | 'alerts'>('profile');
   const [driverAvatar, setDriverAvatar] = useState(driverData.avatar);
   const [vehicleImage, setVehicleImage] = useState(vehicleData.image);
 
@@ -311,37 +307,16 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onSubScreenChange 
   }, [currentSubScreen, onSubScreenChange]);
 
   // Animation refs
-  const heroFadeAnim = useRef(new Animated.Value(0)).current;
-  const statsGridAnim = useRef(new Animated.Value(0)).current;
-  const listItemsAnim = useRef(new Animated.Value(0)).current;
-  const logoutBtnAnim = useRef(new Animated.Value(0)).current;
+  const heroFadeAnim = useRef(new Animated.Value(1)).current;
+  const statsGridAnim = useRef(new Animated.Value(1)).current;
+  const listItemsAnim = useRef(new Animated.Value(1)).current;
+  const logoutBtnAnim = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    // Staggered premium entrance animation sequence
-    Animated.sequence([
-      Animated.timing(heroFadeAnim, {
-        toValue: 1,
-        duration: 350,
-        useNativeDriver: true,
-      }),
-      Animated.parallel([
-        Animated.timing(statsGridAnim, {
-          toValue: 1,
-          duration: 400,
-          useNativeDriver: true,
-        }),
-        Animated.timing(listItemsAnim, {
-          toValue: 1,
-          duration: 450,
-          useNativeDriver: true,
-        }),
-      ]),
-      Animated.timing(logoutBtnAnim, {
-        toValue: 1,
-        duration: 250,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    heroFadeAnim.setValue(1);
+    statsGridAnim.setValue(1);
+    listItemsAnim.setValue(1);
+    logoutBtnAnim.setValue(1);
   }, [heroFadeAnim, statsGridAnim, listItemsAnim, logoutBtnAnim]);
 
   // Handle system hardware back press for Android
@@ -366,17 +341,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onSubScreenChange 
     return () => subscription.remove();
   }, [currentSubScreen]);
 
-  const getAnimatedStyle = (value: Animated.Value) => ({
-    opacity: value,
-    transform: [
-      {
-        translateY: value.interpolate({
-          inputRange: [0, 1],
-          outputRange: [15, 0],
-        }),
-      },
-    ],
-  });
+  const getAnimatedStyle = (_value: Animated.Value) => ({});
 
   if (currentSubScreen === 'personal') {
     return (
@@ -474,53 +439,15 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onSubScreenChange 
     return (
       <HelpAndSupportScreen
         onBack={() => setCurrentSubScreen('settings')}
-        onNavigateSupportCenter={() => setCurrentSubScreen('support_center')}
+        onNavigateLiveChat={() => setCurrentSubScreen('order_chat')}
       />
     );
   }
-
-  if (currentSubScreen === 'support_center') {
-    return (
-      <SupportCenterScreen
-        onBack={() => setCurrentSubScreen('help')}
-        onNavigateOrderSupport={() => setCurrentSubScreen('order_chat')}
-        onNavigateEmergencySupport={() => setCurrentSubScreen('emergency_report')}
-        onNavigateTechnicalSupport={() => setCurrentSubScreen('technical_support')}
-        onNavigatePaymentQueries={() => setCurrentSubScreen('payment_queries')}
-      />
-    );
-  }
-
-  if (currentSubScreen === 'technical_support') {
-    return (
-      <TechnicalSupportScreen
-        onBack={() => setCurrentSubScreen('support_center')}
-      />
-    );
-  }
-
-  if (currentSubScreen === 'payment_queries') {
-    return (
-      <PaymentQueriesScreen
-        onBack={() => setCurrentSubScreen('support_center')}
-      />
-    );
-  }
-
-  if (currentSubScreen === 'emergency_report') {
-    return (
-      <EmergencySupportScreen
-        onBack={() => setCurrentSubScreen('support_center')}
-      />
-    );
-  }
-
-
 
   if (currentSubScreen === 'order_chat') {
     return (
       <OrderChatScreen
-        onBack={() => setCurrentSubScreen('support_center')}
+        onBack={() => setCurrentSubScreen('help')}
       />
     );
   }
