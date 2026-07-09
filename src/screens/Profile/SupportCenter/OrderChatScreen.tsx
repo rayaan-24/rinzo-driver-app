@@ -14,6 +14,7 @@ import {
 import Svg, { Path, Circle } from 'react-native-svg';
 import { theme } from '../../../theme';
 import { moderateScale } from '../../../utils/responsive';
+import { Header } from '../../../components/Header';
 
 // ==========================================
 // OUTLINED SVG ICONS (Order Chat layout)
@@ -236,49 +237,52 @@ export const OrderChatScreen: React.FC<OrderChatScreenProps> = ({ onBack }) => {
     <Animated.View style={[styles.outerContainer, { opacity: screenFade }]}>
       
       {/* 1. FIXED HEADER */}
-      <View style={styles.headerContainer}>
-        <View style={styles.headerLeftCol}>
-          <TouchableOpacity
-            accessible={true}
-            accessibilityLabel="Go Back"
-            accessibilityRole="button"
-            activeOpacity={0.7}
-            onPress={onBack}
-            style={styles.headerBackTouch}
-          >
-            <ArrowLeftIcon size={24} color={theme.colors.textDark} />
-          </TouchableOpacity>
-          <View style={styles.avatarOutline}>
-            <DedicatedAgentAvatar />
-            <View style={styles.onlineStatusDot} />
+      <Header
+        leftCustom={
+          <View style={styles.headerLeftCol}>
+            <TouchableOpacity
+              accessible={true}
+              accessibilityLabel="Go Back"
+              accessibilityRole="button"
+              activeOpacity={0.7}
+              onPress={onBack}
+              style={styles.headerBackTouch}
+            >
+              <ArrowLeftIcon size={24} color={theme.colors.textDark} />
+            </TouchableOpacity>
+            <View style={styles.avatarOutline}>
+              <DedicatedAgentAvatar />
+              <View style={styles.onlineStatusDot} />
+            </View>
+            <View style={styles.supportAgentTitleCol}>
+              <Text style={styles.agentTitle}>Rinzo Support</Text>
+              <Text style={styles.agentSubtitle}>Online</Text>
+            </View>
           </View>
-          <View style={styles.supportAgentTitleCol}>
-            <Text style={styles.agentTitle}>Rinzo Support</Text>
-            <Text style={styles.agentSubtitle}>Online</Text>
+        }
+        rightCustom={
+          <View style={styles.headerRightCol}>
+            <TouchableOpacity
+              accessible={true}
+              accessibilityLabel="Phone Call support"
+              accessibilityRole="button"
+              activeOpacity={0.75}
+              style={styles.headerCircleBtn}
+            >
+              <PhoneCallIcon size={18} color={theme.colors.textDark} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              accessible={true}
+              accessibilityLabel="More options"
+              accessibilityRole="button"
+              activeOpacity={0.75}
+              style={styles.headerCircleBtn}
+            >
+              <ThreeDotsIcon size={18} color={theme.colors.textDark} />
+            </TouchableOpacity>
           </View>
-        </View>
-
-        <View style={styles.headerRightCol}>
-          <TouchableOpacity
-            accessible={true}
-            accessibilityLabel="Phone Call support"
-            accessibilityRole="button"
-            activeOpacity={0.75}
-            style={styles.headerCircleBtn}
-          >
-            <PhoneCallIcon size={18} color={theme.colors.textDark} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            accessible={true}
-            accessibilityLabel="More options"
-            accessibilityRole="button"
-            activeOpacity={0.75}
-            style={styles.headerCircleBtn}
-          >
-            <ThreeDotsIcon size={18} color={theme.colors.textDark} />
-          </TouchableOpacity>
-        </View>
-      </View>
+        }
+      />
 
       {/* 2. CHAT SCROLL AREA WRAPPER */}
       <KeyboardAvoidingView
@@ -423,16 +427,6 @@ const styles = StyleSheet.create({
   outerContainer: {
     flex: 1,
     backgroundColor: '#FCFAFF', // Light lavender
-  },
-  headerContainer: {
-    flexDirection: 'row',
-    height: 56,
-    backgroundColor: '#FFFFFF',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: theme.spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F1F1F5',
   },
   headerLeftCol: {
     flexDirection: 'row',

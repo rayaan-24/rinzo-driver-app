@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { theme } from '../../theme';
 import { HomeScreen } from '../../screens/Home/Home/HomeScreen';
 import { HistoryScreen } from '../../screens/OrderHistory/HistoryScreen';
-import { PerformanceScreen } from '../../screens/Performance/PerformanceScreen';
+
 import { ProfileScreen } from '../../screens/Profile/ProfileScreen';
 import { BottomTabBar, TabType } from '../../components/BottomTabBar';
 import { PickupDetailsScreen } from '../../screens/Pickup/PickupDetails/PickupDetailsScreen';
@@ -37,6 +37,7 @@ import { LoginEmailScreen } from '../../screens/Auth/LoginEmail/LoginEmailScreen
 import { CreateNewPasswordScreen } from '../../screens/Auth/CreateNewPassword/CreateNewPasswordScreen';
 import { PasswordResetSuccessScreen } from '../../screens/Auth/PasswordResetSuccess/PasswordResetSuccessScreen';
 import { SignupScreen } from '../../screens/Auth/Signup/SignupScreen';
+import { AlertsScreen } from '../../screens/Alerts/AlertsScreen';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const TAB_ORDER: TabType[] = ['Home', 'History', 'Alerts', 'Profile'];
@@ -58,6 +59,8 @@ type FlowState =
 export const RootNavigator: React.FC = () => {
   const [flowState, setFlowState] = useState<FlowState>('Splash');
   const [phone, setPhone] = useState<string>('');
+  const [verificationType, setVerificationType] = useState<'phone' | 'email'>('phone');
+  const [emailAddress, setEmailAddress] = useState<string>('');
 
   const [activeTab, setActiveTab] = useState<TabType>('Home');
   const [isHideTabBar, setIsHideTabBar] = useState(false);
@@ -134,7 +137,8 @@ export const RootNavigator: React.FC = () => {
   if (flowState === 'LoginPhone') {
     return (
       <LoginPhoneScreen
-        onSendOTP={(pNum: string) => {
+        onSendOTP={(pNum) => {
+          setVerificationType('phone');
           setPhone(pNum);
           setFlowState('OTPVerification');
         }}
@@ -150,7 +154,11 @@ export const RootNavigator: React.FC = () => {
       <LoginEmailScreen
         onLoginSuccess={() => setFlowState('Main')}
         onNavigateToPhone={() => setFlowState('LoginPhone')}
-        onNavigateToForgotPassword={() => setFlowState('CreateNewPassword')}
+        onNavigateToForgotPassword={(emailVal) => {
+          setVerificationType('email');
+          setEmailAddress(emailVal || 'driver@rinzo.com');
+          setFlowState('OTPVerification');
+        }}
         onNavigateToSignUp={() => setFlowState('SignUp')}
       />
     );
@@ -185,10 +193,30 @@ export const RootNavigator: React.FC = () => {
   if (flowState === 'OTPVerification') {
     return (
       <OTPVerificationScreen
+        verificationType={verificationType}
         phoneNumber={phone ? `+91 ${phone}` : '+91 87777 34343'}
-        onVerify={() => setFlowState('Main')}
-        onChangePhone={() => setFlowState('LoginPhone')}
-        onBack={() => setFlowState('LoginPhone')}
+        emailAddress={emailAddress || 'driver@rinzo.com'}
+        onVerify={() => {
+          if (verificationType === 'email') {
+            setFlowState('CreateNewPassword');
+          } else {
+            setFlowState('Main');
+          }
+        }}
+        onChangePhone={() => {
+          if (verificationType === 'email') {
+            setFlowState('LoginEmail');
+          } else {
+            setFlowState('LoginPhone');
+          }
+        }}
+        onBack={() => {
+          if (verificationType === 'email') {
+            setFlowState('LoginEmail');
+          } else {
+            setFlowState('LoginPhone');
+          }
+        }}
       />
     );
   }
@@ -210,7 +238,7 @@ export const RootNavigator: React.FC = () => {
       case 'History':
         return <HistoryScreen />;
       case 'Alerts':
-        return <PerformanceScreen />;
+        return <AlertsScreen />;
       case 'Profile':
         return <ProfileScreen onSubScreenChange={(isSub) => setIsHideTabBar(isSub)} />;
       default:

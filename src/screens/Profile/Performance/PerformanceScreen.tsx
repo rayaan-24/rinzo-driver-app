@@ -10,6 +10,7 @@ import {
 import Svg, { Path, Circle, Defs, LinearGradient as SvgLinearGradient, Stop, Rect } from 'react-native-svg';
 import { theme } from '../../../theme';
 import { moderateScale } from '../../../utils/responsive';
+import { Header } from '../../../components/Header';
 
 // ==========================================
 // CUSTOM SVG ICONS (Android space-safe paths)
@@ -188,36 +189,22 @@ export const PerformanceScreen: React.FC<PerformanceScreenProps> = ({ onBack }) 
       <View style={styles.contentWrapper}>
         
         {/* 1. FIXED HEADER */}
-        <Animated.View style={[styles.headerContainer, { opacity: headerFade }]}>
-          <Animated.View style={{ transform: [{ scale: backScale }] }}>
-            <TouchableOpacity
-              accessible={true}
-              accessibilityLabel="Go Back"
-              accessibilityRole="button"
-              activeOpacity={0.7}
-              onPressIn={() => pressIn(backScale)}
-              onPressOut={() => pressOut(backScale)}
-              onPress={onBack}
-              style={styles.headerButton}
-            >
-              <ArrowLeftIcon size={22} color={theme.colors.textDark} />
-            </TouchableOpacity>
-          </Animated.View>
-          <Text style={styles.headerTitle}>Performance</Text>
-          <Animated.View style={{ transform: [{ scale: helpScale }] }}>
+        <Header
+          title="Performance"
+          showBack
+          onBackPress={onBack}
+          rightCustom={
             <TouchableOpacity
               accessible={true}
               accessibilityLabel="Help"
               accessibilityRole="button"
               activeOpacity={0.7}
-              onPressIn={() => pressIn(helpScale)}
-              onPressOut={() => pressOut(helpScale)}
               style={styles.headerButtonRight}
             >
               <HelpIcon size={20} color={theme.colors.textDark} />
             </TouchableOpacity>
-          </Animated.View>
-        </Animated.View>
+          }
+        />
 
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -416,36 +403,7 @@ const styles = StyleSheet.create({
     maxWidth: 600,
     backgroundColor: '#FFFFFF',
   },
-  headerContainer: {
-    flexDirection: 'row',
-    height: moderateScale(60),
-    backgroundColor: '#FFFFFF',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: theme.spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F2F2F7',
-  },
-  headerButton: {
-    width: 40,
-    height: 40,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-  },
-  headerButtonRight: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: theme.colors.borderLight,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  headerTitle: {
-    fontFamily: 'Poppins-Bold',
-    fontSize: theme.typography.fontSize.lg,
-    fontWeight: theme.typography.fontWeight.bold,
-    color: theme.colors.textDark,
-  },
+
   scrollContent: {
     paddingHorizontal: theme.spacing.md,
     paddingTop: theme.spacing.xl,
@@ -777,5 +735,13 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: theme.typography.fontWeight.medium,
     color: theme.colors.textMedium,
+  },
+  headerButtonRight: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: theme.colors.borderLight,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

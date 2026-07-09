@@ -24,23 +24,12 @@ import { PerformanceScreen } from './Performance/PerformanceScreen';
 import { SettingsScreen } from './Settings/SettingsScreen';
 import { TermsAndPrivacyScreen } from './TermsAndPrivacy/TermsAndPrivacyScreen';
 import { HelpAndSupportScreen } from './HelpAndSupport/HelpAndSupportScreen';
-import { SupportCenterScreen } from './SupportCenter/SupportCenterScreen';
 import { OrderChatScreen } from './SupportCenter/OrderChatScreen';
-import { EmergencySupportScreen } from './SupportCenter/EmergencySupportScreen';
 import { vehicleData } from '../../data/vehicleInformation';
 
 // ==========================================
 // LOCAL SVG ICONS (Satisfying final plan)
 // ==========================================
-
-const BellIcon: React.FC<{ size?: number; color?: string }> = ({ size = 20, color = theme.colors.textDark }) => (
-  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-    <Path
-      d="M 12 22 C 13.1 22 14 21.1 14 20 H 10 C 10 21.1 10.9 22 12 22 Z M 18 16 V 11 C 18 7.93 16.37 5.36 13.5 4.68 V 4 C 13.5 3.17 12.83 2.5 12 2.5 C 11.17 2.5 10.5 3.17 10.5 4 V 4.68 C 7.64 5.36 6 7.92 6 11 V 16 L 4 18 V 19 H 20 V 18 L 18 16 Z M 16 17 H 8 V 11 C 8 8.52 9.51 6.5 12 6.5 C 14.49 6.5 16 8.52 16 11 V 17 Z"
-      fill={color}
-    />
-  </Svg>
-);
 
 const UserPlaceholderIcon: React.FC<{ size?: number; color?: string }> = ({ size = 24, color = theme.colors.primary }) => (
   <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
@@ -301,7 +290,7 @@ interface ProfileScreenProps {
 }
 
 export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onSubScreenChange }) => {
-  const [currentSubScreen, setCurrentSubScreen] = useState<'profile' | 'personal' | 'vehicle' | 'documents' | 'document_details' | 'upload_success' | 'bank_details' | 'performance' | 'settings' | 'terms' | 'help' | 'support_center' | 'order_chat' | 'emergency_report'>('profile');
+  const [currentSubScreen, setCurrentSubScreen] = useState<'profile' | 'personal' | 'vehicle' | 'documents' | 'document_details' | 'upload_success' | 'bank_details' | 'performance' | 'settings' | 'terms' | 'help' | 'order_chat'>('profile');
   const [driverAvatar, setDriverAvatar] = useState(driverData.avatar);
   const [vehicleImage, setVehicleImage] = useState(vehicleData.image);
 
@@ -466,35 +455,15 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onSubScreenChange 
     return (
       <HelpAndSupportScreen
         onBack={() => setCurrentSubScreen('settings')}
-        onNavigateSupportCenter={() => setCurrentSubScreen('support_center')}
+        onNavigateLiveChat={() => setCurrentSubScreen('order_chat')}
       />
     );
   }
-
-  if (currentSubScreen === 'support_center') {
-    return (
-      <SupportCenterScreen
-        onBack={() => setCurrentSubScreen('help')}
-        onNavigateOrderSupport={() => setCurrentSubScreen('order_chat')}
-        onNavigateEmergencySupport={() => setCurrentSubScreen('emergency_report')}
-      />
-    );
-  }
-
-  if (currentSubScreen === 'emergency_report') {
-    return (
-      <EmergencySupportScreen
-        onBack={() => setCurrentSubScreen('support_center')}
-      />
-    );
-  }
-
-
 
   if (currentSubScreen === 'order_chat') {
     return (
       <OrderChatScreen
-        onBack={() => setCurrentSubScreen('support_center')}
+        onBack={() => setCurrentSubScreen('help')}
       />
     );
   }
@@ -502,23 +471,6 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ onSubScreenChange 
   return (
     <View style={styles.outerContainer}>
       <View style={styles.contentWrapper}>
-        {/* 1. HEADER */}
-        <View style={styles.headerContainer}>
-          <View style={styles.headerLeft}>
-            <AvatarPlaceholder size={moderateScale(32)} source={driverAvatar} />
-            <Text style={styles.headerTitle}>Rinzo Driver</Text>
-          </View>
-          <TouchableOpacity
-            accessible={true}
-            accessibilityLabel="Notifications"
-            accessibilityRole="button"
-            activeOpacity={0.7}
-            style={styles.headerRight}
-          >
-            <BellIcon size={20} color={theme.colors.textDark} />
-          </TouchableOpacity>
-        </View>
-
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollContent}
@@ -661,16 +613,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: theme.spacing.md,
     paddingTop: theme.spacing.md,
     paddingBottom: moderateScale(130), // Floating bottom navigation safe padding
-  },
-  headerContainer: {
-    flexDirection: 'row',
-    height: moderateScale(60),
-    backgroundColor: theme.colors.cardBg,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: theme.spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: theme.colors.borderLight,
   },
   headerLeft: {
     flexDirection: 'row',
