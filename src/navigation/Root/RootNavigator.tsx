@@ -79,48 +79,25 @@ const OnboardingFlow: React.FC<{ onFinish: () => void }> = ({ onFinish }) => {
     }
   };
 
-  const footerTransition = useRef(new Animated.Value(0)).current;
-
-  useEffect(() => {
-    Animated.timing(footerTransition, {
-      toValue: currentPage === 2 ? 1 : 0,
-      duration: 200,
-      useNativeDriver: false,
-    }).start();
-  }, [currentPage]);
-
   // Skip button opacity animation (fades out as page 3 comes into view)
-  const skipOpacity = footerTransition.interpolate({
-    inputRange: [0, 1],
-    outputRange: [1, 0],
+  const skipOpacity = scrollX.interpolate({
+    inputRange: [SCREEN_WIDTH, SCREEN_WIDTH * 1.5, SCREEN_WIDTH * 1.8],
+    outputRange: [1, 0.5, 0],
+    extrapolate: 'clamp',
   });
 
-  // Next button layout animations (fades out and translates upward)
-  const nextOpacity = footerTransition.interpolate({
-    inputRange: [0, 1],
-    outputRange: [1, 0],
+  // Next button smoothly fades out as page 3 comes into view
+  const nextOpacity = scrollX.interpolate({
+    inputRange: [SCREEN_WIDTH, SCREEN_WIDTH * 1.5, SCREEN_WIDTH * 1.8],
+    outputRange: [1, 0.5, 0],
+    extrapolate: 'clamp',
   });
 
-  const nextTranslateY = footerTransition.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, -30],
-  });
-
-  // Page 3 buttons layout animations (fades in and translates upward)
-  const getStartedOpacity = footerTransition.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, 1],
-  });
-
-  const getStartedTranslateY = footerTransition.interpolate({
-    inputRange: [0, 1],
-    outputRange: [30, 0],
-  });
-
-  // Footer dynamic height animation to accommodate 2 stacked buttons cleanly
-  const footerHeightAnimation = footerTransition.interpolate({
-    inputRange: [0, 1],
-    outputRange: [vs(54), vs(114)],
+  // Get Started button smoothly fades in as page 3 comes into view
+  const getStartedOpacity = scrollX.interpolate({
+    inputRange: [SCREEN_WIDTH, SCREEN_WIDTH * 1.5, SCREEN_WIDTH * 1.8],
+    outputRange: [0, 0.5, 1],
+    extrapolate: 'clamp',
   });
 
   return (
@@ -215,17 +192,13 @@ const OnboardingFlow: React.FC<{ onFinish: () => void }> = ({ onFinish }) => {
       <View style={onboardingStyles.footer}>
         <PageIndicator total={3} current={currentPage} scrollX={scrollX} style={onboardingStyles.indicator} />
         
-        <Animated.View style={{ height: footerHeightAnimation, width: '100%', overflow: 'hidden', position: 'relative' }}>
+        <View style={{ height: vs(54), width: '100%', position: 'relative' }}>
           {/* Next Button Container */}
           <Animated.View
             pointerEvents={currentPage < 2 ? 'auto' : 'none'}
             style={[
               StyleSheet.absoluteFill,
-              {
-                opacity: nextOpacity,
-                transform: [{ translateY: nextTranslateY }],
-                height: vs(54),
-              }
+              { opacity: nextOpacity }
             ]}
           >
             <CustomButton
@@ -235,31 +208,21 @@ const OnboardingFlow: React.FC<{ onFinish: () => void }> = ({ onFinish }) => {
             />
           </Animated.View>
 
-          {/* Page 3 Stacked Buttons Container */}
+          {/* Get Started Button Container */}
           <Animated.View
             pointerEvents={currentPage === 2 ? 'auto' : 'none'}
             style={[
               StyleSheet.absoluteFill,
-              {
-                opacity: getStartedOpacity,
-                transform: [{ translateY: getStartedTranslateY }],
-                height: vs(114),
-              }
+              { opacity: getStartedOpacity }
             ]}
           >
             <CustomButton
               title="Get Started  →"
               onPress={onFinish}
-              style={onboardingStyles.getStartedButton}
-            />
-            <CustomButton
-              title="Back"
-              variant="secondary"
-              onPress={handleBack}
-              style={onboardingStyles.backButton}
+              style={onboardingStyles.button}
             />
           </Animated.View>
-        </Animated.View>
+        </View>
       </View>
     </SafeAreaView>
   );
