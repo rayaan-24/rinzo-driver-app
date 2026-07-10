@@ -42,7 +42,7 @@ export const OnboardingScreen2: React.FC<OnboardingScreen2Props> = ({
       <View style={styles.content}>
         <Text style={styles.title}>Every Parcel Tracked</Text>
         <Text style={styles.subtitle}>
-          Each laundry bag receives a unique QR tag {'\n'}for complete traceability.
+          Each laundry bag receives a unique QR tag for complete traceability.
         </Text>
       </View>
 
