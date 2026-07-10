@@ -192,37 +192,39 @@ const OnboardingFlow: React.FC<{ onFinish: () => void }> = ({ onFinish }) => {
       <View style={onboardingStyles.footer}>
         <PageIndicator total={3} current={currentPage} scrollX={scrollX} style={onboardingStyles.indicator} />
         
-        <View style={{ height: vs(54), width: '100%', position: 'relative' }}>
-          {/* Next Button Container */}
-          <Animated.View
-            pointerEvents={currentPage < 2 ? 'auto' : 'none'}
-            style={[
-              StyleSheet.absoluteFill,
-              { opacity: nextOpacity }
-            ]}
-          >
-            <CustomButton
-              title="Next"
-              onPress={handleNext}
-              style={onboardingStyles.button}
-            />
-          </Animated.View>
+        <TouchableOpacity
+          onPress={currentPage === 2 ? onFinish : handleNext}
+          activeOpacity={0.8}
+          style={onboardingStyles.button}
+        >
+          <View style={{ width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+            {/* Next Text */}
+            <Animated.Text
+              style={[
+                onboardingStyles.buttonText,
+                {
+                  opacity: nextOpacity,
+                  position: 'absolute',
+                }
+              ]}
+            >
+              Next
+            </Animated.Text>
 
-          {/* Get Started Button Container */}
-          <Animated.View
-            pointerEvents={currentPage === 2 ? 'auto' : 'none'}
-            style={[
-              StyleSheet.absoluteFill,
-              { opacity: getStartedOpacity }
-            ]}
-          >
-            <CustomButton
-              title="Get Started  →"
-              onPress={onFinish}
-              style={onboardingStyles.button}
-            />
-          </Animated.View>
-        </View>
+            {/* Get Started Text */}
+            <Animated.Text
+              style={[
+                onboardingStyles.buttonText,
+                {
+                  opacity: getStartedOpacity,
+                  position: 'absolute',
+                }
+              ]}
+            >
+              Get Started  →
+            </Animated.Text>
+          </View>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -303,6 +305,14 @@ const onboardingStyles = StyleSheet.create({
     height: vs(54),
     borderRadius: s(16),
     backgroundColor: '#7952F3',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    fontFamily: theme.typography.fontFamily.bold,
+    fontSize: theme.typography.fontSize.md,
+    fontWeight: theme.typography.fontWeight.bold,
+    color: '#FFFFFF',
   },
   buttonColumn: {
     flexDirection: 'column',
@@ -372,6 +382,23 @@ export const RootNavigator: React.FC = () => {
   const directionRef = useRef(-1);
   const insets = useSafeAreaInsets();
 
+  const authFadeAnim = useRef(new Animated.Value(1)).current;
+
+  const navigateToAuthScreen = (nextState: FlowState) => {
+    Animated.timing(authFadeAnim, {
+      toValue: 0,
+      duration: 150,
+      useNativeDriver: true,
+    }).start(() => {
+      setFlowState(nextState);
+      Animated.timing(authFadeAnim, {
+        toValue: 1,
+        duration: 200,
+        useNativeDriver: true,
+      }).start();
+    });
+  };
+
   // ===================== AUTH / ONBOARDING FLOW =====================
 
   if (flowState === 'Splash') {
@@ -379,9 +406,7 @@ export const RootNavigator: React.FC = () => {
   }
 
   if (flowState === 'Onboarding') {
-    return (
-      <OnboardingFlow onFinish={() => setFlowState('AllowLocation')} />
-    );
+    return <OnboardingFlow onFinish={() => setFlowState('AllowLocation')} />;
   }
 
   if (flowState === 'AllowLocation') {
@@ -395,88 +420,100 @@ export const RootNavigator: React.FC = () => {
 
   if (flowState === 'LoginPhone') {
     return (
-      <LoginPhoneScreen
-        onSendOTP={(pNum) => {
-          setVerificationType('phone');
-          setPhone(pNum);
-          setFlowState('OTPVerification');
-        }}
-        onNavigateToEmail={() => setFlowState('LoginEmail')}
-        onNavigateToSignUp={() => setFlowState('SignUp')}
-        onBack={() => setFlowState('AllowLocation')}
-      />
+      <Animated.View style={{ flex: 1, opacity: authFadeAnim }}>
+        <LoginPhoneScreen
+          onSendOTP={(pNum) => {
+            setVerificationType('phone');
+            setPhone(pNum);
+            navigateToAuthScreen('OTPVerification');
+          }}
+          onNavigateToEmail={() => navigateToAuthScreen('LoginEmail')}
+          onNavigateToSignUp={() => navigateToAuthScreen('SignUp')}
+          onBack={() => navigateToAuthScreen('AllowLocation')}
+        />
+      </Animated.View>
     );
   }
 
   if (flowState === 'LoginEmail') {
     return (
-      <LoginEmailScreen
-        onLoginSuccess={() => setFlowState('Main')}
-        onNavigateToPhone={() => setFlowState('LoginPhone')}
-        onNavigateToForgotPassword={(emailVal) => {
-          setVerificationType('email');
-          setEmailAddress(emailVal || 'driver@rinzo.com');
-          setFlowState('OTPVerification');
-        }}
-        onNavigateToSignUp={() => setFlowState('SignUp')}
-      />
+      <Animated.View style={{ flex: 1, opacity: authFadeAnim }}>
+        <LoginEmailScreen
+          onLoginSuccess={() => navigateToAuthScreen('Main')}
+          onNavigateToPhone={() => navigateToAuthScreen('LoginPhone')}
+          onNavigateToForgotPassword={(emailVal) => {
+            setVerificationType('email');
+            setEmailAddress(emailVal || 'driver@rinzo.com');
+            navigateToAuthScreen('OTPVerification');
+          }}
+          onNavigateToSignUp={() => navigateToAuthScreen('SignUp')}
+        />
+      </Animated.View>
     );
   }
 
   if (flowState === 'CreateNewPassword') {
     return (
-      <CreateNewPasswordScreen
-        onResetSuccess={() => setFlowState('PasswordResetSuccess')}
-        onBack={() => setFlowState('LoginEmail')}
-      />
+      <Animated.View style={{ flex: 1, opacity: authFadeAnim }}>
+        <CreateNewPasswordScreen
+          onResetSuccess={() => navigateToAuthScreen('PasswordResetSuccess')}
+          onBack={() => navigateToAuthScreen('LoginEmail')}
+        />
+      </Animated.View>
     );
   }
 
   if (flowState === 'PasswordResetSuccess') {
     return (
-      <PasswordResetSuccessScreen
-        onGoToLogin={() => setFlowState('LoginEmail')}
-      />
+      <Animated.View style={{ flex: 1, opacity: authFadeAnim }}>
+        <PasswordResetSuccessScreen
+          onGoToLogin={() => navigateToAuthScreen('LoginEmail')}
+        />
+      </Animated.View>
     );
   }
 
   if (flowState === 'SignUp') {
     return (
-      <SignupScreen
-        onSignUpSuccess={() => setFlowState('LoginEmail')}
-        onBack={() => setFlowState('LoginEmail')}
-      />
+      <Animated.View style={{ flex: 1, opacity: authFadeAnim }}>
+        <SignupScreen
+          onSignUpSuccess={() => navigateToAuthScreen('LoginEmail')}
+          onBack={() => navigateToAuthScreen('LoginEmail')}
+        />
+      </Animated.View>
     );
   }
 
   if (flowState === 'OTPVerification') {
     return (
-      <OTPVerificationScreen
-        verificationType={verificationType}
-        phoneNumber={phone ? `+91 ${phone}` : '+91 87777 34343'}
-        emailAddress={emailAddress || 'driver@rinzo.com'}
-        onVerify={() => {
-          if (verificationType === 'email') {
-            setFlowState('CreateNewPassword');
-          } else {
-            setFlowState('Main');
-          }
-        }}
-        onChangePhone={() => {
-          if (verificationType === 'email') {
-            setFlowState('LoginEmail');
-          } else {
-            setFlowState('LoginPhone');
-          }
-        }}
-        onBack={() => {
-          if (verificationType === 'email') {
-            setFlowState('LoginEmail');
-          } else {
-            setFlowState('LoginPhone');
-          }
-        }}
-      />
+      <Animated.View style={{ flex: 1, opacity: authFadeAnim }}>
+        <OTPVerificationScreen
+          verificationType={verificationType}
+          phoneNumber={phone ? `+91 ${phone}` : '+91 87777 34343'}
+          emailAddress={emailAddress || 'driver@rinzo.com'}
+          onVerify={() => {
+            if (verificationType === 'email') {
+              navigateToAuthScreen('CreateNewPassword');
+            } else {
+              navigateToAuthScreen('Main');
+            }
+          }}
+          onChangePhone={() => {
+            if (verificationType === 'email') {
+              navigateToAuthScreen('LoginEmail');
+            } else {
+              navigateToAuthScreen('LoginPhone');
+            }
+          }}
+          onBack={() => {
+            if (verificationType === 'email') {
+              navigateToAuthScreen('LoginEmail');
+            } else {
+              navigateToAuthScreen('LoginPhone');
+            }
+          }}
+        />
+      </Animated.View>
     );
   }
 
